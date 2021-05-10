@@ -1,0 +1,8 @@
+elpa/
+auto-save-list/
+custom.el
+eshell/
+network-security.data
+.DS_Store
+personal.el
+transient/
