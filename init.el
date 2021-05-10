@@ -152,6 +152,50 @@
 (load custom-file 'noerror)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CUSTOM FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun tay/cleanup ()
+  "Cleanup all user buffers and remove splits"
+  (interactive)
+  (mapc (lambda (s)
+	  (if (not (string-prefix-p " " (buffer-name s)))
+	      (kill-buffer s)))
+	(buffer-list))
+  (delete-other-windows)
+  ;; (tramp-cleanup-all-buffers)
+  ;; (tramp-cleanup-all-connections)
+  (cd "~/")
+  (message "YOU ARE SO CLEAN"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ORG MODE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'org)
+
+(setq org-startup-indented t
+      org-agenda-files '("~/orgs")
+      org-todo-keywords '((sequence "TODO" "|" "DONE" "ONHOLD"))
+      org-hide-emphasis-markers t
+      org-hide-macro-markers t
+      org-hide-leading-stars t)
+
+(add-to-list 'org-modules 'org-habit t)
+
+(setq org-capture-templates
+      '(("t" "Basic TODO" entry (file+headline "~/orgs/planner.org" "INBOX")
+         "* TODO %? %i\n%u\n")
+        ("d" "Deadline TODO" entry (file+headline "~/orgs/planner.org" "INBOX")
+         "* TODO %? %i\nDEADLINE:%^t\n")
+        ("p" "Personal TODO" entry (file+headline "~/orgs/personal.org" "INBOX")
+         "* TODO %? %i\nDEADLINE:%^t\n")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CC MODE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq c-default-style "linux"
+      c-basic-offset 4)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; External Packages
 ;;
 ;; everything below is contained in external melpa packages
@@ -160,6 +204,7 @@
 
 ;; bootstrap melpa
 (require 'package)
+(setq package-check-signature nil)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
@@ -357,11 +402,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LOOKUP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package dumb-jump
-  :ensure t
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
+;; (use-package dumb-jump
+;;   :ensure t
+;;   :config
+;;   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+;;   (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WORKSPACES
@@ -436,8 +481,12 @@
 
    ;; file and buffer keymaps
    "f" 'counsel-find-file
-   "b" 'ivy-switch-buffer
+   "b" 'persp-ivy-switch-buffer
    "k" (lambda () (interactive) (kill-buffer (current-buffer)))
+   "K" 'tay/cleanup
+   ";" 'comment-line
+   "TAB" 'indent-region
+   "l" 'recenter-top-bottom
 
    ;; searching
    "s" '(:ignore t :which-key "search")
@@ -449,8 +498,9 @@
    ;; open things
    "o" '(:ignore t :which-key "open")
    "o e" 'tay/eshell-new
-   "o m" 'mu4e
+   ;; "o m" 'mu4e
    "o g" 'magit
+   "o a" 'org-agenda
    
    ;; evil motion
    "SPC" '(:ignore t :which-key "motion")
@@ -474,60 +524,91 @@
    "p b" 'persp-switch-to-buffer
    "p s" 'persp-switch
    "p n" 'persp-next
-   "p p" 'persp-prev))
+   "p p" 'persp-prev
+   "p d" 'persp-delete-frame
+
+   "c" '(:ignore t :which-key "capture")
+   "c c" 'org-capture))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMAIL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")
-(load (expand-file-name "personal.el" user-emacs-directory) 'noerror)
+;; (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")
+;; (load (expand-file-name "personal.el" user-emacs-directory) 'noerror)
+;; 
+;; (use-package mu4e
+;;   :ensure nil
+;;   :config
+;;   ;; mbsync settings
+;;   (setq mu4e-get-mail-command "mbsync -a"
+;;         mu4e-change-filenames-when-moving t)
+;; 
+;;   ;; general mu4e settings
+;;   (setq mu4e-update-interval nil
+;;         mu4e-compose-format-flowed t 
+;;         mu4e-view-show-addresses t
+;;         mu4e-sent-messages-behavior 'sent
+;;         mu4e-hide-index-messages t
+;;         mu4e-view-show-images t
+;;         mu4e-view-image-max-width 800
+;;         message-send-mail-function #'smtpmail-send-it
+;;         smtpmail-stream-type 'starttls
+;;         message-kill-buffer-on-exit t 
+;;         mu4e-completing-read-function #'ivy-completing-read
+;;         user-mail-agent 'mu4e-user-agent)
+;; 
+;;   ;; truncate lines in emails
+;;   (add-hook 'mu4e-view-mode-hook (lambda () (setq truncate-lines nil)))
+;; 
+;;   ;; gmail settings
+;;   (setq mu4e-sent-messages-behavior 'delete
+;;         mu4e-index-cleanup nil
+;;         mu4e-index-lazy-check t)
+;; 
+;;   (setq message-cite-function  'message-cite-original
+;;         message-citation-line-function  'message-insert-formatted-citation-line
+;;         message-cite-reply-position 'above
+;;         message-yank-prefix  "    "
+;;         message-yank-cited-prefix  "    "
+;;         message-yank-empty-prefix  "    "
+;;         message-citation-line-format "On %e %B %Y %R, %f wrote:\n"))
+;; 
+;; (use-package smtpmail
+;;   :ensure nil
+;;   :custom
+;;   (message-send-mail-function 'smtpmail-send-it)
+;;   (smtpmail-stream-type 'starttls)
+;;   (smtpmail-default-smtp-server "smtp.gmail.com")
+;;   (smtpmail-smtp-server "smtp.gmail.com")
+;;   (smtpmail-smtp-service 587))
 
-(use-package mu4e
-  :ensure nil
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MARKDOWN
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package markdown-mode
+  :ensure t
+  :defer t
   :config
-  ;; mbsync settings
-  (setq mu4e-get-mail-command "mbsync -a"
-        mu4e-change-filenames-when-moving t)
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
-  ;; general mu4e settings
-  (setq mu4e-update-interval nil
-        mu4e-compose-format-flowed t 
-        mu4e-view-show-addresses t
-        mu4e-sent-messages-behavior 'sent
-        mu4e-hide-index-messages t
-        mu4e-view-show-images t
-        mu4e-view-image-max-width 800
-        message-send-mail-function #'smtpmail-send-it
-        smtpmail-stream-type 'starttls
-        message-kill-buffer-on-exit t 
-        mu4e-completing-read-function #'ivy-completing-read
-        user-mail-agent 'mu4e-user-agent)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; C/C++
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package lsp-mode
+  :ensure t
+  :hook
+  (c-mode . lsp-deferred)
+  :commands
+  (lsp lsp-deferred)
+  :config
+  (setq lsp-clients-clangd-executable "/usr/local/opt/llvm/bin/clangd"))
 
-  ;; truncate lines in emails
-  (add-hook 'mu4e-view-mode-hook (lambda () (setq truncate-lines nil)))
-
-  ;; gmail settings
-  (setq mu4e-sent-messages-behavior 'delete
-        mu4e-index-cleanup nil
-        mu4e-index-lazy-check t)
-
-  (setq message-cite-function  'message-cite-original
-        message-citation-line-function  'message-insert-formatted-citation-line
-        message-cite-reply-position 'above
-        message-yank-prefix  "    "
-        message-yank-cited-prefix  "    "
-        message-yank-empty-prefix  "    "
-        message-citation-line-format "On %e %B %Y %R, %f wrote:\n"))
-
-(use-package smtpmail
-  :ensure nil
-  :custom
-  (message-send-mail-function 'smtpmail-send-it)
-  (smtpmail-stream-type 'starttls)
-  (smtpmail-default-smtp-server "smtp.gmail.com")
-  (smtpmail-smtp-server "smtp.gmail.com")
-  (smtpmail-smtp-service 587))
+(use-package lsp-ivy
+  :defer t
+  :diminish
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CLEANUP
