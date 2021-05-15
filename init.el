@@ -1,614 +1,164 @@
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; Taylor's extra config
-;; ;;
-;; ;;
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;  ______ ______  __  __  __    __  ______  ______  ______
+;; /\__  _/\  __ \/\ \_\ \/\ "-./  \/\  __ \/\  ___\/\  ___\
+;; \/_/\ \\ \  __ \ \____ \ \ \-./\ \ \  __ \ \ \___\ \___  \
+;;    \ \_\\ \_\ \_\/\_____\ \_\ \ \_\ \_\ \_\ \_____\/\_____\
+;;     \/_/ \/_/\/_/\/_____/\/_/  \/_/\/_/\/_/\/_____/\/_____/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
 (defvar tdm--file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; DEFAULTS
+;; BOOSTRAP TAYMACS
+;;
+;; emacs auto generated custom settings and personal fields are loaded first
+;; this also loads the functions that are used throughout taymacs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; get rid of extra ui elements first
-(push '(menu-bar-lines . 0)   default-frame-alist)
-(push '(tool-bar-lines . 0)   default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
+;; this defines where all of the modules live for this config
+;; THIS MUST BE SET
+(setq tay/custom-module-path "modules/")
 
-(setq menu-bar-mode nil
-      tool-bar-mode nil
-      scroll-bar-mode nil)
+;; define paths to our basic settings files
+;;
+;; - custom: auto generated custom settings file that emacs makes
+;; - personal: personal settings such as email, name, etc.
+;; - taymacs: base taymacs functions that we need for later
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory)
+      personal-config (expand-file-name "personal.el" user-emacs-directory)
+      taymacs-module (expand-file-name
+                      (concat tay/custom-module-path "taymacs.el")
+                      user-emacs-directory))
 
-;; optimize settings for faster render times
-(setq auto-mode-case-fold nil)
-
-(setq-default bidi-display-reordering 'left-to-right
-              bidi-paragraph-direction 'left-to-right)
-
-(setq bidi-inhibit-bpa t)
-
-(setq-default cursor-in-non-selected-windows nil)
-
-(setq highlight-nonselected-windows nil)
-
-(setq fast-but-imprecise-scrolling t)
-(setq frame-inhibit-implied-resize t)
-
-(setq idle-update-delay 1.0)
-
-(setq inhibit-compacting-font-caches t)
-
-;; general frame/window settings
-(setq indicate-buffer-boundaries nil
-      indicate-empty-lines nil)
-
-(setq frame-resize-pixelwise t)
-(setq window-resize-pixelwise nil)
-
-(setq window-divider-default-places t
-      window-divider-default-bottom-width 1
-      window-divider-default-right-width 1)
-(window-divider-mode 1)
-
-(setq split-width-threshold 160
-      split-height-threshold nil)
-
-(setq resize-mini-windows 'grow-only)
-
-;; nice scrolling
-(setq hscroll-margin 2
-      hscroll-step 1
-      scroll-conservatively 101
-      scroll-margin 0
-      scroll-preserve-screen-position t
-      auto-window-vscroll nil
-      mouse-wheel-scroll-amount '(2 ((shift) . hscroll))
-      mouse-wheel-scroll-amount-horizontal 2)
-
-(add-hook 'eshell-mode-hook (lambda () hscroll-margin 0))
-
-;; setup scratch buffer with no mode or message
-(setq inhibit-startup-message t
-      inhibit-startup-echo-area-message user-login-name
-      inhibit-default-init t
-      initial-major-mode 'fundamental-mode
-      initial-scratch-message nil)
-
-;; tab
-(setq-default indent-tabs-mode nil
-              tab-width 4)
-
-(setq-default tab-always-indent nil)
-
-(setq tabify-regexp "^\t* [ \t]+")
-
-;; cursor
-(blink-cursor-mode -1)
-(setq blink-matching-paren nil)
-(setq x-stretch-cursor nil)
-
-;; line and overflow
-(setq-default fill-column 80)
-
-(setq-default truncate-lines t)
-(setq truncate-partial-width-windows nil)
-
-;; highlight line
-(setq hl-line-sticky-flag nil
-      global-hl-line-sticky-flag nil)
-(global-hl-line-mode)
-
-;; show parens
-(setq show-paren-delay 0.1
-      show-paren-highlight-openparen t
-      show-paren-when-point-inside-paren t
-      show-paren-when-point-in-periphery t)
-(show-paren-mode 1)
-
-;; buffer and file handling
-(setq create-lockfiles nil
-      make-backup-files nil)
-
-(setq uniquify-buffer-name-style 'forward
-      ring-bell-function #'ignore
-      visible-bell nil)
-
-(setq find-file-visit-truename t
-      vc-follow-symlinks t)
-
-(setq find-file-suppress-same-file-warnings t)
-
-(setq require-final-newline t)
-
-(setq kill-do-not-save-duplicates t)
-
-(setq confirm-nonexistent-file-or-buffer nil)
-
-(global-auto-revert-mode t)
-
-(setq x-underline-at-descent-line t)
-
-;; minibuffer
-(setq enable-recursive-minibuffers t)
-
-(setq echo-keystrokes 0.02)
-
-(fset #'yes-or-no-p #'y-or-n-p)
-
-(setq minibuffer-prompt-properties '(read-only t intangible t cursor-intangible t face minibuffer-prompt))
-(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-;; modeline
-(setq display-time-mail-string "")
-(setq display-time-day-and-date t)
-(setq display-time-default-load-average nil)
-(display-time-mode 1)
-(column-number-mode 1)
-
-;; setup separate custom settings file
-(setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
+(load personal-config 'noerror)
+
+;; this sets us up for success for the rest of config. we need this to load
+;; without error or everything is done for
+(load taymacs-module)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; CUSTOM FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun tay/cleanup ()
-  "Cleanup all user buffers and remove splits"
-  (interactive)
-  (mapc (lambda (s)
-	  (if (not (string-prefix-p " " (buffer-name s)))
-	      (kill-buffer s)))
-	(buffer-list))
-  (delete-other-windows)
-  ;; (tramp-cleanup-all-buffers)
-  ;; (tramp-cleanup-all-connections)
-  (cd "~/")
-  (message "YOU ARE SO CLEAN"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ORG MODE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'org)
-
-(setq org-startup-indented t
-      org-agenda-files '("~/orgs")
-      org-todo-keywords '((sequence "TODO" "|" "DONE" "ONHOLD"))
-      org-hide-emphasis-markers t
-      org-hide-macro-markers t
-      org-hide-leading-stars t)
-
-(add-to-list 'org-modules 'org-habit t)
-
-(setq org-capture-templates
-      '(("t" "Basic TODO" entry (file+headline "~/orgs/planner.org" "INBOX")
-         "* TODO %? %i\n%u\n")
-        ("d" "Deadline TODO" entry (file+headline "~/orgs/planner.org" "INBOX")
-         "* TODO %? %i\nDEADLINE:%^t\n")
-        ("p" "Personal TODO" entry (file+headline "~/orgs/personal.org" "INBOX")
-         "* TODO %? %i\nDEADLINE:%^t\n")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; CC MODE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq c-default-style "linux"
-      c-basic-offset 4)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; External Packages
 ;;
-;; everything below is contained in external melpa packages
+;;  ______  ______  __   __  ______ __  ______
+;; /\  ___\/\  __ \/\ "-.\ \/\  ___/\ \/\  ___\
+;; \ \ \___\ \ \/\ \ \ \-.  \ \  __\ \ \ \ \__ \
+;;  \ \_____\ \_____\ \_\\"\_\ \_\  \ \_\ \_____\
+;;   \/_____/\/_____/\/_/ \/_/\/_/   \/_/\/_____/
+;;
+;; this section covers all of the module configuration for taymacs. we can
+;; enable/disable modules as we wish.
+;;
+;; - set the `tay/external-packages' var to enable melpa packages
+;; - edit the `tay/modules' list to setup the various modules for taymacs
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; bootstrap melpa
-(require 'package)
-(setq package-check-signature nil)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+;; set if you wish to use external package repos such as melpa
+(setq tay/external-packages t)
 
-;; setup use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(require 'use-package)
-(setq use-package-verbose t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GENERAL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; load macos path
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  (exec-path-from-shell-copy-env "PATH"))
-
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; UI
+;; these are all of the available modules
 ;;
-;; - doom-themes (doom-vibrant)
-;; - telephone-line
-;; - ns-auto-titlebar
-;; 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package doom-themes
-  :ensure t
-  :config
-  (setq doom-themes-enable-bold t    
-        doom-themes-enable-italic t) 
-  (load-theme 'doom-vibrant t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
-
-(use-package solaire-mode
-  :ensure t
-  :config
-  (add-hook 'change-major-mode-hook 'turn-on-solaire-mode)
-  (add-hook 'after-revert-hook 'turn-on-solaire-mode)
-  (add-hook 'ediff-prepare-buffer-hook 'solaire-mode)
-  (add-hook 'minibuffer-setup-hook 'solaire-mode-in-minibuffer)
-  (setq solaire-mode-auto-swap-bg nil)
-
-  (solaire-global-mode +1))
-
-(use-package telephone-line
-  :ensure t
-  :config
-  (setq telephone-line-primary-left-separator 'telephone-line-flat)
-  (setq telephone-line-primary-right-separator 'telephone-line-flat)
-  (setq telephone-line-secondary-left-separator 'telephone-line-flat)
-  (setq telephone-line-secondary-right-separator 'telephone-line-flat)
-  (telephone-line-mode 1))
-
-(use-package ns-auto-titlebar
-  :ensure t
-  :config
-  (when (eq system-type 'darwin) (ns-auto-titlebar-mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; EDITOR
+;; enabling a module will pull in external packages and setup default settings
+;; if external packages are disabled, no functionality may be setup in some
+;; cases
 ;;
-;; - smartparens
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package smartparens
-  :ensure t
-  :config
-  (let ((unless-list '(sp-point-before-word-p
-                       sp-point-after-word-p
-                       sp-point-before-same-p)))
-    (sp-pair "'"  nil :unless unless-list)
-    (sp-pair "\"" nil :unless unless-list))
-
-  (dolist (brace '("(" "{" "["))
-    (sp-pair brace nil
-             :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))
-             :unless '(sp-point-before-word-p sp-point-before-same-p)))
-
-  (sp-local-pair sp-lisp-modes "(" ")" :unless '(:rem sp-point-before-same-p))
-
-  (require 'smartparens-config)
-  (smartparens-global-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; SEARCH
+;; comment out or remove uneeded modules to disable them from loading
 ;;
-;; - ivy
-;; - counsel
-;; - swiper
-;; - ivy-rich
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package ivy
-  :ensure t
-  :config
-  (setq ivy-sort-max-size 7500)
-  (require 'counsel nil t)
-  (setq ivy-height 17
-        ivy-wrap t
-        ivy-fixed-height-minibuffer t
-        ivy-read-action-format-function #'ivy-read-action-format-columns
-        ivy-on-del-error-function #'ignore
-        ivy-use-selectable-prompt t
-        ivy-count-format "(%d/%d) "
-        ivy-display-style 'fancy
-        ivy-initial-inputs-alist nil)
-  (ivy-mode 1))
+(setq tay/modules '(
+                    ;; look, feel, and function
+                    tay/editor
+                    tay/theme
+                    tay/zen
 
-(use-package ivy-rich
-  :ensure t
-  :config
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  (setq ivy-rich-parse-remote-buffer nil)
-  (setq ivy-rich-path-style 'abbrev)
-  (ivy-rich-mode 1))
+                    ;; general
+                    tay/path
+                    tay/dired
+                    tay/ediff
+                    tay/term
 
-(use-package counsel
-  :ensure t
-  :after ivy
-  :config
-  (counsel-mode))
+                    ;; navigation/completion
+                    tay/ivy
 
-(use-package swiper
-  :ensure t
-  :config
-  (setq swiper-goto-start-of-match t)
-  :bind
-  (("C-s" . swiper)
-   ("C-r" . swiper-backward)))
+                    ;; organization
+                    tay/workspace
+
+                    ;; languages
+                    tay/org
+                    tay/cc
+                    tay/python
+                    tay/markdown
+                    tay/web
+
+                    ;; applications
+                    ;; tay/email
+                    tay/git
+                    ))
+
+;; you dont really have a choice to load the core module
+(tay/load-default-module 'tay/core)
+
+;; enable external package managers if desired above
+(if tay/external-packages
+    (tay/enable-ext-pkg))
+
+;; load all enabled modules
+(tay/load-module-list tay/modules)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; DIRED
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package dired
-  :init
-  (setq dired-auto-revert-buffer t 
-        dired-dwim-target t
-        dired-hide-details-hide-symlink-targets nil
-        dired-recursive-copies  'always
-        dired-recursive-deletes 'top
-        dired-create-destination-dirs 'ask))
-
-(use-package diredfl
-  :ensure t
-  :config
-  (add-hook 'dired-mode-hook 'diredfl-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ESHELL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package eshell
-  :init
-  (defun tay/eshell-new ()
-    "Make a brand new eshell buffer in the current location."
-    (interactive)
-    (eshell 'N))
-
-  ;; aliases for eshell
-  (add-hook 'eshell-mode-hook
-	        (lambda ()
-	          (eshell/alias "python" "python3 $*")
-	          (eshell/alias "pip" "pip3 $*")
-	          (eshell/alias "clear" "clear 1"))))
-
-(use-package shrink-path
-  :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; UNDO
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package undo-fu
-  :ensure t
-  :after evil
-  :config
-  (define-key evil-normal-state-map "u" 'undo-fu-only-undo)
-  (define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo))
-
-(use-package volatile-highlights
-  :ensure t
-  :after undo-fu
-  :config
-  (vhl/define-extension 'undo-fu 'undo-fu-only-undo 'undo-fu-only-redo)
-  (vhl/install-extension 'undo-fu)
-  (volatile-highlights-mode t))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LOOKUP
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package dumb-jump
-;;   :ensure t
-;;   :config
-;;   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-;;   (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; WORKSPACES
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package perspective
-  :ensure t
-  :config
-  (persp-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GIT
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package magit
-  :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; EVIL EVIL EVIL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package evil
-  :ensure t
-  :init
-  (defvar evil-want-C-g-bindings t)
-  (defvar evil-want-C-u-scroll t)
-  (defvar evil-want-C-u-delete t)
-  (defvar evil-want-C-w-scroll t)
-  (defvar evil-want-C-w-delete t)
-  (defvar evil-want-Y-yank-to-eol t)
-  (defvar evil-want-abbrev-expand-on-insert-exit nil)
-  (defvar evil-respect-visual-line-mode t)
-
-  (setq evil-ex-search-vim-style-regexp t
-        evil-ex-visual-char-range t
-        evil-mode-line-format 'nil
-        evil-symbol-word-search t
-        evil-ex-interactive-search-highlight 'selected-window
-        evil-kbd-macro-suppress-motion-error t
-        evil-want-keybinding nil)
-  :config
-  (advice-add #'evil-visual-update-x-selection :override #'ignore)
-  (advice-add #'evil-window-split  :override #'+evil-window-split-a)
-  (advice-add #'evil-window-vsplit :override #'+evil-window-vsplit-a)
-  (evil-mode 1))
-
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-
-(use-package evil-easymotion
-  :ensure t)
-
-(use-package evil-traces
-  :ensure t
-  :config
-  (evil-traces-use-diff-faces) 
-  (evil-traces-mode))
-
-(use-package evil-goggles
-  :ensure t
-  :config
-  (evil-goggles-mode)
-  (evil-goggles-use-diff-faces))
-
-(use-package general
-  :ensure t
-  :config
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'override
-   :prefix "SPC"
-
-   ;; file and buffer keymaps
-   "f" 'counsel-find-file
-   "b" 'persp-ivy-switch-buffer
-   "k" (lambda () (interactive) (kill-buffer (current-buffer)))
-   "K" 'tay/cleanup
-   ";" 'comment-line
-   "TAB" 'indent-region
-   "l" 'recenter-top-bottom
-
-   ;; searching
-   "s" '(:ignore t :which-key "search")
-   "s s" 'swiper
-   "s a" 'counsel-ag
-
-   ":" 'counsel-M-x
-
-   ;; open things
-   "o" '(:ignore t :which-key "open")
-   "o e" 'tay/eshell-new
-   ;; "o m" 'mu4e
-   "o g" 'magit
-   "o a" 'org-agenda
-   
-   ;; evil motion
-   "SPC" '(:ignore t :which-key "motion")
-   "SPC j" 'evilem-motion-next-visual-line
-   "SPC k" 'evilem-motion-previous-visual-line
-
-   ;; windows
-   "w" '(:ignore t :which-key "window")
-   "w v" 'split-window-right
-   "w s" 'split-window-below
-   "w h" 'evil-window-left
-   "w j" 'evil-window-down
-   "w k" 'evil-window-up
-   "w l" 'evil-window-right
-   "w d" 'evil-window-delete
-   "w o" 'delete-other-windows
-
-   "p" '(:ignore t :which-key "perspective")
-   "p a" 'persp-add-buffer
-   "p k" 'persp-remove-buffer
-   "p b" 'persp-switch-to-buffer
-   "p s" 'persp-switch
-   "p n" 'persp-next
-   "p p" 'persp-prev
-   "p d" 'persp-delete-frame
-
-   "c" '(:ignore t :which-key "capture")
-   "c c" 'org-capture))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; EMAIL
+;;  __  __  ______  __  __  ______
+;; /\ \/ / /\  ___\/\ \_\ \/\  ___\
+;; \ \  _"-\ \  __\\ \____ \ \___  \
+;;  \ \_\ \_\ \_____\/\_____\/\_____\
+;;   \/_/\/_/\/_____/\/_____/\/_____/
+;;
+;; this section covers all of the customized key bindings in taymacs. these
+;; are all in one place so that it is easier understand and modify.
+;;
+;; there are a few taymacs helpers that allow us to easily setup keys
+;;
+;; - `tay/global-key': set a global keybinding
+;; - `tay/global-module-key': set a global keybinding if a module is enabled
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")
-;; (load (expand-file-name "personal.el" user-emacs-directory) 'noerror)
-;; 
-;; (use-package mu4e
-;;   :ensure nil
-;;   :config
-;;   ;; mbsync settings
-;;   (setq mu4e-get-mail-command "mbsync -a"
-;;         mu4e-change-filenames-when-moving t)
-;; 
-;;   ;; general mu4e settings
-;;   (setq mu4e-update-interval nil
-;;         mu4e-compose-format-flowed t 
-;;         mu4e-view-show-addresses t
-;;         mu4e-sent-messages-behavior 'sent
-;;         mu4e-hide-index-messages t
-;;         mu4e-view-show-images t
-;;         mu4e-view-image-max-width 800
-;;         message-send-mail-function #'smtpmail-send-it
-;;         smtpmail-stream-type 'starttls
-;;         message-kill-buffer-on-exit t 
-;;         mu4e-completing-read-function #'ivy-completing-read
-;;         user-mail-agent 'mu4e-user-agent)
-;; 
-;;   ;; truncate lines in emails
-;;   (add-hook 'mu4e-view-mode-hook (lambda () (setq truncate-lines nil)))
-;; 
-;;   ;; gmail settings
-;;   (setq mu4e-sent-messages-behavior 'delete
-;;         mu4e-index-cleanup nil
-;;         mu4e-index-lazy-check t)
-;; 
-;;   (setq message-cite-function  'message-cite-original
-;;         message-citation-line-function  'message-insert-formatted-citation-line
-;;         message-cite-reply-position 'above
-;;         message-yank-prefix  "    "
-;;         message-yank-cited-prefix  "    "
-;;         message-yank-empty-prefix  "    "
-;;         message-citation-line-format "On %e %B %Y %R, %f wrote:\n"))
-;; 
-;; (use-package smtpmail
-;;   :ensure nil
-;;   :custom
-;;   (message-send-mail-function 'smtpmail-send-it)
-;;   (smtpmail-stream-type 'starttls)
-;;   (smtpmail-default-smtp-server "smtp.gmail.com")
-;;   (smtpmail-smtp-server "smtp.gmail.com")
-;;   (smtpmail-smtp-service 587))
+;; disable these bindings as they tend to not be wanted or cause loss of work
+(tay/global-key "C-z" nil)
+(tay/global-key "C-x C-z" nil)
+(tay/global-key "C-x C-c" nil)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MARKDOWN
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package markdown-mode
-  :ensure t
-  :defer t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+;; helpers for killing things better
+(tay/global-key "C-x C-k" 'tay/kill-this-buffer)
+(tay/global-key "C-c K" 'tay/cleanup)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; C/C++
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package lsp-mode
-  :ensure t
-  :hook
-  (c-mode . lsp-deferred)
-  :commands
-  (lsp lsp-deferred)
-  :config
-  (setq lsp-clients-clangd-executable "/usr/local/opt/llvm/bin/clangd"))
+;; go to full screen
+(tay/global-key "C-c 0" 'toggle-frame-fullscreen)
 
-(use-package lsp-ivy
-  :defer t
-  :diminish
-  :ensure t
-  :commands lsp-ivy-workspace-symbol)
+(tay/global-module-key "C-c o c" 'org-capture 'tay/org)
+
+(tay/global-module-key "C-c g" 'magit 'tay/git)
+
+(tay/global-module-key "C-c a" 'counsel-ag 'tay/ivy)
+(tay/global-module-key "C-s" 'swiper 'tay/ivy)
+(tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
+(tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
+(tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
+
+(tay/global-module-key "C-c t" (lambda () (interactive) (vterm t)) 'tay/term)
+(tay/global-module-key "C-c e" 'tay/eshell-new 'tay/term)
+
+(tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
+(tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
+(tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
+(tay/global-module-key "C-c p s" 'persp-switch 'tay/workspace)
+(tay/global-module-key "C-c p n" 'persp-next 'tay/workspace)
+(tay/global-module-key "C-c p p" 'persp-prev 'tay/workspace)
+(tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
+
+(tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CLEANUP
