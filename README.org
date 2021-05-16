@@ -38,7 +38,8 @@ be downloaded or enabled.
 | Path      | MacOs path helper                            | ~tay/path~      |
 | Dired     | Dired settings                               | ~tay/dired~     |
 | Ediff     | Ediff settings                               | ~tay/ediff~     |
-| Term      | Terminal settings (eshell, vterm)            | ~tay/term~      |
+| VTerm     | Terminal settings (vterm)                    | ~tay/vterm~     |
+| Eshell    | Eshell settings                              | ~tay/eshell~    |
 | Ivy       | Navigation, search, etc. via Ivy and friends | ~tay/ivy~       |
 | Workspace | Buffer isolation for projects                | ~tay/workspace~ |
 | Org       | org-mode settings                            | ~tay/org~       |

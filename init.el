@@ -79,7 +79,10 @@
                     tay/path
                     tay/dired
                     tay/ediff
-                    tay/term
+
+                    ;; terms
+                    tay/eshell
+                    ;; tay/vterm
 
                     ;; navigation/completion
                     tay/ivy
@@ -89,13 +92,13 @@
 
                     ;; languages
                     tay/org
-                    tay/cc
-                    tay/python
+                    ;; tay/cc
+                    ;; tay/python
                     tay/markdown
                     tay/web
 
                     ;; applications
-                    ;; tay/email
+                    tay/email
                     tay/git
                     ))
 
