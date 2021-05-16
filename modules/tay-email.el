@@ -12,6 +12,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")
+(require 'mu4e)
 
 ;; mbsync settings
 (setq mu4e-get-mail-command "mbsync -a"
@@ -21,15 +22,15 @@
 (setq mu4e-update-interval nil
       mu4e-compose-format-flowed t
       mu4e-view-show-addresses t
-      mu4e-sent-messages-behavior 'sent
-      mu4e-hide-index-messages t
+      mu4e-sent-messages-behavior 'delete
       mu4e-view-show-images t
       mu4e-view-image-max-width 800
       message-send-mail-function #'smtpmail-send-it
       smtpmail-stream-type 'starttls
       message-kill-buffer-on-exit t
       mu4e-completing-read-function #'ivy-completing-read
-      user-mail-agent 'mu4e-user-agent)
+      user-mail-agent 'mu4e-user-agent
+      mu4e-attachment-dir  "~/Downloads")
 
 ;; truncate lines in emails
 (add-hook 'mu4e-view-mode-hook (lambda () (setq truncate-lines nil)))
@@ -45,7 +46,7 @@
       message-yank-prefix  "    "
       message-yank-cited-prefix  "    "
       message-yank-empty-prefix  "    "
-      message-citation-line-format "On %e %B %Y %R, %f wrote:\n"))
+      message-citation-line-format "On %e %B %Y %R, %f wrote:\n")
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-stream-type 'starttls

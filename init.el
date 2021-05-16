@@ -163,8 +163,8 @@
 
 ;; hotkeys for eshell and vterm
 ;; these will open a new terminal every time we use them
-(tay/global-module-key "C-c t" 'tay/vterm-new 'tay/term)
-(tay/global-module-key "C-c e" 'tay/eshell-new 'tay/term)
+(tay/global-module-key "C-c t" 'tay/vterm-new 'tay/vterm)
+(tay/global-module-key "C-c e" 'tay/eshell-new 'tay/eshell)
 
 ;; switch around projects and segregate buffer so we dont get lost
 (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
@@ -177,6 +177,9 @@
 
 ;; toggle zen mode easily in buffer
 (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
+
+;; open email
+(tay/global-module-key "C-c m" 'mu4e 'tay/email)
 
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook
