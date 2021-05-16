@@ -28,7 +28,7 @@
    (defun tay/vterm-new ()
      "Make a brand new vterm buffer"
      (interactive)
-     (vterm t))))
+     (vterm t)))
 
  ;; make the eshell prompt nice
  (use-package shrink-path))
