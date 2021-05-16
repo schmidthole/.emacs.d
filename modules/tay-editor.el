@@ -4,6 +4,8 @@
 ;; - smartparens
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (tay/do-if-ext-pkg
+ ;; this package makes parens and pairs in general behave like fancier editors
+ ;; most of the customization is ripped from doom emacs
  (use-package smartparens
    :config
    (let ((unless-list '(sp-point-before-word-p
@@ -22,6 +24,7 @@
    (require 'smartparens-config)
    (smartparens-global-mode))
 
+ ;; nice way to display what keys are available for a given prefix
  (use-package which-key
    :config
    (which-key-mode)))

@@ -3,6 +3,12 @@
 ;;
 ;; mu4e settings and smtp sending
 ;;
+;; this module is extremely opinionated and specific to me. it assumes we are
+;; using mu4e, mbsync, and smpt sendmail for email. the formatting is also
+;; setup to play nice with gmail.
+;;
+;; most of the specific settings should reside in `personal.el'
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")

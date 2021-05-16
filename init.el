@@ -8,6 +8,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; pop that garbage collection on up for increased startup speed
 (setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
 (defvar tdm--file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
@@ -106,6 +107,9 @@
     (tay/enable-ext-pkg))
 
 ;; load all enabled modules
+;;
+;; check out each module's source in the directory for specifics on what is
+;; being loaded
 (tay/load-module-list tay/modules)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -137,19 +141,29 @@
 ;; go to full screen
 (tay/global-key "C-c 0" 'toggle-frame-fullscreen)
 
+;; capture a new task
 (tay/global-module-key "C-c o c" 'org-capture 'tay/org)
 
+;; open git easily
 (tay/global-module-key "C-c g" 'magit 'tay/git)
 
+;; ag searching is great, needs silver searcher to be installed
 (tay/global-module-key "C-c a" 'counsel-ag 'tay/ivy)
+
+;; swiper instead of isearch
 (tay/global-module-key "C-s" 'swiper 'tay/ivy)
 (tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
+
+;; avy for jumping around visible buffer area
 (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
 (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
 
-(tay/global-module-key "C-c t" (lambda () (interactive) (vterm t)) 'tay/term)
+;; hotkeys for eshell and vterm
+;; these will open a new terminal every time we use them
+(tay/global-module-key "C-c t" 'tay/vterm-new 'tay/term)
 (tay/global-module-key "C-c e" 'tay/eshell-new 'tay/term)
 
+;; switch around projects and segregate buffer so we dont get lost
 (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
 (tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
 (tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
@@ -158,12 +172,10 @@
 (tay/global-module-key "C-c p p" 'persp-prev 'tay/workspace)
 (tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
 
+;; toggle zen mode easily in buffer
 (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; CLEANUP
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook
     (lambda () (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1)))
 
