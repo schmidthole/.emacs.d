@@ -10,11 +10,11 @@ random settings.
 
 * Customization
 
-Everything you need to cusomize is found in the good old ~init.el~ file found
+Everything you need to cusomize is found in the good 'ol ~init.el~ file
 inside the ~.emacs.d/~ directory. Everything starts from here no matter what.
 Individual module customization can be found in the ~modules/~ directory.
 
-After making changes to the ~init.el~, you simply need to restart emacs for
+After making changes to the ~init.el~, you'll need to restart emacs for
 the changes to take effect.
 
 * Modules
@@ -24,7 +24,7 @@ at will. These can be found in the ~tay/modules~ list. Simply
 comment/uncomment to enable and disable modules.
 
 The ~tay/external-packages~ variable can also be unset (it is set by default)
-to enable external package downloads from MELPA. If this is unset, only
+to enable/disable external package downloads from MELPA. If this is unset, only
 built in emacs settings will be used where applicable and no packages will
 be downloaded or enabled.
 
@@ -52,7 +52,8 @@ be downloaded or enabled.
 * Keybindings
 
 Taymacs sticks to standard Emacs bindings with a few customizations. These are
-all in one place within the ~init.el~ so they can be easily modified.
+all in one place within the ~init.el~ so they can be easily modified. The goal is
+to not have to remember a ton of random keys to accomplish everyday tasks.
 
 ** Keybindings List
 
