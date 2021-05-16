@@ -6,6 +6,8 @@ to exactly what you need. This distro approach tries to keep things organized
 and easy to understand, without chasing through directories trying to find
 random settings.
 
+[[img/screenshot.png]]
+
 * Customization
 
 Everything you need to cusomize is found in the good old ~init.el~ file found
