@@ -30,24 +30,24 @@ be downloaded or enabled.
 
 ** Module List
 
-| Module    | Description                                  | List Var       |
-|-----------+----------------------------------------------+----------------|
-| Editor    | Editor packages (smart-parens, which-key)    | ~'tay/editor~    |
-| Theme     | Theme, modeline, etc.                        | ~'tay/theme~     |
-| Zen       | Zen mode                                     | ~'tay/zen~       |
-| Path      | MacOs path helper                            | ~'tay/path~      |
-| Dired     | Dired settings                               | ~'tay/dired~     |
-| Ediff     | Ediff settings                               | ~'tay/ediff~     |
-| Term      | Terminal settings (eshell, vterm)            | ~'tay/term~      |
-| Ivy       | Navigation, search, etc. via Ivy and friends | ~'tay/ivy~       |
-| Workspace | Buffer isolation for projects                | ~'tay/workspace~ |
-| Org       | org-mode settings                            | ~'~tay/org~       |
-| C/C++     | C language packages/settings                 | ~'tay/cc~        |
-| Python    | Python language settings                     | ~'tay/python~    |
-| Markdown  | Markdown language settings                   | ~'tay/markdown~  |
-| Web       | HTML, JS, and templating                     | ~'tay/web~       |
-| Email     | Email setup via mu4e, mbsync, smtp           | ~'tay/email~     |
-| Git       | Git via magit                                | ~'tay/git~       |
+| Module    | Description                                  | List Var      |
+|-----------+----------------------------------------------+---------------|
+| Editor    | Editor packages (smart-parens, which-key)    | ~tay/editor~    |
+| Theme     | Theme, modeline, etc.                        | ~tay/theme~     |
+| Zen       | Zen mode                                     | ~tay/zen~       |
+| Path      | MacOs path helper                            | ~tay/path~      |
+| Dired     | Dired settings                               | ~tay/dired~     |
+| Ediff     | Ediff settings                               | ~tay/ediff~     |
+| Term      | Terminal settings (eshell, vterm)            | ~tay/term~      |
+| Ivy       | Navigation, search, etc. via Ivy and friends | ~tay/ivy~       |
+| Workspace | Buffer isolation for projects                | ~tay/workspace~ |
+| Org       | org-mode settings                            | ~tay/org~       |
+| C/C++     | C language packages/settings                 | ~tay/cc~        |
+| Python    | Python language settings                     | ~tay/python~    |
+| Markdown  | Markdown language settings                   | ~tay/markdown~  |
+| Web       | HTML, JS, and templating                     | ~tay/web~       |
+| Email     | Email setup via mu4e, mbsync, smtp           | ~tay/email~     |
+| Git       | Git via magit                                | ~tay/git~       |
 
 * Keybindings
 
