@@ -6,3 +6,4 @@ network-security.data
 .DS_Store
 personal.el
 transient/
+org-clock-save.el
