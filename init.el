@@ -97,6 +97,7 @@
                     ;; tay/python
                     tay/markdown
                     tay/web
+                    tay/json
 
                     ;; applications
                     tay/email
