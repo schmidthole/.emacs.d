@@ -71,6 +71,7 @@
 ;;
 (setq tay/modules '(
                     ;; look, feel, and function
+                    tay/font
                     tay/editor
                     tay/theme
                     tay/zen

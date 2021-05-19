@@ -8,6 +8,7 @@
 ;; defines an association list of the available taymacs modules and their
 ;; filenames within the modules dir
 (setq tay/module-files-alist '((tay/core . "tay-core.el")
+                               (tay/font . "tay-font.el")
                                (tay/editor . "tay-editor.el")
                                (tay/theme . "tay-theme.el")
                                (tay/path . "tay-path.el")
