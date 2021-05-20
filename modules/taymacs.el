@@ -102,6 +102,29 @@ nothing is performed for that entry"
   (setq use-package-always-ensure t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MOVEMENT
+;;
+;; custom opinionated buffer editing functions
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun tay/vi-line-below ()
+  "make a newline below the current one and move there. this will not break
+apart lines like the standard emacs binding"
+  (interactive)
+  (progn
+    (move-end-of-line 1)
+    (newline-and-indent)))
+
+(defun tay/vi-line-above ()
+  "make a newline above the current one and move there. this will not break apart
+line like the standard emacs binding"
+  (interactive)
+  (progn
+    (previous-line)
+    (tay/vi-line-below)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXTRAS
 ;;
 ;; extra collected functions for various tasks
