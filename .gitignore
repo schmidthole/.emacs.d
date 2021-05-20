@@ -7,3 +7,5 @@ network-security.data
 personal.el
 transient/
 org-clock-save.el
+bookmarks
+tramp
