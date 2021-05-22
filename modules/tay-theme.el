@@ -10,7 +10,9 @@
  (use-package doom-themes
    :config
    (setq doom-themes-enable-bold t
-         doom-themes-enable-italic t)
+         doom-themes-enable-italic t
+         doom-vibrant-brighter-modeline t
+         doom-vibrant-padded-modeline t)
    (load-theme 'doom-vibrant t)
 
    (doom-themes-visual-bell-config)
