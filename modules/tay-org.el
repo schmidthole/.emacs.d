@@ -73,3 +73,6 @@
            ("[ ]"  . 9744)
            ("DONE" . 9745)
            ("[X]"  . 9745)))))
+
+;; exporting
+(setq org-html-htmlize-output-type 'css)
