@@ -139,6 +139,10 @@
 (tay/global-key "C-x C-z" nil)
 (tay/global-key "C-x C-c" nil)
 
+;; more vi like newline keys
+(tay/global-key "C-j" 'tay/vi-line-below)
+(tay/global-key "C-o" 'tay/vi-line-above)
+
 ;; helpers for killing things better
 (tay/global-key "C-x C-k" 'tay/kill-this-buffer)
 (tay/global-key "C-c K" 'tay/cleanup)
