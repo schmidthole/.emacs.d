@@ -9,3 +9,4 @@ transient/
 org-clock-save.el
 bookmarks
 tramp
+.lsp-session-v1
