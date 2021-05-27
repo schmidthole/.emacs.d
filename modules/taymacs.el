@@ -26,7 +26,8 @@
                                (tay/web . "tay-web.el")
                                (tay/email . "tay-email.el")
                                (tay/git . "tay-git.el")
-                               (tay/json . "tay-json.el")))
+                               (tay/json . "tay-json.el")
+                               (tay/clojure . "tay-clojure.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS
