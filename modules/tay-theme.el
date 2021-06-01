@@ -5,30 +5,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (tay/do-if-ext-pkg
- ;; i really like the doom themes, they are well put together and dont really
- ;; fall short for any major modes
- (use-package doom-themes
-   :config
-   (setq doom-themes-enable-bold t
-         doom-themes-enable-italic t
-         doom-vibrant-brighter-modeline t
-         doom-vibrant-padded-modeline t)
-   (load-theme 'doom-vibrant t)
+ ;; light and dark modus themes are what I keep coming back to for some reason
+ (use-package modus-themes
+  :init
+  (setq modus-themes-slanted-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-region 'no-extend
+        modus-themes-paren-match 'intense-bold
+        modus-themes-completions 'opinionated
+        modus-themes-prompts 'intense-accented
+        modus-themes-mode-line 'accented)
 
-   (doom-themes-visual-bell-config)
-   (doom-themes-org-config))
+  (modus-themes-load-themes)
+  :config
+  (modus-themes-load-vivendi))
 
- ;; another companion to doom themes that colors buffers different based
- ;; on mode
- (use-package solaire-mode
-   :config
-   (add-hook 'change-major-mode-hook 'turn-on-solaire-mode)
-   (add-hook 'after-revert-hook 'turn-on-solaire-mode)
-   (add-hook 'ediff-prepare-buffer-hook 'solaire-mode)
-   (add-hook 'minibuffer-setup-hook 'solaire-mode-in-minibuffer)
-   (setq solaire-mode-auto-swap-bg nil)
-
-   (solaire-global-mode +1))
 
  ;; this modeline is minimal and easy to read. it also does the declutter
  ;; tasks for you
