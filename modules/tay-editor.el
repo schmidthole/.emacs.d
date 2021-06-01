@@ -22,9 +22,4 @@
    (sp-local-pair sp-lisp-modes "(" ")" :unless '(:rem sp-point-before-same-p))
 
    (require 'smartparens-config)
-   (smartparens-global-mode))
-
- ;; nice way to display what keys are available for a given prefix
- (use-package which-key
-   :config
-   (which-key-mode)))
+   (smartparens-global-mode)))
