@@ -169,8 +169,11 @@
 
 ;; hotkeys for eshell and vterm
 ;; these will open a new terminal every time we use them
-(tay/global-module-key "C-c t" 'tay/vterm-new 'tay/vterm)
+(tay/global-module-key "C-c s" 'tay/vterm-new 'tay/vterm)
 (tay/global-module-key "C-c e" 'tay/eshell-new 'tay/eshell)
+
+;; switch light and dark themes easily
+(tay/global-module-key "C-c t" 'modus-themes-toggle 'tay/theme)
 
 ;; switch around projects and segregate buffer so we dont get lost
 (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
