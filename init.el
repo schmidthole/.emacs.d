@@ -143,9 +143,23 @@
 (tay/global-key "C-j" 'tay/vi-line-below)
 (tay/global-key "C-o" 'tay/vi-line-above)
 
+;; move in chunks
+(tay/global-key "<up>" 'tay/up-chunk)
+(tay/global-key "<down>" 'tay/down-chunk)
+
 ;; helpers for killing things better
 (tay/global-key "C-x C-k" 'tay/kill-this-buffer)
 (tay/global-key "C-c K" 'tay/cleanup)
+(tay/global-key "M-k" 'tay/kill-line)
+
+;; selection functions
+(tay/global-module-key "C-=" 'er/expand-region 'tay/editor)
+
+(tay/global-key "M-i" nil)
+(tay/global-module-key "M-i l" 'tay/avy-select-to-line 'tay/ivy)
+(tay/global-key "M-i \"" (lambda ()
+                           (interactive)
+                           (tay/select-inside "\"")))
 
 ;; go to full screen
 (tay/global-key "C-c 0" 'toggle-frame-fullscreen)

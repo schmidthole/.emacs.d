@@ -51,7 +51,22 @@
 
 ;; avy allows us to easily jump around buffers by character, line, or whatevs
 (use-package avy
-  :defer 0.4)
+  :defer 0.4
+  :config
+  (defun tay/avy-select-to-line ()
+    "use avy to select from the current point to a certain line. operates similar
+to vi's visual line mode"
+    (interactive)
+    (set-mark (point))
+    (avy-goto-line)
+    (exchange-point-and-mark)
+    (if (< (point) (mark))
+        (beginning-of-line)
+      (end-of-line))
+    (exchange-point-and-mark)
+    (if (< (point) (mark))
+        (beginning-of-line)
+      (end-of-line))))
 
 ;; adds ivy functionality to any lsp stuff
 (use-package lsp-ivy

@@ -125,6 +125,35 @@ line like the standard emacs binding"
     (previous-line)
     (tay/vi-line-below)))
 
+(defun tay/up-chunk ()
+  "moves up 20 lines at a time"
+  (interactive)
+  (previous-line 20))
+
+(defun tay/down-chunk ()
+  "moves down 20 lines at a time"
+  (interactive)
+  (next-line 20))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; EDITING
+;;
+;; custom editing functions
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun tay/kill-line ()
+  "kill the line regardless of cursor position and move to next line"
+  (interactive)
+  (beginning-of-line)
+  (kill-line)
+  (let ((line-contents (buffer-substring-no-properties
+                        (line-beginning-position)
+                        (line-end-position))))
+    (if (string= line-contents "")
+        (kill-line)))
+  (back-to-indentation))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXTRAS
 ;;
