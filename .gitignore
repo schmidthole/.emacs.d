@@ -10,3 +10,5 @@ org-clock-save.el
 bookmarks
 tramp
 .lsp-session-v1
+.cache/
+anaconda-mode/
