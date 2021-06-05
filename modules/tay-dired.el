@@ -20,5 +20,6 @@
 (tay/do-if-ext-pkg
  ;; this is a great package that makes dired easier to read
  (use-package diredfl
+   :defer 1.2
    :config
    (add-hook 'dired-mode-hook 'diredfl-mode)))

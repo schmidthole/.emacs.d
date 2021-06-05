@@ -7,4 +7,5 @@
 
 ;; self-explanatory.... use magit for git
 (tay/do-if-ext-pkg
- (use-package magit))
+ (use-package magit
+   :defer t))

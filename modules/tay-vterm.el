@@ -11,6 +11,7 @@
  ;; it's a shame but most emacs shells fall over with one thing or another
  ;; this shell doesn't
  (use-package vterm
+   :defer 0.6
    :init
    (setq vterm-always-compile-module t)
    :config

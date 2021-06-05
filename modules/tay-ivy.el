@@ -44,16 +44,16 @@
   (setq ivy-rich-path-style 'abbrev)
   (ivy-rich-mode 1))
 
-(use-package ivy-posframe
-  :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-  (ivy-posframe-mode 1))
+;; (use-package ivy-posframe
+;;   :config
+;;   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+;;   (ivy-posframe-mode 1))
 
 ;; avy allows us to easily jump around buffers by character, line, or whatevs
 (use-package avy
-  :defer 0.2)
+  :defer 0.4)
 
 ;; adds ivy functionality to any lsp stuff
 (use-package lsp-ivy
-  :defer t
+  :defer
   :commands lsp-ivy-workspace-symbol))

@@ -61,18 +61,5 @@
         ("p" "Personal TODO" entry (file+headline "~/orgs/personal.org" "INBOX")
          "* TODO %? %i\nDEADLINE:%^t\n")))
 
-(tay/do-if-ext-pkg
- (use-package org-superstar
-   :config
-   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-   (setq org-superstar-leading-bullet ?\s
-         org-superstar-leading-fallback ?\s
-         org-hide-leading-stars nil
-         org-superstar-todo-bullet-alist
-         '(("TODO" . 9744)
-           ("[ ]"  . 9744)
-           ("DONE" . 9745)
-           ("[X]"  . 9745)))))
-
 ;; exporting
 (setq org-html-htmlize-output-type 'css)
