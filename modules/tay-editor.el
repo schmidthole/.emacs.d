@@ -22,4 +22,7 @@
    (sp-local-pair sp-lisp-modes "(" ")" :unless '(:rem sp-point-before-same-p))
 
    (require 'smartparens-config)
-   (smartparens-global-mode)))
+   (smartparens-global-mode))
+
+ ;; vim like object selection
+ (use-package expand-region))
