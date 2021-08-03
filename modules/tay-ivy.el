@@ -35,14 +35,14 @@
   :config
   (setq swiper-goto-start-of-match t))
 
-;; ivy rich provides some more info and color to selection buffers
-(use-package ivy-rich
-  :after counsel
-  :config
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  (setq ivy-rich-parse-remote-buffer nil)
-  (setq ivy-rich-path-style 'abbrev)
-  (ivy-rich-mode 1))
+;; ;; ivy rich provides some more info and color to selection buffers
+;; (use-package ivy-rich
+;;   :after counsel
+;;   :config
+;;   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+;;   (setq ivy-rich-parse-remote-buffer nil)
+;;   (setq ivy-rich-path-style 'abbrev)
+;;   (ivy-rich-mode 1))
 
 ;; (use-package ivy-posframe
 ;;   :config

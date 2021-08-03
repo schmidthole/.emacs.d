@@ -10,6 +10,7 @@
 (setq tay/module-files-alist '((tay/core . "tay-core.el")
                                (tay/font . "tay-font.el")
                                (tay/editor . "tay-editor.el")
+                               (tay/evil . "tay-evil.el")
                                (tay/theme . "tay-theme.el")
                                (tay/path . "tay-path.el")
                                (tay/dired . "tay-dired.el")
@@ -27,7 +28,9 @@
                                (tay/email . "tay-email.el")
                                (tay/git . "tay-git.el")
                                (tay/json . "tay-json.el")
-                               (tay/clojure . "tay-clojure.el")))
+                               (tay/clojure . "tay-clojure.el")
+                               (tay/kotlin . "tay-kotlin.el")
+                               (tay/cmake . "tay-cmake.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS
@@ -40,6 +43,12 @@
   (let* ((file-location (concat tay/custom-module-path name))
          (module-path (expand-file-name file-location user-emacs-directory)))
     (load module-path 'noerror)))
+
+(defun tay/load-mode (name)
+  "loads a custom mode file from the defined dir"
+  (let* ((file-location (concat tay/custom-mode-path name))
+         (mode-path (expand-file-name file-location user-emacs-directory)))
+    (load mode-path 'noerror)))
 
 (defun tay/load-default-module (symbol)
   "loads a module via symbol name vs. by file name if module assoc dne, then
@@ -154,6 +163,14 @@ line like the standard emacs binding"
         (kill-line)))
   (back-to-indentation))
 
+(defun tay/copy-line ()
+  "copy the entire current line"
+  (interactive)
+  (beginning-of-line)
+  (set-mark (point))
+  (end-of-line)
+  (kill-ring-save mark point))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXTRAS
 ;;
@@ -165,9 +182,9 @@ line like the standard emacs binding"
   "Cleanup all user buffers and remove splits"
   (interactive)
   (mapc (lambda (s)
-	  (if (not (string-prefix-p " " (buffer-name s)))
-	      (kill-buffer s)))
-	(buffer-list))
+	      (if (not (string-prefix-p " " (buffer-name s)))
+	          (kill-buffer s)))
+	    (buffer-list))
   (delete-other-windows)
   ;; (tramp-cleanup-all-buffers)
   ;; (tramp-cleanup-all-connections)
