@@ -23,6 +23,7 @@
 ;; this defines where all of the modules live for this config
 ;; THIS MUST BE SET
 (setq tay/custom-module-path "modules/")
+(setq tay/custom-mode-path "modes/")
 
 ;; define paths to our basic settings files
 ;;
@@ -71,10 +72,11 @@
 ;;
 (setq tay/modules '(
                     ;; look, feel, and function
-                    tay/font
+                    ;; tay/font
                     tay/editor
+                    tay/evil
                     tay/theme
-                    tay/zen
+                    ;; tay/zen
 
                     ;; general
                     tay/path
@@ -83,24 +85,26 @@
 
                     ;; terms
                     tay/eshell
-                    ;; tay/vterm
+                    tay/vterm
 
                     ;; navigation/completion
                     tay/ivy
 
                     ;; organization
-                    tay/workspace
+                    ;; tay/workspace
 
                     ;; languages
                     tay/org
-                    ;; tay/cc
-                    ;; tay/python
+                    tay/cc
+                    tay/python
                     tay/markdown
                     tay/web
                     tay/json
+                    tay/kotlin
+                    tay/clojure
 
                     ;; applications
-                    tay/email
+                    ;; tay/email
                     tay/git
                     ))
 
@@ -157,9 +161,6 @@
 
 (tay/global-key "M-i" nil)
 (tay/global-module-key "M-i l" 'tay/avy-select-to-line 'tay/ivy)
-(tay/global-key "M-i \"" (lambda ()
-                           (interactive)
-                           (tay/select-inside "\"")))
 
 ;; go to full screen
 (tay/global-key "C-c 0" 'toggle-frame-fullscreen)
@@ -178,8 +179,8 @@
 (tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
 
 ;; avy for jumping around visible buffer area
-(tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
-(tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
+;; (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
+;; (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
 
 ;; hotkeys for eshell and vterm
 ;; these will open a new terminal every time we use them
@@ -190,13 +191,13 @@
 (tay/global-module-key "C-c t" 'modus-themes-toggle 'tay/theme)
 
 ;; switch around projects and segregate buffer so we dont get lost
-(tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
-(tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
-(tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
-(tay/global-module-key "C-c p s" 'persp-switch 'tay/workspace)
-(tay/global-module-key "C-c p n" 'persp-next 'tay/workspace)
-(tay/global-module-key "C-c p p" 'persp-prev 'tay/workspace)
-(tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
+;; (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
+;; (tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
+;; (tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
+;; (tay/global-module-key "C-c p s" 'persp-switch 'tay/workspace)
+;; (tay/global-module-key "C-c p n" 'persp-next 'tay/workspace)
+;; (tay/global-module-key "C-c p p" 'persp-prev 'tay/workspace)
+;; (tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
 
 ;; toggle zen mode easily in buffer
 (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
@@ -209,4 +210,5 @@
     (lambda () (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1)))
 
 (add-hook 'emacs-startup-hook
-    (lambda () (setq file-name-handler-alist tdm--file-name-handler-alist)))
+          (lambda () (setq file-name-handler-alist tdm--file-name-handler-alist)))
+(put 'upcase-region 'disabled nil)
