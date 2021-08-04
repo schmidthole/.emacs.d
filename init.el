@@ -85,23 +85,24 @@
 
                     ;; terms
                     tay/eshell
-                    tay/vterm
+                    ;; tay/vterm
 
                     ;; navigation/completion
-                    tay/ivy
+                    ;; tay/ivy
+                    tay/ido
 
                     ;; organization
                     ;; tay/workspace
 
                     ;; languages
-                    tay/org
+                    ;; tay/org
                     tay/cc
                     tay/python
                     tay/markdown
                     tay/web
-                    tay/json
+                    ;; tay/json
                     tay/kotlin
-                    tay/clojure
+                    ;; tay/clojure
 
                     ;; applications
                     ;; tay/email

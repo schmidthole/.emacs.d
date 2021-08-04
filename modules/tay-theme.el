@@ -4,13 +4,15 @@
 ;; color scheme, modeline, titlebar
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-theme 'modus-operandi t)
-
 (tay/do-if-ext-pkg
  ;; (use-package doom-themes
  ;;   :config
  ;;   (setq doom-challenger-deep-brighter-modeline t)
  ;;   (load-theme 'doom-challenger-deep t))
+
+ (use-package modus-themes
+   :config
+   (load-theme 'modus-operandi t))
 
  ;; this modeline is minimal and easy to read. it also does the declutter
  ;; tasks for you

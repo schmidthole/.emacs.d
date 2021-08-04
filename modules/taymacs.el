@@ -30,7 +30,8 @@
                                (tay/json . "tay-json.el")
                                (tay/clojure . "tay-clojure.el")
                                (tay/kotlin . "tay-kotlin.el")
-                               (tay/cmake . "tay-cmake.el")))
+                               (tay/cmake . "tay-cmake.el")
+                               (tay/ido . "tay-ido.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS
@@ -48,7 +49,7 @@
   "loads a custom mode file from the defined dir"
   (let* ((file-location (concat tay/custom-mode-path name))
          (mode-path (expand-file-name file-location user-emacs-directory)))
-    (load mode-path 'noerror)))
+    (load mode-path)))
 
 (defun tay/load-default-module (symbol)
   "loads a module via symbol name vs. by file name if module assoc dne, then
