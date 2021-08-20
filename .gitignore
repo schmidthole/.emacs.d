@@ -12,3 +12,4 @@ tramp
 .lsp-session-v1
 .cache/
 anaconda-mode/
+smex-items
