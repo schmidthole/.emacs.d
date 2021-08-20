@@ -18,4 +18,6 @@
    (defun tay/vterm-new ()
      "Make a brand new vterm buffer"
      (interactive)
+     ;; keep our M-i prefix command since this is rarely used term side
+     (define-key vterm-mode-map  (kbd "M-i") nil)
      (vterm t))))

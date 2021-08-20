@@ -17,6 +17,9 @@
 
 (add-hook 'dired-load-hook (function (lambda () (load "dired-x"))))
 
+;; keep our prefix command for dired mode since it is never used for dired ops
+(define-key dired-mode-map (kbd "M-i") nil)
+
 (tay/do-if-ext-pkg
  ;; this is a great package that makes dired easier to read
  (use-package diredfl
