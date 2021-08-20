@@ -36,7 +36,7 @@
                                (tay/window . "tay-window.el")
                                (tay/undo . "tay-undo.el")
                                (tay/anzu . "tay-anzu.el")
-                               (tay/posframe . "tay-posframe.el")))
+                               (tay/icons . "tay-icons.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS
