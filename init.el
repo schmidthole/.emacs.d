@@ -75,6 +75,7 @@
                     ;; tay/font
                     tay/editor
                     ;; tay/evil
+                    tay/icons
                     tay/theme
                     ;; tay/zen
 
@@ -144,7 +145,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; disable these bindings as they tend to not be wanted or cause loss of work
 (tay/global-key "M-i" nil)
 (tay/global-key "C-z" nil)
 (tay/global-key "C-x C-z" nil)
@@ -157,7 +157,7 @@
 (tay/global-module-key "C-/" 'undo 'tay/undo)
 (tay/global-module-key "C-z" 'redo 'tay/redo)
 (tay/global-key "C-x C-k" 'tay/kill-this-buffer)
-(tay/global-key "M-i K" 'tay/cleanup)
+(tay/global-key "M-i k" 'tay/cleanup)
 (tay/global-key "M-k" 'tay/kill-line)
 (tay/global-module-key "C-=" 'er/expand-region 'tay/editor)
 (tay/global-module-key "M-i l" 'tay/avy-select-to-line 'tay/ivy)
@@ -181,6 +181,8 @@
 ;; (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
 (tay/global-module-key "C-c m" 'mu4e 'tay/email)
 (tay/global-module-key "M-o" 'ace-window 'tay/window)
+(tay/global-key "M-i s" 'split-window-below)
+(tay/global-key "M-i v" 'split-window-right)
 (tay/global-module-key "C-a" 'mwim-beginning-of-code-or-line 'tay/editor)
 (tay/global-module-key "C-e" 'mwim-end-of-code-or-line 'tay/editor)
 (tay/global-module-key "C-r" 'anzu-query-replace-regexp 'tay/anzu)
