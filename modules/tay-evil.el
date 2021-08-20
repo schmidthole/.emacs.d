@@ -34,8 +34,8 @@
     "x" 'execute-extended-command
     "f" 'find-file
     "g" 'magit-status
-    "s" 'swiper
     "e" 'tay/eshell-new
+    "s" 'vc-git-grep
     "c c" 'tay/cleanup
     ;; "c o a" 'org-agenda
     ;; "c o c" 'org-capture
@@ -44,6 +44,9 @@
     ;; "2" 'split-window-below
     ;; "3" 'split-window-right
     ;; "o" 'other-window
+    "a s" 'counsel-ag
+    "a a" 'ag
+    "a f" 'ag-dired
     "w" 'save-buffer))
 
  (use-package evil-goggles

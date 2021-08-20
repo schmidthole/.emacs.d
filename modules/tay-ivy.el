@@ -31,9 +31,9 @@
   (counsel-mode))
 
 ;; we replace isearch with swiper
-(use-package swiper
-  :config
-  (setq swiper-goto-start-of-match t))
+;; (use-package swiper
+;;   :config
+;;   (setq swiper-goto-start-of-match t))
 
 ;; ;; ivy rich provides some more info and color to selection buffers
 ;; (use-package ivy-rich

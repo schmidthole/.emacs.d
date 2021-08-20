@@ -31,7 +31,8 @@
                                (tay/clojure . "tay-clojure.el")
                                (tay/kotlin . "tay-kotlin.el")
                                (tay/cmake . "tay-cmake.el")
-                               (tay/ido . "tay-ido.el")))
+                               (tay/ido . "tay-ido.el")
+                               (tay/ag . "tay-ag.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS

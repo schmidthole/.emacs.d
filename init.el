@@ -74,7 +74,7 @@
                     ;; look, feel, and function
                     ;; tay/font
                     tay/editor
-                    tay/evil
+                    ;; tay/evil
                     tay/theme
                     ;; tay/zen
 
@@ -83,19 +83,22 @@
                     tay/dired
                     tay/ediff
 
+                    ;; searching
+                    tay/ag
+
                     ;; terms
-                    tay/eshell
-                    ;; tay/vterm
+                    ;; tay/eshell
+                    tay/vterm
 
                     ;; navigation/completion
-                    ;; tay/ivy
-                    tay/ido
+                    tay/ivy
+                    ;; tay/ido
 
                     ;; organization
                     ;; tay/workspace
 
                     ;; languages
-                    ;; tay/org
+                    tay/org
                     tay/cc
                     tay/python
                     tay/markdown
@@ -103,6 +106,7 @@
                     ;; tay/json
                     tay/kotlin
                     ;; tay/clojure
+                    tay/cmake
 
                     ;; applications
                     ;; tay/email
@@ -142,7 +146,6 @@
 ;; disable these bindings as they tend to not be wanted or cause loss of work
 (tay/global-key "C-z" nil)
 (tay/global-key "C-x C-z" nil)
-(tay/global-key "C-x C-c" nil)
 
 ;; more vi like newline keys
 (tay/global-key "C-j" 'tay/vi-line-below)
@@ -164,24 +167,26 @@
 (tay/global-module-key "M-i l" 'tay/avy-select-to-line 'tay/ivy)
 
 ;; go to full screen
-(tay/global-key "C-c 0" 'toggle-frame-fullscreen)
+;; (tay/global-key "C-c 0" 'toggle-frame-fullscreen)
 
 ;; capture a new task
-(tay/global-module-key "C-c o c" 'org-capture 'tay/org)
+;; (tay/global-module-key "C-c o c" 'org-capture 'tay/org)
 
 ;; open git easily
 (tay/global-module-key "C-c g" 'magit 'tay/git)
 
 ;; ag searching is great, needs silver searcher to be installed
-(tay/global-module-key "C-c a" 'counsel-ag 'tay/ivy)
+(tay/global-module-key "C-c a a" 'counsel-ag 'tay/ivy)
+(tay/global-module-key "C-c a f" 'ag-dired 'tay/ag)
+(tay/global-module-key "C-c a s" 'ag 'tay/ag)
 
 ;; swiper instead of isearch
-(tay/global-module-key "C-s" 'swiper 'tay/ivy)
-(tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
+;; (tay/global-module-key "C-s" 'swiper 'tay/ivy)
+;; (tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
 
 ;; avy for jumping around visible buffer area
-;; (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
-;; (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
+(tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
+(tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
 
 ;; hotkeys for eshell and vterm
 ;; these will open a new terminal every time we use them
@@ -201,10 +206,10 @@
 ;; (tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
 
 ;; toggle zen mode easily in buffer
-(tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
+;; (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
 
 ;; open email
-(tay/global-module-key "C-c m" 'mu4e 'tay/email)
+;; (tay/global-module-key "C-c m" 'mu4e 'tay/email)
 
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook
