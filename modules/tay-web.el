@@ -30,4 +30,16 @@
          js2-enter-indents-newline t
          js2-indent-on-enter-key t)
 
-   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))))
+   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+
+ (use-package flycheck
+   :defer
+   :init
+   (setq-default flycheck-disabled-checkers '(javascript-jshint
+                                              javascript-standard))
+   (add-hook 'js2-mode-hook 'flycheck-mode))
+
+ (use-package prettier-js
+   :after js2-mode
+   :config
+   (add-hook 'js2-mode-hook 'prettier-js-mode)))
