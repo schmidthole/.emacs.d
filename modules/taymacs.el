@@ -30,7 +30,13 @@
                                (tay/json . "tay-json.el")
                                (tay/clojure . "tay-clojure.el")
                                (tay/kotlin . "tay-kotlin.el")
-                               (tay/cmake . "tay-cmake.el")))
+                               (tay/cmake . "tay-cmake.el")
+                               (tay/ido . "tay-ido.el")
+                               (tay/company . "tay-company.el")
+                               (tay/window . "tay-window.el")
+                               (tay/undo . "tay-undo.el")
+                               (tay/anzu . "tay-anzu.el")
+                               (tay/posframe . "tay-posframe.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS

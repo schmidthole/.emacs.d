@@ -74,37 +74,43 @@
                     ;; look, feel, and function
                     ;; tay/font
                     tay/editor
-                    tay/evil
+                    ;; tay/evil
                     tay/theme
                     ;; tay/zen
 
                     ;; general
                     tay/path
                     tay/dired
-                    tay/ediff
+                    ;; tay/ediff
+                    tay/window
+                    tay/undo
+                    tay/anzu
 
                     ;; terms
                     tay/eshell
-                    tay/vterm
+                    ;; tay/vterm
 
                     ;; navigation/completion
                     tay/ivy
+                    tay/avy
+                    tay/company
+                    ;; tay/ido
 
                     ;; organization
                     ;; tay/workspace
 
                     ;; languages
-                    tay/org
-                    tay/cc
+                    ;; tay/org
+                    ;; tay/cc
                     tay/python
                     tay/markdown
                     tay/web
-                    tay/json
-                    tay/kotlin
-                    tay/clojure
+                    ;; tay/json
+                    ;; tay/kotlin
+                    ;; tay/clojure
 
                     ;; applications
-                    ;; tay/email
+                    tay/email
                     tay/git
                     ))
 
@@ -139,58 +145,32 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; disable these bindings as they tend to not be wanted or cause loss of work
+(tay/global-key "M-i" nil)
 (tay/global-key "C-z" nil)
 (tay/global-key "C-x C-z" nil)
-(tay/global-key "C-x C-c" nil)
-
-;; more vi like newline keys
 (tay/global-key "C-j" 'tay/vi-line-below)
 (tay/global-key "C-o" 'tay/vi-line-above)
-
-;; move in chunks
 (tay/global-key "<up>" 'tay/up-chunk)
 (tay/global-key "<down>" 'tay/down-chunk)
-
-;; helpers for killing things better
+(tay/global-module-key "<left>" 'undo 'tay/undo)
+(tay/global-module-key "<right>" 'redo 'tay/redo)
+(tay/global-module-key "C-/" 'undo 'tay/undo)
+(tay/global-module-key "C-z" 'redo 'tay/redo)
 (tay/global-key "C-x C-k" 'tay/kill-this-buffer)
-(tay/global-key "C-c K" 'tay/cleanup)
+(tay/global-key "M-i K" 'tay/cleanup)
 (tay/global-key "M-k" 'tay/kill-line)
-
-;; selection functions
 (tay/global-module-key "C-=" 'er/expand-region 'tay/editor)
-
-(tay/global-key "M-i" nil)
 (tay/global-module-key "M-i l" 'tay/avy-select-to-line 'tay/ivy)
-
-;; go to full screen
-(tay/global-key "C-c 0" 'toggle-frame-fullscreen)
-
-;; capture a new task
-(tay/global-module-key "C-c o c" 'org-capture 'tay/org)
-
-;; open git easily
-(tay/global-module-key "C-c g" 'magit 'tay/git)
-
-;; ag searching is great, needs silver searcher to be installed
-(tay/global-module-key "C-c a" 'counsel-ag 'tay/ivy)
-
-;; swiper instead of isearch
-(tay/global-module-key "C-s" 'swiper 'tay/ivy)
-(tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
-
-;; avy for jumping around visible buffer area
-;; (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
-;; (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
-
-;; hotkeys for eshell and vterm
-;; these will open a new terminal every time we use them
+(tay/global-key "M-i 0" 'toggle-frame-fullscreen)
+;; (tay/global-module-key "C-c o c" 'org-capture 'tay/org)
+(tay/global-module-key "M-i g" 'magit 'tay/git)
+(tay/global-module-key "M-i a" 'counsel-ag 'tay/ivy)
+(tay/global-module-key "M-s" 'swiper 'tay/ivy)
+(tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
+(tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
 (tay/global-module-key "C-c s" 'tay/vterm-new 'tay/vterm)
 (tay/global-module-key "C-c e" 'tay/eshell-new 'tay/eshell)
-
-;; switch light and dark themes easily
 (tay/global-module-key "C-c t" 'modus-themes-toggle 'tay/theme)
-
-;; switch around projects and segregate buffer so we dont get lost
 ;; (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
 ;; (tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
 ;; (tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
@@ -198,16 +178,17 @@
 ;; (tay/global-module-key "C-c p n" 'persp-next 'tay/workspace)
 ;; (tay/global-module-key "C-c p p" 'persp-prev 'tay/workspace)
 ;; (tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
-
-;; toggle zen mode easily in buffer
-(tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
-
-;; open email
+;; (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
 (tay/global-module-key "C-c m" 'mu4e 'tay/email)
+(tay/global-module-key "M-o" 'ace-window 'tay/window)
+(tay/global-module-key "C-a" 'mwim-beginning-of-code-or-line 'tay/editor)
+(tay/global-module-key "C-e" 'mwim-end-of-code-or-line 'tay/editor)
+(tay/global-module-key "C-r" 'anzu-query-replace-regexp 'tay/anzu)
+(tay/global-module-key "C-M-r" 'anzu-query-replace-at-cursor-thing 'tay/anzu)
 
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook
-    (lambda () (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1)))
+          (lambda () (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1)))
 
 (add-hook 'emacs-startup-hook
           (lambda () (setq file-name-handler-alist tdm--file-name-handler-alist)))

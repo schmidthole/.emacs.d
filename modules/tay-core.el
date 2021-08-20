@@ -63,6 +63,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq create-lockfiles nil
+      auto-save-default nil
+      create-lockfiles nil
       make-backup-files nil
       uniquify-buffer-name-style 'forward
       ring-bell-function #'ignore
