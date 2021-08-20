@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITOR
 ;;
-;; - smartparens
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (tay/do-if-ext-pkg
  ;; this package makes parens and pairs in general behave like fancier editors
@@ -13,10 +12,14 @@
  ;; vim like object selection
  (use-package expand-region)
 
+ (use-package smex)
+
  ;; keep things indented and aligned
- ;; (use-package aggressive-indent
- ;;   :config
- ;;   (global-aggressive-indent-mode 1)))
+ (use-package aggressive-indent
+   :config
+   (global-aggressive-indent-mode 1))
+
+ (use-package mwim)
 
  ;; (use-package volatile-highlights
  ;;   :config
@@ -24,4 +27,4 @@
  ;;                         'evil-paste-pop 'evil-move)
  ;;   (vhl/install-extension 'evil)
  ;;   (volatile-highlights-mode t))
-)
+ )
