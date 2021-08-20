@@ -165,6 +165,7 @@
 ;; (tay/global-module-key "C-c o c" 'org-capture 'tay/org)
 (tay/global-module-key "M-i g" 'magit 'tay/git)
 (tay/global-module-key "M-i a" 'counsel-ag 'tay/ivy)
+(tay/global-module-key "M-i p" 'counsel-git 'tay/ivy)
 (tay/global-module-key "M-s" 'swiper 'tay/ivy)
 (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
 (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
