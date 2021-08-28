@@ -82,36 +82,38 @@
                     ;; general
                     tay/path
                     tay/dired
-                    ;; tay/ediff
+                    tay/ediff
                     tay/window
                     tay/undo
                     tay/anzu
 
                     ;; terms
                     tay/eshell
-                    ;; tay/vterm
+                    tay/vterm
 
                     ;; navigation/completion
                     tay/ivy
                     tay/avy
                     tay/company
+                    tay/flycheck
                     ;; tay/ido
 
                     ;; organization
                     ;; tay/workspace
 
                     ;; languages
-                    ;; tay/org
-                    ;; tay/cc
+                    tay/org
+                    tay/cc
                     tay/python
                     tay/markdown
                     tay/web
                     ;; tay/json
-                    ;; tay/kotlin
+                    tay/kotlin
                     ;; tay/clojure
+                    tay/cmake
 
                     ;; applications
-                    tay/email
+                    ;; tay/email
                     tay/git
                     ))
 
@@ -188,6 +190,8 @@
 (tay/global-module-key "C-e" 'mwim-end-of-code-or-line 'tay/editor)
 (tay/global-module-key "C-r" 'anzu-query-replace-regexp 'tay/anzu)
 (tay/global-module-key "C-M-r" 'anzu-query-replace-at-cursor-thing 'tay/anzu)
+(tay/global-module-key "M-i d" 'lsp-find-definition 'tay/cc)
+(tay/global-module-key "M-i r" 'lsp-find-references 'tay/cc)
 
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook

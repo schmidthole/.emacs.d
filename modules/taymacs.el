@@ -36,7 +36,8 @@
                                (tay/window . "tay-window.el")
                                (tay/undo . "tay-undo.el")
                                (tay/anzu . "tay-anzu.el")
-                               (tay/icons . "tay-icons.el")))
+                               (tay/icons . "tay-icons.el")
+                               (tay/flycheck . "tay-flycheck.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS

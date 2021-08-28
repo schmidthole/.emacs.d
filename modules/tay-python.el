@@ -7,18 +7,10 @@
 
 ;; basic python settings
 (setq python-indent-offset 4
-      python-shell-completion-native-enable nil)
+      python-shell-completion-native-enable nil
+      python-shell-interpreter "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3")
 
 (tay/do-if-ext-pkg
- ;; i've tried lsp-mode for python and it just is not that great. I find that
- ;; using flycheck with flake8 and anaconda mode for refs/documentation
- ;; is almost 100% of what is needed
- (use-package flycheck
-   :defer
-   :init
-   (setq-default flycheck-disabled-checkers '(python-pylint))
-   (add-hook 'python-mode-hook 'flycheck-mode))
-
  (use-package anaconda-mode
    :defer
    :init

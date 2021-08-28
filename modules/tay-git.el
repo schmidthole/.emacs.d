@@ -8,4 +8,8 @@
 ;; self-explanatory.... use magit for git
 (tay/do-if-ext-pkg
  (use-package magit
-   :defer t))
+   :defer t)
+
+ (use-package git-gutter
+   :config
+   (global-git-gutter-mode t)))

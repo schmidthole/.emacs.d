@@ -7,11 +7,20 @@
 (tay/do-if-ext-pkg
  ;; (use-package doom-themes
  ;;   :config
- ;;   (setq doom-challenger-deep-brighter-modeline t)
- ;;   (load-theme 'doom-challenger-deep t))
+ ;;   (setq doom-themes-enable-bold t
+ ;;         doom-themes-enable-italic t)
+ ;;   (load-theme 'doom-one t)
+ ;;   (doom-themes-visual-bell-config))
+
+ (use-package solaire-mode
+   :config
+   (solaire-global-mode +1))
 
  (use-package modus-themes
    :config
+   (setq modus-themes-bold-constructs t)
+   (setq modus-themes-slanted-constructs t)
+   (setq modus-themes-prompts 'intense)
    (load-theme 'modus-vivendi t))
 
  ;; this modeline is minimal and easy to read. it also does the declutter
@@ -26,6 +35,8 @@
 
  (use-package doom-modeline
    :config
+   ;; this is the min value for the default font size
+   (setq doom-modeline-height 24)
    (setq doom-modeline-buffer-encoding nil)
    (doom-modeline-mode 1))
 
