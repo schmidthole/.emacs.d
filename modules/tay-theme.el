@@ -20,7 +20,9 @@
    :config
    (setq modus-themes-bold-constructs t)
    (setq modus-themes-slanted-constructs t)
-   (setq modus-themes-prompts 'intense)
+   (setq modus-themes-prompts '(background intense bold))
+   (setq modus-themes-mode-line 'accented)
+   (setq modus-themes-fringes nil)
    (load-theme 'modus-vivendi t))
 
  ;; this modeline is minimal and easy to read. it also does the declutter
