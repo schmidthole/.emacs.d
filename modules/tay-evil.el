@@ -20,7 +20,7 @@
    :config
    (evil-collection-init)
    (evil-define-key 'normal 'dired-mode-map
-     "gk" 'dired-kill-subdir))
+                    "gk" 'dired-kill-subdir))
 
  (use-package general
    :after evil
@@ -30,27 +30,22 @@
     :keymaps 'override
     :prefix "SPC"
     "b" 'switch-to-buffer
-    "n" 'switch-to-next-buffer
-    "p" 'switch-to-prev-buffer
     "k" 'tay/kill-this-buffer
     "x" 'execute-extended-command
     "f" 'find-file
     "g" 'magit-status
     "s" 'swiper
     "a" 'counsel-ag
-    "e" 'tay/eshell-new
-    ;; "s" 'tay/vterm-new
-    "c c" 'tay/cleanup
-    ;; "c o a" 'org-agenda
-    ;; "c o c" 'org-capture
-    ;; "1" 'delete-other-windows
-    ;; "0" 'delete-window
-    ;; "2" 'split-window-below
-    ;; "3" 'split-window-right
-    ;; "o" 'other-window
+    "p" 'counsel-git
+    "t" 'tay/vterm-new
+    "1" 'delete-other-windows
+    "0" 'delete-window
+    "2" 'split-window-below
+    "3" 'split-window-right
+    "o" 'ace-window
     "w" 'save-buffer))
 
  (use-package evil-goggles
    :config
-   (setq evil-goggles-duration 0.100)
+   (setq evil-goggles-duration 0.200)
    (evil-goggles-mode)))

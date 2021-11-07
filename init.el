@@ -74,7 +74,7 @@
                     ;; look, feel, and function
                     ;; tay/font
                     tay/editor
-                    ;; tay/evil
+                    tay/evil
                     tay/icons
                     tay/theme
                     ;; tay/zen
@@ -88,33 +88,38 @@
                     tay/anzu
 
                     ;; terms
-                    tay/eshell
+                    ;; tay/eshell
                     tay/vterm
 
                     ;; navigation/completion
                     tay/ivy
                     tay/avy
                     tay/company
-                    tay/flycheck
+                    ;; tay/flycheck
                     ;; tay/ido
 
                     ;; organization
                     ;; tay/workspace
 
                     ;; languages
-                    tay/org
+                    ;; tay/org
                     tay/cc
                     tay/python
                     tay/markdown
                     tay/web
                     ;; tay/json
-                    tay/kotlin
-                    ;; tay/clojure
+                    ;; tay/kotlin
+                    tay/clojure
                     tay/cmake
+                    ;; tay/golang
+                    tay/yaml
+                    tay/lua
+                    ;; tay/adoc
 
                     ;; applications
                     ;; tay/email
                     tay/git
+                    ;; tay/spotify
                     ))
 
 ;; you dont really have a choice to load the core module
@@ -173,7 +178,7 @@
 (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
 (tay/global-module-key "C-c s" 'tay/vterm-new 'tay/vterm)
 (tay/global-module-key "C-c e" 'tay/eshell-new 'tay/eshell)
-(tay/global-module-key "C-c t" 'modus-themes-toggle 'tay/theme)
+(tay/global-module-key "M-i t" 'modus-themes-toggle 'tay/theme)
 ;; (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
 ;; (tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
 ;; (tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
@@ -188,10 +193,11 @@
 (tay/global-key "M-i v" 'split-window-right)
 (tay/global-module-key "C-a" 'mwim-beginning-of-code-or-line 'tay/editor)
 (tay/global-module-key "C-e" 'mwim-end-of-code-or-line 'tay/editor)
-(tay/global-module-key "C-r" 'anzu-query-replace-regexp 'tay/anzu)
+(tay/global-module-key "M-i r" 'anzu-query-replace-regexp 'tay/anzu)
 (tay/global-module-key "C-M-r" 'anzu-query-replace-at-cursor-thing 'tay/anzu)
 (tay/global-module-key "M-i d" 'lsp-find-definition 'tay/cc)
-(tay/global-module-key "M-i r" 'lsp-find-references 'tay/cc)
+(tay/global-module-key "M-i c" 'org-capture 'tay/org)
+(tay/global-key "M-i i" 'tay/echo-info)
 
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook

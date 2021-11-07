@@ -15,15 +15,17 @@
       dired-recursive-deletes 'always
       dired-create-destination-dirs 'ask)
 
-(add-hook 'dired-load-hook (function (lambda () (load "dired-x"))))
+(add-hook 'dired-load-hook (function (lambda ()
+                                       (load "dired-x")
+                                       (dired-hide-details-mode))))
 
 ;; keep our prefix commands for dired mode since it is never used for dired ops
-(define-key dired-mode-map (kbd "M-i") nil)
-(define-key dired-mode-map (kbd "M-s") nil)
+;; (define-key dired-mode-map (kbd "M-i") nil)
+;; (define-key dired-mode-map (kbd "M-s") nil)
 
-(tay/do-if-ext-pkg
- ;; this is a great package that makes dired easier to read
- (use-package diredfl
-   :defer 1.2
-   :config
-   (add-hook 'dired-mode-hook 'diredfl-mode)))
+;; (tay/do-if-ext-pkg
+;;  ;; this is a great package that makes dired easier to read
+;;  (use-package diredfl
+;;    :defer 1.2
+;;    :config
+;;    (add-hook 'dired-mode-hook 'diredfl-mode)))

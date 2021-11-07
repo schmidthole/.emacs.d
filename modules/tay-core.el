@@ -54,9 +54,14 @@
               bidi-paragraph-direction 'left-to-right)
 
 (blink-cursor-mode -1)
-;; (global-hl-line-mode)
+(global-hl-line-mode)
 (show-paren-mode 1)
 (window-divider-mode 1)
+
+;; (setq mode-line-format nil)
+;; (setq-default mode-line-format nil)
+
+;; (add-hook 'prog-mode-hook 'linum-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITOR

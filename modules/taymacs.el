@@ -37,7 +37,12 @@
                                (tay/undo . "tay-undo.el")
                                (tay/anzu . "tay-anzu.el")
                                (tay/icons . "tay-icons.el")
-                               (tay/flycheck . "tay-flycheck.el")))
+                               (tay/flycheck . "tay-flycheck.el")
+                               (tay/spotify . "tay-spotify.el")
+                               (tay/golang . "tay-golang.el")
+                               (tay/yaml . "tay-yaml.el")
+                               (tay/lua . "tay-lua.el")
+                               (tay/adoc . "tay-adoc.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS
@@ -202,3 +207,12 @@ line like the standard emacs binding"
   "kill the current buffer"
   (interactive)
   (kill-buffer (current-buffer)))
+
+(defun tay/echo-info ()
+  "Show info in echo area that would often be displayed in the modeline"
+  (interactive)
+  (message (concat
+            ""
+            (buffer-name) " | "
+            (symbol-name major-mode)  " | "
+            (format-time-string "%Y-%m-%d %H:%M"))))
