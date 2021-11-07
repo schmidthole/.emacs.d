@@ -114,6 +114,7 @@
                     ;; tay/golang
                     tay/yaml
                     tay/lua
+                    tay/typescript
                     ;; tay/adoc
 
                     ;; applications

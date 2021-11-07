@@ -42,7 +42,8 @@
                                (tay/golang . "tay-golang.el")
                                (tay/yaml . "tay-yaml.el")
                                (tay/lua . "tay-lua.el")
-                               (tay/adoc . "tay-adoc.el")))
+                               (tay/adoc . "tay-adoc.el")
+                               (tay/typescript . "tay-typescript.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS
