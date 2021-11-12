@@ -1,9 +1,3 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; EVIL
-;;
-;; - evil mode support
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (tay/do-if-ext-pkg
  (use-package evil
    :init
@@ -22,6 +16,7 @@
    (evil-define-key 'normal 'dired-mode-map
                     "gk" 'dired-kill-subdir))
 
+ ;; custom leader key bindings
  (use-package general
    :after evil
    :config
@@ -38,6 +33,9 @@
     "a" 'counsel-ag
     "p" 'counsel-git
     "t" 'tay/vterm-new
+    "r r" 'vterm-toggle
+    "r f" 'vterm-toggle-forward
+    "r b" 'vterm-toggle-backward
     "1" 'delete-other-windows
     "0" 'delete-window
     "2" 'split-window-below

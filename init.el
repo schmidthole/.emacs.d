@@ -86,6 +86,7 @@
                     tay/window
                     tay/undo
                     tay/anzu
+                    tay/lsp
 
                     ;; terms
                     ;; tay/eshell
@@ -95,7 +96,7 @@
                     tay/ivy
                     tay/avy
                     tay/company
-                    ;; tay/flycheck
+                    tay/flycheck
                     ;; tay/ido
 
                     ;; organization
@@ -199,6 +200,7 @@
 (tay/global-module-key "M-i d" 'lsp-find-definition 'tay/cc)
 (tay/global-module-key "M-i c" 'org-capture 'tay/org)
 (tay/global-key "M-i i" 'tay/echo-info)
+(tay/global-module-key "M-i h" 'company-quickhelp-manual-begin 'tay/company)
 
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook

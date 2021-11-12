@@ -1,18 +1,5 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ORG
-;;
-;; org mode settings
-;;
-;; these settings are pretty specific to my paths and uses, they should be
-;; refactored
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (require 'org)
 
-;; opinionated org settings
-;;
-;; indented, hidden stars and markdown
 (setq org-startup-indented t
       org-agenda-files '("~/orgs")
       org-todo-keywords '((sequence "TODO" "|" "DONE" "ONHOLD"))
@@ -23,16 +10,12 @@
       org-indirect-buffer-display 'current-window
       org-archive-subtree-save-file-p t)
 
-;; remove the org cycle agenda files binding because it conflicts
-;; with our avy bindings
 (define-key org-mode-map (kbd "C-'") nil)
 
-;; org clock settings for time tracking
 (add-to-list 'org-modules 'org-clock t)
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
 
-;; org agenda settings ripped from doom emacs
 (setq-default
    org-agenda-deadline-faces
    '((1.001 . error)
@@ -61,5 +44,4 @@
         ("p" "Personal TODO" entry (file+headline "~/orgs/personal.org" "INBOX")
          "* TODO %? %i\nDEADLINE:%^t\n")))
 
-;; exporting
 (setq org-html-htmlize-output-type 'css)

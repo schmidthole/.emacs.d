@@ -1,14 +1,6 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; WEB
-;;
-;; web language settngs js, html, templating
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (setq js-indent-level 2)
 
 (tay/do-if-ext-pkg
- ;; basically the standard for html, js, and templating for web stuff
  (use-package web-mode
    :config
    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))

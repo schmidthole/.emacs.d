@@ -1,5 +1,3 @@
-;; lua and fennel support
-
 (tay/do-if-ext-pkg
  (use-package fennel-mode
    :config

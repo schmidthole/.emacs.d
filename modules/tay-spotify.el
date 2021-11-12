@@ -1,7 +1,3 @@
-;;
-;; spotify emacs app via smudge
-;;
-
 (tay/do-if-ext-pkg
  (use-package smudge
    :config

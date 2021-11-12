@@ -1,5 +1,3 @@
-;; asciidoc editing
-
 (tay/do-if-ext-pkg
  (use-package adoc-mode
    :config
