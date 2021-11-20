@@ -4,12 +4,6 @@
    (setq typescript-indent-level 2))
 
  (use-package lsp-mode
-   :config
-   (lsp-register-client
-    (make-lsp-client :new-connection (lsp-tramp-connection '("typescript-language-server" "--stdio"))
-                     :major-modes '(typescript-mode js-mode)
-                     :remote? t
-                     :server-id 'tsserver-remote))
    :hook (typescript-mode . lsp-deferred)
    :hook (js-mode . lsp-deferred))
 
