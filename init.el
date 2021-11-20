@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;  ______ ______  __  __  __    __  ______  ______  ______
 ;; /\__  _/\  __ \/\ \_\ \/\ "-./  \/\  __ \/\  ___\/\  ___\
@@ -179,8 +179,9 @@
 (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
 (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
 (tay/global-module-key "C-c s" 'tay/vterm-new 'tay/vterm)
-(tay/global-module-key "C-c e" 'tay/eshell-new 'tay/eshell)
-(tay/global-module-key "M-i t" 'modus-themes-toggle 'tay/theme)
+(tay/global-module-key "C-c r" 'vterm-toggle 'tay/vterm)
+(tay/global-module-key "C-c e" 'vterm-toggle-forward 'tay/vterm)
+(tay/global-module-key "M-i t" 'tay/toggle-solarized 'tay/theme)
 ;; (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
 ;; (tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
 ;; (tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
