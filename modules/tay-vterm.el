@@ -4,6 +4,7 @@
    :init
    (setq vterm-always-compile-module t)
    :config
+   (define-key vterm-mode-map (kbd "C-u") #'vterm--self-insert)
    (defun tay/vterm-new ()
      "Make a brand new vterm buffer"
      (interactive)

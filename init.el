@@ -8,11 +8,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; pop that garbage collection on up for increased startup speed
-(setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
-(defvar tdm--file-name-handler-alist file-name-handler-alist)
-(setq file-name-handler-alist nil)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BOOSTRAP TAYMACS
 ;;
@@ -72,10 +67,10 @@
 ;;
 (setq tay/modules '(
                     ;; look, feel, and function
-                    ;; tay/font
+                    tay/font
                     tay/editor
-                    tay/evil
-                    tay/icons
+                    ;; tay/evil
+                    ;; tay/icons
                     tay/theme
                     ;; tay/zen
 
@@ -83,18 +78,18 @@
                     tay/path
                     tay/dired
                     tay/ediff
-                    tay/window
-                    tay/undo
+                    ;; tay/window
+                    ;; tay/undo
                     tay/anzu
                     tay/lsp
 
                     ;; terms
-                    ;; tay/eshell
-                    tay/vterm
+                    tay/eshell
+                    ;; tay/vterm
 
                     ;; navigation/completion
                     tay/ivy
-                    tay/avy
+                    ;; tay/avy
                     tay/company
                     tay/flycheck
                     ;; tay/ido
@@ -114,7 +109,7 @@
                     tay/cmake
                     ;; tay/golang
                     tay/yaml
-                    tay/lua
+                    ;; tay/lua
                     tay/typescript
                     ;; tay/adoc
 
@@ -154,59 +149,56 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; unset keys we don't want
 (tay/global-key "M-i" nil)
 (tay/global-key "C-z" nil)
 (tay/global-key "C-x C-z" nil)
+(tay/global-key "C-M-." nil)
+(tay/global-key "C-M-," nil)
+
 (tay/global-key "C-j" 'tay/vi-line-below)
 (tay/global-key "C-o" 'tay/vi-line-above)
-(tay/global-key "<up>" 'tay/up-chunk)
-(tay/global-key "<down>" 'tay/down-chunk)
-(tay/global-module-key "<left>" 'undo 'tay/undo)
-(tay/global-module-key "<right>" 'redo 'tay/redo)
+(tay/global-key "M-k" 'tay/kill-line)
+(tay/global-key "C-M-." 'next-buffer)
+(tay/global-key "C-M-," 'previous-buffer)
+
 (tay/global-module-key "C-/" 'undo 'tay/undo)
-(tay/global-module-key "C-z" 'redo 'tay/redo)
+(tay/global-module-key "C-z" 'redo 'tay/undo)
+
 (tay/global-key "C-x C-k" 'tay/kill-this-buffer)
 (tay/global-key "M-i k" 'tay/cleanup)
-(tay/global-key "M-k" 'tay/kill-line)
+
 (tay/global-module-key "C-=" 'er/expand-region 'tay/editor)
-(tay/global-module-key "M-i l" 'tay/avy-select-to-line 'tay/ivy)
+
 (tay/global-key "M-i 0" 'toggle-frame-fullscreen)
-;; (tay/global-module-key "C-c o c" 'org-capture 'tay/org)
+
 (tay/global-module-key "M-i g" 'magit 'tay/git)
+
 (tay/global-module-key "M-i a" 'counsel-ag 'tay/ivy)
 (tay/global-module-key "M-i p" 'counsel-git 'tay/ivy)
-(tay/global-module-key "M-s" 'swiper 'tay/ivy)
+(tay/global-module-key "C-s" 'swiper 'tay/ivy)
+(tay/global-module-key "C-r" 'swiper-backward 'tay/ivy)
+
 (tay/global-module-key "C-;" 'avy-goto-char 'tay/ivy)
 (tay/global-module-key "C-'" 'avy-goto-line 'tay/ivy)
-(tay/global-module-key "C-c s" 'tay/vterm-new 'tay/vterm)
-(tay/global-module-key "C-c r" 'vterm-toggle 'tay/vterm)
-(tay/global-module-key "C-c e" 'vterm-toggle-forward 'tay/vterm)
-(tay/global-module-key "M-i t" 'tay/toggle-solarized 'tay/theme)
-;; (tay/global-module-key "C-c p k" 'persp-remove-buffer 'tay/workspace)
-;; (tay/global-module-key "C-x b" 'persp-ivy-switch-buffer 'tay/workspace)
-;; (tay/global-module-key "C-x C-b" 'persp-ivy-switch-buffer 'tay/workspace)
-;; (tay/global-module-key "C-c p s" 'persp-switch 'tay/workspace)
-;; (tay/global-module-key "C-c p n" 'persp-next 'tay/workspace)
-;; (tay/global-module-key "C-c p p" 'persp-prev 'tay/workspace)
-;; (tay/global-module-key "C-c p d" 'persp-kill 'tay/workspace)
-;; (tay/global-module-key "C-c z" 'olivetti-mode 'tay/zen)
-(tay/global-module-key "C-c m" 'mu4e 'tay/email)
-(tay/global-module-key "M-o" 'ace-window 'tay/window)
+
+(tay/global-module-key "C-`" 'tay/eshell-new 'tay/eshell)
+
+;; (tay/global-module-key "C-c m" 'mu4e 'tay/email)
+
+(tay/global-module-key "M-o" 'other-window 'tay/window)
 (tay/global-key "M-i s" 'split-window-below)
 (tay/global-key "M-i v" 'split-window-right)
+
 (tay/global-module-key "C-a" 'mwim-beginning-of-code-or-line 'tay/editor)
 (tay/global-module-key "C-e" 'mwim-end-of-code-or-line 'tay/editor)
+
 (tay/global-module-key "M-i r" 'anzu-query-replace-regexp 'tay/anzu)
 (tay/global-module-key "C-M-r" 'anzu-query-replace-at-cursor-thing 'tay/anzu)
+
 (tay/global-module-key "M-i d" 'lsp-find-definition 'tay/cc)
 (tay/global-module-key "M-i c" 'org-capture 'tay/org)
+
 (tay/global-key "M-i i" 'tay/echo-info)
+
 (tay/global-module-key "M-i h" 'company-quickhelp-manual-begin 'tay/company)
-
-;; cleanup and reset after startup
-(add-hook 'emacs-startup-hook
-          (lambda () (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1)))
-
-(add-hook 'emacs-startup-hook
-          (lambda () (setq file-name-handler-alist tdm--file-name-handler-alist)))
-(put 'upcase-region 'disabled nil)

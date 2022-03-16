@@ -1,21 +1,31 @@
 (tay/do-if-ext-pkg
- ;; (use-package smartparens
- ;;   :config
- ;;   (smartparens-global-mode))
+ (use-package expand-region
+   :defer 1.2
+   :diminish)
 
- (use-package expand-region)
+ (use-package smex
+   :defer 0.85
+   :diminish)
 
- (use-package smex)
-
- (use-package mwim)
-
- (use-package volatile-highlights
-   :config
-   (vhl/define-extension 'evil 'evil-paste-after 'evil-paste-before
-                         'evil-paste-pop 'evil-move)
-   (vhl/install-extension 'evil)
-   (volatile-highlights-mode t))
+ (use-package mwim
+   :defer 0.8
+   :diminish)
 
  (use-package rainbow-delimiters
+   :defer 0.75
+   :diminish
    :config
-   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+ (use-package which-key
+   :defer 1.4
+   :diminish
+   :config
+   (which-key-setup-side-window-bottom)
+   (which-key-mode))
+
+ (use-package hungry-delete
+   :defer 0.70
+   :config
+   (setq hungry-delete-join-reluctantly t)
+   (global-hungry-delete-mode)))

@@ -2,14 +2,11 @@
 ;; UI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(push '(menu-bar-lines . 0)   default-frame-alist)
-(push '(tool-bar-lines . 0)   default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)
 
-(setq menu-bar-mode nil
-      tool-bar-mode nil
-      scroll-bar-mode nil
-      hl-line-sticky-flag nil
+(setq hl-line-sticky-flag nil
       global-hl-line-sticky-flag nil
       blink-matching-paren nil
       x-stretch-cursor nil
@@ -18,38 +15,18 @@
       show-paren-when-point-inside-paren t
       show-paren-when-point-in-periphery t
       highlight-nonselected-windows nil
-      auto-mode-case-fold nil
-      bidi-inhibit-bpa t
       idle-update-delay 1.0
       inhibit-compacting-font-caches t
-      x-underline-at-descent-line t
-      fast-but-imprecise-scrolling t
       frame-inhibit-implied-resize t
-      indicate-buffer-boundaries nil
-      indicate-empty-lines nil
-      frame-resize-pixelwise t
-      window-resize-pixelwise nil
-      window-divider-default-places t
-      window-divider-default-bottom-width 1
-      window-divider-default-right-width 1
       fast-but-imprecise-scrolling t
-      frame-inhibit-implied-resize t
       indicate-buffer-boundaries nil
-      indicate-empty-lines nil
-      frame-resize-pixelwise t
-      window-resize-pixelwise nil)
+      indicate-empty-lines nil)
 
-(setq window-divider-default-places t
-      window-divider-default-bottom-width 1
-      window-divider-default-right-width 1)
-(setq-default cursor-in-non-selected-windows nil
-              bidi-display-reordering 'left-to-right
-              bidi-paragraph-direction 'left-to-right)
+(setq-default cursor-in-non-selected-windows nil)
 
 (blink-cursor-mode -1)
 (global-hl-line-mode)
 (show-paren-mode 1)
-(window-divider-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITOR
@@ -68,8 +45,7 @@
       require-final-newline t
       kill-do-not-save-duplicates t
       confirm-nonexistent-file-or-buffer nil
-      save-interprogram-paste-before-kill t
-      truncate-partial-width-windows nil)
+      save-interprogram-paste-before-kill t)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -87,9 +63,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq enable-recursive-minibuffers t
-      echo-keystrokes 0.02
-      minibuffer-prompt-properties
-      '(read-only t intangible t cursor-intangible t face minibuffer-prompt))
+      echo-keystrokes 0.02)
 
 (fset #'yes-or-no-p #'y-or-n-p)
 
@@ -110,12 +84,8 @@
 ;; SCROLLING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq hscroll-margin 2
-      hscroll-step 1
-      scroll-conservatively 101
-      scroll-margin 0
+(setq scroll-conservatively 101
       scroll-preserve-screen-position t
-      auto-window-vscroll nil
       mouse-wheel-scroll-amount '(2 ((shift) . hscroll))
       mouse-wheel-scroll-amount-horizontal 2)
 
@@ -138,5 +108,4 @@
                                   obsolete
                                   noruntime
                                   cl-functions
-                                  interactive-only
-                                  ))
+                                  interactive-only))

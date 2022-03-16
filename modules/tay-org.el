@@ -1,9 +1,7 @@
 (require 'org)
 
-(setq org-startup-indented t
-      org-agenda-files '("~/orgs")
-      org-todo-keywords '((sequence "TODO" "|" "DONE" "ONHOLD"))
-      org-hide-leading-stars t
+(setq org-agenda-files '("~/orgs")
+      org-todo-keywords '((sequence "TODO" "INPROGRESS" "EXTERNAL" "|" "DONE" "ONHOLD"))
       org-fontify-done-headline t
       org-fontify-quote-and-verse-blocks t
       org-fontify-whole-heading-line t

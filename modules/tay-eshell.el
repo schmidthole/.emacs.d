@@ -5,9 +5,11 @@
 
 (add-hook 'eshell-mode-hook
 	      (lambda ()
+            (eshell/alias "ll" "ls -la")
 	        (eshell/alias "python" "python3 $*")
 	        (eshell/alias "pip" "pip3 $*")
 	        (eshell/alias "clear" "clear 1")))
 
 (tay/do-if-ext-pkg
- (use-package shrink-path))
+ (use-package shrink-path
+   :defer))

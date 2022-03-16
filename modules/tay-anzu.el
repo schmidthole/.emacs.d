@@ -1,2 +1,3 @@
 (tay/do-if-ext-pkg
- (use-package anzu))
+ (use-package anzu
+   :defer 2.0))

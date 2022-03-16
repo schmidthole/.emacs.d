@@ -1,5 +1,6 @@
 (tay/do-if-ext-pkg
  (use-package fennel-mode
+   :defer t
    :config
    (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode))
    (defun love-repl ()
@@ -16,6 +17,7 @@ helper function passing `love .` to fennel-repl"
      (get-buffer fennel-repl--buffer)))
 
  (use-package lua-mode
+   :defer t
    :config
    (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
    (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))

@@ -4,6 +4,7 @@
 
 (tay/do-if-ext-pkg
  (use-package blacken
+   :diminish
    :defer
    :init
    (setq blacken-line-length 100)
