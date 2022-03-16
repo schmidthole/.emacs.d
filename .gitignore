@@ -13,3 +13,4 @@ tramp
 .cache/
 anaconda-mode/
 smex-items
+*.jar
