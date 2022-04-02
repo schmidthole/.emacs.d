@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+>;;
 ;;  ______ ______  __  __  __    __  ______  ______  ______
 ;; /\__  _/\  __ \/\ \_\ \/\ "-./  \/\  __ \/\  ___\/\  ___\
 ;; \/_/\ \\ \  __ \ \____ \ \ \-./\ \ \  __ \ \ \___\ \___  \
@@ -8,40 +8,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; pop that garbage collection on up for increased startup speed
-(setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
-(defvar tdm--file-name-handler-alist file-name-handler-alist)
-(setq file-name-handler-alist nil)
+;; load the core settings and custom functions before external packages
+(require 'tay-core)
+(require 'taymacs)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; BOOSTRAP TAYMACS
-;;
-;; emacs auto generated custom settings and personal fields are loaded first
-;; this also loads the functions that are used throughout taymacs
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; this defines where all of the modules live for this config
-;; THIS MUST BE SET
-(setq tay/custom-module-path "modules/")
-(setq tay/custom-mode-path "modes/")
-
-;; define paths to our basic settings files
-;;
-;; - custom: auto generated custom settings file that emacs makes
-;; - personal: personal settings such as email, name, etc.
-;; - taymacs: base taymacs functions that we need for later
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory)
-      personal-config (expand-file-name "personal.el" user-emacs-directory)
-      taymacs-module (expand-file-name
-                      (concat tay/custom-module-path "taymacs.el")
-                      user-emacs-directory))
-
-(load custom-file 'noerror)
-(load personal-config 'noerror)
-
-;; this sets us up for success for the rest of config. we need this to load
-;; without error or everything is done for
-(load taymacs-module)
+;; enable use package and melpa
+(tay/enable-ext-pkg)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -51,14 +23,11 @@
 ;;  \ \_____\ \_____\ \_\\"\_\ \_\  \ \_\ \_____\
 ;;   \/_____/\/_____/\/_/ \/_/\/_/   \/_/\/_____/
 ;;
-;; this section covers all of the module configuration for taymacs. we can
-;; enable/disable modules as we wish.
-;;
-;; - set the `tay/external-packages' var to enable melpa packages
-;; - edit the `tay/modules' list to setup the various modules for taymacs
+;; this section covers all of the module configuration for taymacs.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+<<<<<<< HEAD
 ;; set if you wish to use external package repos such as melpa
 (setq tay/external-packages t)
 
@@ -125,6 +94,36 @@
 ;; check out each module's source in the directory for specifics on what is
 ;; being loaded
 (tay/load-module-list tay/modules)
+=======
+;; load ui elements such as theme, modeline, and font
+(require 'tay-font)
+(require 'tay-theme)
+(require 'tay-path)
+
+;; load basic editor functionality such as search and completion
+(require 'tay-editor)
+(require 'tay-ivy)
+(require 'tay-company)
+(require 'tay-flycheck)
+(require 'tay-lsp)
+(require 'tay-anzu)
+
+;; mode specific packages
+(require 'cmake-mode)
+(require 'tay-ediff)
+(require 'tay-eshell)
+(require 'tay-git)
+(require 'tay-clojure)
+(require 'tay-paredit)
+(require 'tay-indent)
+(require 'tay-kconfig)
+(require 'tay-markdown)
+(require 'tay-python)
+(require 'tay-yaml)
+(require 'tay-typescript)
+(require 'tay-web)
+(require 'tay-dired)
+>>>>>>> simple-miso
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  __  __  ______  __  __  ______
@@ -133,16 +132,11 @@
 ;;  \ \_\ \_\ \_____\/\_____\/\_____\
 ;;   \/_/\/_/\/_____/\/_____/\/_____/
 ;;
-;; this section covers all of the customized key bindings in taymacs. these
-;; are all in one place so that it is easier understand and modify.
-;;
-;; there are a few taymacs helpers that allow us to easily setup keys
-;;
-;; - `tay/global-key': set a global keybinding
-;; - `tay/global-module-key': set a global keybinding if a module is enabled
+;; all custom keybindings are contained in a single module
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+<<<<<<< HEAD
 ;; disable these bindings as they tend to not be wanted or cause loss of work
 (tay/global-key "C-z" nil)
 (tay/global-key "C-x C-z" nil)
@@ -214,7 +208,8 @@
 ;; cleanup and reset after startup
 (add-hook 'emacs-startup-hook
     (lambda () (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1)))
+=======
+(require 'tay-keybindings)
+>>>>>>> simple-miso
 
-(add-hook 'emacs-startup-hook
-          (lambda () (setq file-name-handler-alist tdm--file-name-handler-alist)))
-(put 'upcase-region 'disabled nil)
+(setq gc-cons-threshold (* 2 1000 1000))
