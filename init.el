@@ -112,6 +112,7 @@
                     ;; tay/lua
                     tay/typescript
                     ;; tay/adoc
+                    tay/kconfig
 
                     ;; applications
                     ;; tay/email
@@ -186,7 +187,7 @@
 
 ;; (tay/global-module-key "C-c m" 'mu4e 'tay/email)
 
-(tay/global-module-key "M-o" 'other-window 'tay/window)
+(tay/global-key "M-o" 'other-window)
 (tay/global-key "M-i s" 'split-window-below)
 (tay/global-key "M-i v" 'split-window-right)
 

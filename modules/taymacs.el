@@ -44,7 +44,8 @@
                                (tay/lua . "tay-lua.el")
                                (tay/adoc . "tay-adoc.el")
                                (tay/typescript . "tay-typescript.el")
-                               (tay/lsp . "tay-lsp.el")))
+                               (tay/lsp . "tay-lsp.el")
+                               (tay/kconfig . "tay-kconfig.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE FUNCTIONS

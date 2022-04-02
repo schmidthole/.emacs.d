@@ -30,8 +30,8 @@ be downloaded or enabled.
 
 ** Module List
 
-| Module    | Description                                  | List Var      |
-|-----------+----------------------------------------------+---------------|
+| Module    | Description                                  | List Var        |
+|-----------+----------------------------------------------+-----------------|
 | Editor    | Editor packages (smart-parens, which-key)    | ~tay/editor~    |
 | Theme     | Theme, modeline, etc.                        | ~tay/theme~     |
 | Zen       | Zen mode                                     | ~tay/zen~       |

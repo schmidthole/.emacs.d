@@ -7,6 +7,7 @@
    :config
    (setq display-line-numbers-type 'relative)
    (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+   (add-hook 'markdown-mode-hook 'display-line-numbers-mode)
    (evil-mode 1))
 
  (use-package evil-collection
@@ -32,15 +33,15 @@
     "s" 'swiper
     "a" 'counsel-ag
     "p" 'counsel-git
-    "t" 'tay/vterm-new
-    "r r" 'vterm-toggle
-    "r f" 'vterm-toggle-forward
-    "r b" 'vterm-toggle-backward
+    ;; "t" 'tay/vterm-new
+    ;; "r r" 'vterm-toggle
+    ;; "r f" 'vterm-toggle-forward
+    ;; "r b" 'vterm-toggle-backward
     "1" 'delete-other-windows
     "0" 'delete-window
     "2" 'split-window-below
     "3" 'split-window-right
-    "o" 'ace-window
+    "o" 'other-window
     "w" 'save-buffer))
 
  (use-package evil-goggles
