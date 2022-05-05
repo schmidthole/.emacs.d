@@ -22,6 +22,9 @@
 (global-hl-line-mode)
 (show-paren-mode 1)
 
+(setq display-line-numbers-type 'relative)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITOR
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

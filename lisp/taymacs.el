@@ -25,6 +25,9 @@
 	           '("melpa" . "https://melpa.org/packages/") t)
   (package-initialize)
 
+  (unless package-archive-contents
+    (package-refresh-contents))
+
   ;; setup use-package
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
@@ -93,6 +96,19 @@ line like the standard emacs binding"
   (kill-ring-save mark point))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SEARCH
+;;
+;; custom search functions to replace ivy, counsel, swiper with built in
+;; emacs functionality.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun tay/git-grep (expr)
+  "Search for `expr' in all files contained in the current repository"
+  (interactive "sSEARCH: ")
+  (vc-git-grep expr "*" (vc-root-dir)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXTRAS
 ;;
 ;; extra collected functions for various tasks
@@ -107,8 +123,6 @@ line like the standard emacs binding"
 	          (kill-buffer s)))
 	    (buffer-list))
   (delete-other-windows)
-  ;; (tramp-cleanup-all-buffers)
-  ;; (tramp-cleanup-all-connections)
   (cd "~/")
   (message "YOU ARE SO CLEAN"))
 

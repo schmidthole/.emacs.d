@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
->;;
+;;
 ;;  ______ ______  __  __  __    __  ______  ______  ______
 ;; /\__  _/\  __ \/\ \_\ \/\ "-./  \/\  __ \/\  ___\/\  ___\
 ;; \/_/\ \\ \  __ \ \____ \ \ \-./\ \ \  __ \ \ \___\ \___  \
@@ -7,6 +7,10 @@
 ;;     \/_/ \/_/\/_/\/_____/\/_/  \/_/\/_/\/_/\/_____/\/_____/
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; load the theme early
+(require 'nord-theme)
+(load-theme 'nord t)
 
 ;; load the core settings and custom functions before external packages
 (require 'tay-core)
@@ -27,26 +31,53 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; flags to enable extra features as they are wanted/needed
+(setq tay/evil nil)
+(setq tay/ivy nil)
+(setq tay/vterm nil)
+(setq tay/fancy-editor nil)
+
 ;; load ui elements such as theme, modeline, and font
 (require 'tay-font)
 (require 'tay-theme)
 (require 'tay-path)
 
-;; load basic editor functionality such as search and completion
-(require 'tay-editor)
-(require 'tay-ivy)
+;; evil mode specific setup
+(if tay/evil
+    (progn
+      (require 'tay-evil)
+      (require 'tay-smartparens))
+  (progn
+    (require 'tay-paredit)))
+
+;; enable all of the ivy/counsel/swiper/avy stuff or use vanilla navigation
+(if tay/ivy
+    (progn
+      (require 'tay-ivy)
+      (require 'tay-avy)
+      (require 'tay-anzu))
+  (require 'tay-fido))
+
+;; ;; use vterm or built in eshell
+(if tay/vterm
+    (require 'tay-vterm)
+  (require 'tay-eshell))
+
+;; ;; enable fancy editing features that modify default behavior
+(when tay/fancy-editor
+  (require 'tay-editor))
+
+;; completion, linting, goto definition
 (require 'tay-company)
 (require 'tay-flycheck)
 (require 'tay-lsp)
-(require 'tay-anzu)
 
 ;; mode specific packages
+(require 'tay-cc)
 (require 'cmake-mode)
 (require 'tay-ediff)
-(require 'tay-eshell)
 (require 'tay-git)
 (require 'tay-clojure)
-(require 'tay-paredit)
 (require 'tay-indent)
 (require 'tay-kconfig)
 (require 'tay-markdown)
@@ -55,6 +86,7 @@
 (require 'tay-typescript)
 (require 'tay-web)
 (require 'tay-dired)
+(require 'tay-org)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  __  __  ______  __  __  ______

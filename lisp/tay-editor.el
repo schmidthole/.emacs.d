@@ -23,4 +23,11 @@
   (setq hungry-delete-join-reluctantly t)
   (global-hungry-delete-mode))
 
+(use-package which-key
+  :defer 1.5
+  :diminish
+  :config
+  (which-key-setup-side-window-bottom)
+  (which-key-mode))
+
 (provide 'tay-editor)

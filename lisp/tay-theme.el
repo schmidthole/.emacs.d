@@ -1,8 +1,3 @@
-
-(use-package nord-theme
-  :config
-  (load-theme 'nord t))
-
 (use-package telephone-line
   :defer 0.1
   :config

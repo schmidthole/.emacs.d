@@ -2,6 +2,7 @@
   :hook
   ((clojure-mode . lsp-deferred)
    (c-mode . lsp-deferred)
+   (c++-mode . lsp-deferred)
    (python-mode . lsp-deferred)
    (typescript-mode . lsp-deferred)
    (js-mode . lsp-deferred)
