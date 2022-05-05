@@ -76,7 +76,7 @@
 (require 'tay-cc)
 (require 'cmake-mode)
 (require 'tay-ediff)
-(require 'tay-git)
+;; (require 'tay-git) ;; this doesn't work right now
 (require 'tay-clojure)
 (require 'tay-indent)
 (require 'tay-kconfig)
