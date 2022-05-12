@@ -6,7 +6,8 @@
    (python-mode . lsp-deferred)
    (typescript-mode . lsp-deferred)
    (js-mode . lsp-deferred)
-   (web-mode . lsp-deferred))
+   (web-mode . lsp-deferred)
+   (rust-mode . lsp-deferred))
   :commands
   (lsp lsp-deferred)
   :config
@@ -31,6 +32,6 @@
   (setq lsp-pyls-plugins-pylint-enabled t)
   (setq lsp-pylsp-plugins-pylint-enabled t)
   :custom
-  ((lsp-clojure-server-command '("java" "-jar" "/Users/taylor/.emacs.d/bin/clj-kondo-lsp-server-2022.01.15-standalone.jar"))))
+  ((lsp-clojure-server-command '("java" "-jar" "/Users/taylor/.emacs.d/bin/clj-kondo-2022.04.25-standalone.jar"))))
 
 (provide 'tay-lsp)

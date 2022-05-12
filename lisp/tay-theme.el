@@ -1,3 +1,8 @@
+(use-package modus-themes
+  :config
+  (setq modus-themes-syntax '(faint))
+  (load-theme 'modus-operandi t))
+
 (use-package telephone-line
   :defer 0.1
   :config

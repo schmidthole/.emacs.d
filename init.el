@@ -8,10 +8,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; load the theme early
-(require 'nord-theme)
-(load-theme 'nord t)
-
 ;; load the core settings and custom functions before external packages
 (require 'tay-core)
 (require 'taymacs)
@@ -73,20 +69,21 @@
 (require 'tay-lsp)
 
 ;; mode specific packages
-(require 'tay-cc)
-(require 'cmake-mode)
+;; (require 'tay-cc)
+;; (require 'cmake-mode)
 (require 'tay-ediff)
-;; (require 'tay-git) ;; this doesn't work right now
+(require 'tay-git) ;; this doesn't work right now
 (require 'tay-clojure)
 (require 'tay-indent)
-(require 'tay-kconfig)
+;; (require 'tay-kconfig)
 (require 'tay-markdown)
 (require 'tay-python)
-(require 'tay-yaml)
+;; (require 'tay-yaml)
 (require 'tay-typescript)
 (require 'tay-web)
 (require 'tay-dired)
 (require 'tay-org)
+(require 'tay-rust)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  __  __  ______  __  __  ______
