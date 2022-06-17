@@ -24,6 +24,7 @@
 
 (setq display-line-numbers-type 'relative)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'org-mode-hook 'display-line-numbers-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITOR
@@ -52,6 +53,7 @@
 
 (delete-selection-mode 1)
 (global-auto-revert-mode t)
+(recentf-mode 1)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 

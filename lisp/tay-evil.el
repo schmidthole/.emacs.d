@@ -7,6 +7,8 @@
   :config
   (setq display-line-numbers-type 'relative)
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+  (add-hook 'markdown-mode-hook 'display-line-numbers-mode)
+  (add-hook 'org-mode-hook 'display-line-numbers-mode)
   (evil-mode 1))
 
 (use-package evil-collection

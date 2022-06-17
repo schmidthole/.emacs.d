@@ -1,3 +1,12 @@
+(use-package modus-themes
+  :config
+  (setq modus-themes-syntax '(faint))
+  (setq modus-themes-prompts '(intense))
+  (setq modus-themes-completions '((selection . (intense accented background))))
+  (setq modus-themes-headings '((t . (background bold))))
+  (setq modus-themes-mode-line '(borderless))
+  (load-theme 'modus-vivendi t))
+
 (use-package telephone-line
   :defer 0.1
   :config

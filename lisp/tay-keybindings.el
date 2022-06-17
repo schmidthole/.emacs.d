@@ -4,6 +4,7 @@
 (tay/bind-key "C-x C-z" nil)
 (tay/bind-key "C-M-." nil)
 (tay/bind-key "C-M-," nil)
+(tay/bind-key "C-x C-r" nil)
 
 (tay/bind-key "C-j" 'tay/vi-line-below)
 (tay/bind-key "C-o" 'tay/vi-line-above)
@@ -35,6 +36,7 @@
     (progn
       (tay/bind-key "M-i a" 'counsel-ag)
       (tay/bind-key "M-i p" 'counsel-git)
+      (tay/bind-key "C-x C-r" 'counsel-recentf)
       (tay/bind-key "C-s" 'swiper)
       (tay/bind-key "C-r" 'swiper-backward)
       (tay/bind-key "C-;" 'avy-goto-char)
@@ -48,5 +50,9 @@
 (tay/bind-key "M-i c" 'org-capture)
 
 (tay/bind-key "M-i i" 'tay/echo-info)
+
+(tay/bind-key "M-i m" 'modus-themes-toggle)
+
+(tay/bind-key "M-i n" (lambda () (interactive) (find-file "~/notes/notes.org")))
 
 (provide 'tay-keybindings)
