@@ -14,3 +14,5 @@ tramp
 anaconda-mode/
 smex-items
 *.jar
+session.*
+eln-cache/
