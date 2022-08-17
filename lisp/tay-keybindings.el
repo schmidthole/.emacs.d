@@ -39,13 +39,13 @@
       (tay/bind-key "C-r" 'swiper-backward)
       (tay/bind-key "C-;" 'avy-goto-char)
       (tay/bind-key "C-'" 'avy-goto-line)
-      (tay/bind-key "M-i r" 'anzu-query-replace-regexp)
+      (tay/bind-key "M-i r" 'anzu-query-replace)
       (tay/bind-key "C-M-r" 'anzu-query-replace-at-cursor-thing))
   (progn
     (tay/bind-key "M-i a" 'tay/git-grep)
     (tay/bind-key "M-i o" 'occur)))
 
-(tay/bind-key "M-i c" 'org-capture)
+(tay/bind-key "M-i m" 'modus-themes-toggle)
 
 (tay/bind-key "M-i i" 'tay/echo-info)
 

@@ -71,10 +71,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq display-time-mail-string "")
-(setq display-time-day-and-date t)
+;; (setq display-time-day-and-date t)
 (setq display-time-default-load-average nil)
 
-(display-time-mode 1)
+;; (display-time-mode 1)
 (column-number-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

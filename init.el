@@ -29,9 +29,9 @@
 
 ;; flags to enable extra features as they are wanted/needed
 (setq tay/evil nil)
-(setq tay/ivy nil)
+(setq tay/ivy t)
 (setq tay/vterm nil)
-(setq tay/fancy-editor nil)
+(setq tay/fancy-editor t)
 
 ;; load ui elements such as theme, modeline, and font
 (require 'tay-font)
@@ -41,8 +41,8 @@
 ;; evil mode specific setup
 (if tay/evil
     (progn
-      (require 'tay-evil)
-      (require 'tay-smartparens))
+      (require 'tay-evil))
+      ;;(require 'tay-smartparens))
   (progn
     (require 'tay-paredit)))
 
@@ -72,9 +72,9 @@
 ;; (require 'tay-cc)
 ;; (require 'cmake-mode)
 (require 'tay-ediff)
-(require 'tay-git) ;; this doesn't work right now
-(require 'tay-clojure)
-(require 'tay-indent)
+(require 'tay-git)
+;; (require 'tay-clojure)
+;; (require 'tay-indent)
 ;; (require 'tay-kconfig)
 (require 'tay-markdown)
 (require 'tay-python)
@@ -83,7 +83,7 @@
 (require 'tay-web)
 (require 'tay-dired)
 (require 'tay-org)
-(require 'tay-rust)
+;; (require 'tay-rust)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  __  __  ______  __  __  ______
