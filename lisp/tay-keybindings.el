@@ -4,10 +4,12 @@
 (tay/bind-key "C-x C-z" nil)
 (tay/bind-key "C-M-." nil)
 (tay/bind-key "C-M-," nil)
+(tay/bind-key "M-j", nil)
 
 (tay/bind-key "C-j" 'tay/vi-line-below)
 (tay/bind-key "C-o" 'tay/vi-line-above)
 (tay/bind-key "M-k" 'tay/kill-line)
+(tay/bind-key "M-j" 'tay/copy-line)
 
 (tay/bind-key "C-M-." 'next-buffer)
 (tay/bind-key "C-M-," 'previous-buffer)

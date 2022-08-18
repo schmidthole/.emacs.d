@@ -90,10 +90,11 @@ line like the standard emacs binding"
 (defun tay/copy-line ()
   "copy the entire current line"
   (interactive)
-  (beginning-of-line)
-  (set-mark (point))
-  (end-of-line)
-  (kill-ring-save mark point))
+  (save-excursion
+    (beginning-of-line)
+    (let ((start (point)))
+      (end-of-line)
+      (kill-ring-save start (point)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SEARCH
