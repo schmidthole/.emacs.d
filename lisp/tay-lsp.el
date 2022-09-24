@@ -21,10 +21,11 @@
   (setq lsp-pylsp-plugins-pydocstyle-enabled nil)
   (setq lsp-pyls-plugins-pydocstyle-enabled nil)
   (setq lsp-pyls-plugins-pydocstyle-add-ignore
-        '(D100 D103 D205 D400 D401))
+        '(D100 D103 D205 D400 D401 C0103))
   (setq lsp-pyls-plugins-pyflakes-enabled nil)
   (setq lsp-pylsp-plugins-pyflakes-enabled nil)
   (setq lsp-pyls-plugins-pylint-enabled t)
-  (setq lsp-pylsp-plugins-pylint-enabled t))
+  (setq lsp-pylsp-plugins-pylint-enabled t)
+  (setf (alist-get 'web-mode lsp--formatting-indent-alist) 'web-mode-code-indent-offset))
 
 (provide 'tay-lsp)

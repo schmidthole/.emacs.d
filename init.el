@@ -37,6 +37,7 @@
 (require 'tay-font)
 (require 'tay-theme)
 (require 'tay-path)
+(require 'gtk-variant)
 
 ;; evil mode specific setup
 (if tay/evil
@@ -73,7 +74,7 @@
 ;; (require 'cmake-mode)
 (require 'tay-ediff)
 (require 'tay-git)
-;; (require 'tay-clojure)
+(require 'tay-clojure)
 ;; (require 'tay-indent)
 ;; (require 'tay-kconfig)
 (require 'tay-markdown)

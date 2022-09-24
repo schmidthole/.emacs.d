@@ -15,6 +15,8 @@
 (setq fast-but-imprecise-scrolling t)
 (setq indicate-buffer-boundaries nil)
 (setq indicate-empty-lines nil)
+(setq frame-resize-pixelwise t)
+(setq window-resize-pixelwise t)
 
 (setq-default cursor-in-non-selected-windows nil)
 

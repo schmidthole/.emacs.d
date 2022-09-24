@@ -7,11 +7,11 @@
 (use-package flycheck-inline
   :hook (flycheck-mode . turn-on-flycheck-inline))
 
-;; (use-package flycheck-clj-kondo
-;;   :defer t)
+(use-package flycheck-clj-kondo
+  :defer t)
 
-;; (use-package clojure-mode
-;;   :config
-;;   (require 'flycheck-clj-kondo))
+(use-package clojure-mode
+  :config
+  (require 'flycheck-clj-kondo))
 
 (provide 'tay-flycheck)

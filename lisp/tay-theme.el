@@ -1,6 +1,8 @@
 (use-package modus-themes
   :config
   (setq modus-themes-mode-line '(moody borderless))
+  (setq modus-themes-completions '((matches . (extrabold background intense))
+                                   (selection . (intense))))
   (setq modus-themes-syntax '(faint alt-syntax))
   (load-theme 'modus-vivendi t))
 
