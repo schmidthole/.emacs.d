@@ -95,6 +95,13 @@ line like the standard emacs binding"
   (end-of-line)
   (kill-ring-save mark point))
 
+(defun tay/base64-decode-buffer ()
+  "decodes a base64 encoded string in the current buffer an replaces it with
+the decoded string"
+  (interactive)
+  (with-current-buffer (current-buffer)
+    (base64-decode-region (point-min) (point-max))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SEARCH
 ;;

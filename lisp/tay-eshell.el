@@ -8,7 +8,9 @@
             (eshell/alias "ll" "ls -la")
 	        (eshell/alias "python" "python3 $*")
 	        (eshell/alias "pip" "pip3 $*")
-	        (eshell/alias "clear" "clear 1")))
+	        (eshell/alias "clear" "clear 1")
+            (setq-local global-hl-line-mode nil)
+            (add-to-list 'eshell-visual-commands "pytest")))
 
 (use-package shrink-path
   :defer)

@@ -11,7 +11,6 @@
 ;; load the theme early
 ;; (require 'nord-theme)
 ;; (load-theme 'nord t)
-;; (load-theme 'modus-operandi t)
 
 ;; load the core settings and custom functions before external packages
 (require 'tay-core)
@@ -35,7 +34,7 @@
 ;; flags to enable extra features as they are wanted/needed
 (setq tay/evil nil)
 (setq tay/ivy t)
-(setq tay/vterm t)
+(setq tay/vterm nil)
 (setq tay/fancy-editor t)
 
 ;; load ui elements such as theme, modeline, and font
@@ -71,14 +70,19 @@
 ;; completion, linting, goto definition
 (require 'tay-company)
 (require 'tay-flycheck)
+(require 'tay-flyspell)
 (require 'tay-lsp)
+
+;; utility applications
+(when tay/ivy
+  (require 'tay-dash))
 
 ;; mode specific packages
 (require 'tay-cc)
 (require 'cmake-mode)
 (require 'tay-ediff)
 (require 'tay-git)
-;; (require 'tay-clojure)
+(require 'tay-clojure)
 ;; (require 'tay-indent)
 (require 'tay-kconfig)
 (require 'tay-markdown)
@@ -88,6 +92,7 @@
 ;; (require 'tay-web)
 (require 'tay-dired)
 (require 'tay-org)
+(require 'tay-kotlin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  __  __  ______  __  __  ______
@@ -103,3 +108,4 @@
 (require 'tay-keybindings)
 
 (setq gc-cons-threshold (* 2 1000 1000))
+(put 'narrow-to-region 'disabled nil)

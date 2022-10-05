@@ -19,7 +19,7 @@
 (setq-default cursor-in-non-selected-windows nil)
 
 (blink-cursor-mode -1)
-(global-hl-line-mode)
+;; (global-hl-line-mode)
 (show-paren-mode 1)
 
 (setq display-line-numbers-type 'relative)
@@ -73,10 +73,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq display-time-mail-string "")
-(setq display-time-day-and-date t)
+;; (setq display-time-day-and-date t)
 (setq display-time-default-load-average nil)
 
-(display-time-mode 1)
+;; (display-time-mode 1)
 (column-number-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

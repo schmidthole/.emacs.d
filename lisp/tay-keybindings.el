@@ -25,12 +25,12 @@
 
 (if tay/vterm
     (tay/bind-key "M-i t" 'tay/vterm-new)
-  (tay/bind-key "M-i t" 'tay/eshell-new))
+  (progn
+    (tay/bind-key "M-i t" 'tay/eshell-new)
+    (tay/bind-key "M-i y" 'shell)))
 
 (when tay/fancy-editor
-  (tay/bind-key "C-=" 'er/expand-region)
-  (tay/bind-key "C-a" 'mwim-beginning-of-code-or-line)
-  (tay/bind-key "C-e" 'mwim-end-of-code-or-line))
+  (tay/bind-key "C-=" 'er/expand-region))
 
 (if tay/ivy
     (progn
@@ -45,7 +45,8 @@
       (tay/bind-key "C-M-r" 'anzu-query-replace-at-cursor-thing))
   (progn
     (tay/bind-key "M-i a" 'tay/git-grep)
-    (tay/bind-key "M-i o" 'occur)))
+    (tay/bind-key "M-i o" 'occur)
+    (tay/bind-key "M-i p" 'project-find-file)))
 
 (tay/bind-key "M-i c" 'org-capture)
 

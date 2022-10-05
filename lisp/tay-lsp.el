@@ -11,7 +11,7 @@
   (lsp lsp-deferred)
   :config
   ;; cc
-  (setq lsp-clients-clangd-executable "/usr/local/opt/llvm/bin/clangd")
+  (setq lsp-clients-clangd-executable "/opt/homebrew/opt/llvm/bin/clangd")
   ;; clojure
   (dolist (m '(clojure-mode
                clojurescript-mode))
@@ -31,6 +31,6 @@
   (setq lsp-pyls-plugins-pylint-enabled t)
   (setq lsp-pylsp-plugins-pylint-enabled t)
   :custom
-  ((lsp-clojure-server-command '("java" "-jar" "/Users/taylor/.emacs.d/bin/clj-kondo-lsp-server-2022.01.15-standalone.jar"))))
+  ((lsp-clojure-server-command '("java" "-jar" "/Users/taylor/.emacs.d/bin/clj-kondo-lsp-server-2022.09.08-standalone.jar"))))
 
 (provide 'tay-lsp)
