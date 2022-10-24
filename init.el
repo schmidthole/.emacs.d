@@ -32,7 +32,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; flags to enable extra features as they are wanted/needed
-(setq tay/evil nil)
+(setq tay/evil t)
 (setq tay/ivy t)
 (setq tay/vterm nil)
 (setq tay/fancy-editor t)
@@ -54,7 +54,7 @@
 (if tay/ivy
     (progn
       (require 'tay-ivy)
-      (require 'tay-avy)
+      ;; (require 'tay-avy)
       (require 'tay-anzu))
   (require 'tay-fido))
 
@@ -76,6 +76,8 @@
 ;; utility applications
 (when tay/ivy
   (require 'tay-dash))
+(require 'tay-scratch)
+(require 'tay-dashboard)
 
 ;; mode specific packages
 (require 'tay-cc)

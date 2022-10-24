@@ -1,16 +1,16 @@
-(use-package modus-themes
-  :config
-  (setq modus-themes-syntax '(faint alt-syntax))
-  (setq modus-themes-fringes '(faint))
-  (setq modus-themes-completions '((selection . (intense accented background))))
-  (setq modus-themes-headings '((t . (background bold))))
-  (setq modus-themes-mode-line '(borderless moody))
-  (setq modus-themes-prompts '(background intense))
-  (load-theme 'modus-operandi t))
+;; (use-package modus-themes
+;;   :config
+;;   (setq modus-themes-syntax '(faint alt-syntax))
+;;   (setq modus-themes-fringes '(faint))
+;;   (setq modus-themes-completions '((selection . (intense accented background))))
+;;   (setq modus-themes-headings '((t . (background bold))))
+;;   (setq modus-themes-mode-line '(borderless moody))
+;;   (setq modus-themes-prompts '(background intense))
+;;   (load-theme 'modus-operandi t))
 
 ;; (use-package ef-themes
 ;;   :config
-;;   (load-theme 'ef-light :no-confirm))
+;;   (load-theme 'ef-dark :no-confirm))
 
 ;; (use-package telephone-line
 ;;   :defer 0.1
@@ -21,12 +21,21 @@
 ;;   (setq telephone-line-secondary-right-separator 'telephone-line-flat)
 ;;   (telephone-line-mode 1))
 
-(use-package moody
+(use-package doom-themes
   :config
-  (setq x-underline-at-descent-line t)
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode)
-  (moody-replace-eldoc-minibuffer-message-function))
+  (load-theme 'doom-ir-black t))
+
+(use-package doom-modeline
+  :config
+  (setq doom-modeline-height 20)
+  (doom-modeline-mode 1))
+
+;; (use-package moody
+;;   :config
+;;   (setq x-underline-at-descent-line t)
+;;   (moody-replace-mode-line-buffer-identification)
+;;   (moody-replace-vc-mode)
+;;   (moody-replace-eldoc-minibuffer-message-function))
 
 (use-package ns-auto-titlebar
   :config

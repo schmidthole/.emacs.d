@@ -12,7 +12,8 @@
         ivy-use-selectable-prompt t
         ivy-count-format "(%d/%d) "
         ivy-display-style 'fancy
-        ivy-initial-inputs-alist nil)
+        ivy-initial-inputs-alist nil
+        ivy-use-virtual-buffers t)
   (ivy-mode 1))
 
 (use-package counsel
