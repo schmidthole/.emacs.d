@@ -42,6 +42,7 @@
 (require 'tay-theme)
 (require 'tay-path)
 (require 'tay-paredit)
+(require 'tay-iedit)
 
 ;; evil mode specific setup
 (if tay/evil

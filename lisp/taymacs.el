@@ -9,6 +9,10 @@
   "simply setup a global keybinding"
   (global-set-key (kbd keychord) func))
 
+(defun tay/bind-key-map (mode-map keychord func)
+  "bind a key for a specific mode map"
+  (define-key mode-map (kbd keychord) func))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXTERNAL PACKAGES
 ;;

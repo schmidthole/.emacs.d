@@ -37,16 +37,19 @@
       (tay/bind-key "M-i a" 'counsel-ag)
       (tay/bind-key "M-i p" 'counsel-git)
       (tay/bind-key "C-x C-r" 'counsel-recentf)
-      (tay/bind-key "C-s" 'swiper)
-      (tay/bind-key "C-r" 'swiper-backward)
-      (tay/bind-key "C-;" 'avy-goto-char)
+      ;; (tay/bind-key "C-s" 'swiper)
+      ;; (tay/bind-key "C-r" 'swiper-backward)
+      ;; (tay/bind-key "C-;" 'avy-goto-char)
       (tay/bind-key "C-'" 'avy-goto-line)
-      (tay/bind-key "M-i r" 'anzu-query-replace-regexp)
-      (tay/bind-key "C-M-r" 'anzu-query-replace-at-cursor-thing))
+      ;; (tay/bind-key "M-i r" 'anzu-query-replace-regexp)
+      ;; (tay/bind-key "C-M-r" 'anzu-query-replace-at-cursor-thing))
+      )
   (progn
     (tay/bind-key "M-i a" 'tay/git-grep)
     (tay/bind-key "M-i o" 'occur)
     (tay/bind-key "M-i p" 'project-find-file)))
+
+(tay/bind-key-map isearch-mode-map "C-o" 'isearch-occur)
 
 (tay/bind-key "M-i c" 'org-capture)
 
