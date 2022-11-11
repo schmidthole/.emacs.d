@@ -121,13 +121,22 @@ the decoded string"
 ;; extra collected functions for various tasks
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq tay/cleanup-exceptions '("*scratch*"
+                               "*Messages*"
+                               "*dashboard*"))
 
 (defun tay/cleanup ()
   "Cleanup all user buffers and remove splits"
   (interactive)
   (mapc (lambda (s)
-	      (if (not (string-prefix-p " " (buffer-name s)))
-	          (kill-buffer s)))
+          (let* ((bname (buffer-name s))
+                (not-special-buffer (not (string-prefix-p " " bname)))
+                (not-exception-buffer (not (member bname tay/cleanup-exceptions))))
+	        (if (and not-special-buffer
+                    not-exception-buffer)
+                (progn
+                  (message (concat "killing " bname))
+	              (kill-buffer s)))))
 	    (buffer-list))
   (delete-other-windows)
   (cd "~/")

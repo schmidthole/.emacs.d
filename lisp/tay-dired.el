@@ -7,5 +7,10 @@
 
 (add-hook 'dired-load-hook (function (lambda ()
                                        (load "dired-x"))))
+(use-package dired-subtree
+  :after dired
+  :config
+  (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+  (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 (provide 'tay-dired)

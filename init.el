@@ -32,7 +32,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; flags to enable extra features as they are wanted/needed
-(setq tay/evil t)
+(setq tay/evil nil)
 (setq tay/ivy t)
 (setq tay/vterm nil)
 (setq tay/fancy-editor t)
@@ -41,14 +41,11 @@
 (require 'tay-font)
 (require 'tay-theme)
 (require 'tay-path)
+(require 'tay-paredit)
 
 ;; evil mode specific setup
 (if tay/evil
-    (progn
-      (require 'tay-evil))
-      ;; (require 'tay-smartparens))
-  (progn
-    (require 'tay-paredit)))
+    (require 'tay-evil))
 
 ;; enable all of the ivy/counsel/swiper/avy stuff or use vanilla navigation
 (if tay/ivy

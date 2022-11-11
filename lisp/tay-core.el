@@ -40,7 +40,7 @@
 (setq find-file-visit-truename t)
 (setq vc-follow-symlinks t)
 (setq find-file-suppress-same-file-warnings t)
-(setq require-final-newline t)
+;; (setq require-final-newline t)
 (setq kill-do-not-save-duplicates t)
 (setq confirm-nonexistent-file-or-buffer nil)
 (setq save-interprogram-paste-before-kill t)

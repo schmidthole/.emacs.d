@@ -1,14 +1,14 @@
-;; (use-package modus-themes
-;;   :config
-;;   (setq modus-themes-syntax '(faint alt-syntax))
-;;   (setq modus-themes-fringes '(faint))
-;;   (setq modus-themes-completions '((selection . (intense accented background))))
-;;   (setq modus-themes-headings '((t . (background bold))))
-;;   (setq modus-themes-mode-line '(borderless moody))
-;;   (setq modus-themes-prompts '(background intense))
-;;   (load-theme 'modus-operandi t))
+(use-package modus-themes
+  :config
+  (setq modus-themes-syntax '(faint alt-syntax))
+  (setq modus-themes-fringes '(faint))
+  (setq modus-themes-completions '((selection . (intense accented background))))
+  (setq modus-themes-headings '((t . (background bold))))
+  (setq modus-themes-mode-line '(borderless moody))
+  (setq modus-themes-prompts '(background intense))
+  (load-theme 'modus-operandi t))
 
-;; (use-package ef-themes
+(use-package ef-themes
 ;;   :config
 ;;   (load-theme 'ef-dark :no-confirm))
 
@@ -21,13 +21,13 @@
 ;;   (setq telephone-line-secondary-right-separator 'telephone-line-flat)
 ;;   (telephone-line-mode 1))
 
-(use-package doom-themes
-  :config
-  (load-theme 'doom-ir-black t))
+;; (use-package doom-themes
+;;   :config
+;;   (load-theme 'doom-one t))
 
-(use-package doom-modeline
+;; (use-package doom-modeline
   :config
-  (setq doom-modeline-height 20)
+  (setq doom-modeline-height 12)
   (doom-modeline-mode 1))
 
 ;; (use-package moody
