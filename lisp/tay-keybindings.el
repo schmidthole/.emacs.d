@@ -5,6 +5,9 @@
 (tay/bind-key "C-M-." nil)
 (tay/bind-key "C-M-," nil)
 (tay/bind-key "C-x C-r" nil)
+(tay/bind-key-map flyspell-mode-map "C-;" nil)
+(tay/bind-key "M-l" nil)
+(tay/bind-key "M-c" nil)
 
 (tay/bind-key "C-j" 'tay/vi-line-below)
 (tay/bind-key "C-o" 'tay/vi-line-above)
@@ -30,7 +33,10 @@
     (tay/bind-key "M-i y" 'shell)))
 
 (when tay/fancy-editor
-  (tay/bind-key "C-=" 'er/expand-region))
+  (when (not tay/evil)
+    (tay/bind-key "C-=" 'er/expand-region)
+    (tay/bind-key "M-c" 'change-inner)
+    (tay/bind-key "M-l" 'change-outer)))
 
 (if tay/ivy
     (progn
@@ -48,8 +54,6 @@
     (tay/bind-key "M-i a" 'tay/git-grep)
     (tay/bind-key "M-i o" 'occur)
     (tay/bind-key "M-i p" 'project-find-file)))
-
-(tay/bind-key-map isearch-mode-map "C-o" 'isearch-occur)
 
 (tay/bind-key "M-i c" 'org-capture)
 

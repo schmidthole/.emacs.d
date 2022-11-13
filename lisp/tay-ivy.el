@@ -22,10 +22,10 @@
   :config
   (counsel-mode))
 
-(use-package swiper
-  :diminish
-  :after ivy
-  :config
-  (setq swiper-goto-start-of-match t))
+;; (use-package swiper
+;;   :diminish
+;;   :after ivy
+;;   :config
+;;   (setq swiper-goto-start-of-match t))
 
 (provide 'tay-ivy)

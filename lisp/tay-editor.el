@@ -1,7 +1,11 @@
 (if (not tay/evil)
-    (use-package expand-region
-      :defer 0.5
-      :diminish))
+    (progn
+      (use-package expand-region
+        :defer 0.5
+        :diminish)
+      (use-package change-inner
+        :defer 0.6
+        :diminish)))
 
 (use-package hungry-delete
   :defer 0.2
