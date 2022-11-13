@@ -1,8 +1,12 @@
-#+TITLE: Taylor Emacs Wiki
+#+TITLE: Taylor Emacs Wiki
 
-* iSearch
+* Incremental Search
 ** isearch-occur
-When in isearch-mode, use ~C-o~ to enter an Occur buffer.
+When in isearch-mode, use ~M-s o~ to enter an Occur buffer.
+* Selection
+** Select Paragraph
+~M-h~ Marks the entire paragraph. Using this binding multiple times expands the
+selection to the next paragraph down
 * Occur
 ** Editing
 + When in an Occur buffer, use ~e~ to enter editing mode.
