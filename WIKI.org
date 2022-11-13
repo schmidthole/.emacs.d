@@ -1,0 +1,9 @@
+#+TITLE: Taylor Emacs Wiki
+
+* iSearch
+** isearch-occur
+When in isearch-mode, use ~C-o~ to enter an Occur buffer.
+* Occur
+** Editing
++ When in an Occur buffer, use ~e~ to enter editing mode.
++ Use ~C-c C-c~ to submit changes when finished. ~C-c C-q~ cancels.
