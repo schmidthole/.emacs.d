@@ -25,9 +25,12 @@
 ;;   :config
 ;;   (load-theme 'doom-one t))
 
-;; (use-package doom-modeline
+(use-package doom-modeline
   :config
-  (setq doom-modeline-height 12)
+  (setq doom-modeline-height 20)
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-bar-width 2)
+  (setq doom-modeline-percent-position nil)
   (doom-modeline-mode 1))
 
 ;; (use-package moody
