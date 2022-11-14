@@ -72,6 +72,18 @@ line like the standard emacs binding"
   (interactive)
   (next-line 20))
 
+(setq tay/last-go-to-char nil)
+
+(defun tay/go-to-char-forward (c)
+  (interactive "cCHAR: ")
+  (search-forward (char-to-string c) (point-at-eol))
+  (setq tay/last-go-to-char c))
+
+(defun tay/go-to-char-backward (c)
+  (interactive "cCHAR: ")
+  (search-backward (char-to-string c) (point-at-bol))
+  (setq tay/last-go-to-char c))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITING
 ;;

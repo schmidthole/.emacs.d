@@ -12,6 +12,8 @@
 (tay/bind-key "C-j" 'tay/vi-line-below)
 (tay/bind-key "C-o" 'tay/vi-line-above)
 (tay/bind-key "M-k" 'tay/kill-line)
+(tay/bind-key "C-," 'tay/go-to-char-backward)
+(tay/bind-key "C-." 'tay/go-to-char-forward)
 
 (tay/bind-key "C-M-." 'next-buffer)
 (tay/bind-key "C-M-," 'previous-buffer)
