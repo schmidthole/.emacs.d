@@ -1,0 +1,163 @@
+
+(deftheme github-dark "Github dark theme for emacs.")
+
+(let ((class '((class color) (min-colors 89)))
+      (black0 "#1b1f23")
+      (white0 "#ffffff")
+
+      (gray0 "#fafbfc")
+      (gray1 "#f6f8fa")
+      (gray2 "#e1e4e8")
+      (gray3 "#d1d5da")
+      (gray4 "#959da5")
+      (gray5 "#6a737d")
+      (gray6 "#586069")
+      (gray7 "#444d56")
+      (gray8 "#2f363d")
+      (gray9 "#24292e")
+
+      (blue0 "#f1f8ff")
+      (blue1 "#dbedff")
+      (blue2 "#c8e1ff")
+      (blue3 "#79b8ff")
+      (blue4 "#2188ff")
+      (blue5 "#0366d6")
+      (blue6 "#005cc5")
+      (blue7 "#044289")
+      (blue8 "#032f62")
+      (blue9 "#05264c")
+
+      (green0 "#f0fff4")
+      (green1 "#dcffe4")
+      (green2 "#bef5cb")
+      (green3 "#85e89d")
+      (green4 "#34d058")
+      (green5 "#28a745")
+      (green6 "#22863a")
+      (green7 "#176f2c")
+      (green8 "#165c26")
+      (green9 "#144620")
+
+      (yellow0 "#fffdef")
+      (yellow1 "#fffbdd")
+      (yellow2 "#fff5b1")
+      (yellow3 "#ffea7f")
+      (yellow4 "#ffdf5d")
+      (yellow5 "#ffd33d")
+      (yellow6 "#f9c513")
+      (yellow7 "#dbab09")
+      (yellow8 "#b08800")
+      (yellow9 "#735c0f")
+
+      (orange0 "#fff8f2")
+      (orange1 "#ffebda")
+      (orange2 "#ffd1ac")
+      (orange3 "#ffab70")
+      (orange4 "#fb8532")
+      (orange5 "#f66a0a")
+      (orange6 "#e36209")
+      (orange7 "#d15704")
+      (orange8 "#c24e00")
+      (orange9 "#a04100")
+
+      (red0 "#ffeef0")
+      (red1 "#ffdce0")
+      (red2 "#fdaeb7")
+      (red3 "#f97583")
+      (red4 "#ea4a5a")
+      (red5 "#d73a49")
+      (red6 "#cb2431")
+      (red7 "#b31d28")
+      (red8 "#9e1c23")
+      (red9 "#86181d")
+
+      (purple0 "#f5f0ff")
+      (purple1 "#e6dcfd")
+      (purple2 "#d1bcf9")
+      (purple3 "#b392f0")
+      (purple4 "#8a63d2")
+      (purple5 "#6f42c1")
+      (purple6 "#5a32a3")
+      (purple7 "#4c2889")
+      (purple8 "#3a1d6e")
+      (purple9 "#29134e")
+
+      (pink0 "#ffeef8")
+      (pink1 "#fedbf0")
+      (pink2 "#f9b3dd")
+      (pink3 "#f692ce")
+      (pink4 "#ec6cb9")
+      (pink5 "#ea4aaa")
+      (pink6 "#d03592")
+      (pink7 "#b93a86")
+      (pink8 "#99306f")
+      (pink9 "#6d224f"))
+  (custom-theme-set-faces
+   'github-dark
+
+   ;; default
+   `(bold ((,class (:weight bold))))
+   `(italic ((,class (:slant italic))))
+   `(bold-italic ((,class (:weight bold :slant italic))))
+   `(default ((,class (:foreground ,white0 :background ,black0))))
+   `(error ((,class (:foreground ,red3, :weight bold))))
+   `(escape-glyph ((,class (:foreground ,gray0))))
+   `(shadow ((,class (:foreground ,gray4))))
+   `(underline ((,class (:underline t))))
+   `(warning ((,class (:foreground ,yellow3 :weight bold))))
+   `(border ((,class (:foreground ,gray4))))
+   `(region ((,class (:background ,gray6))))
+   `(line-number-current-line ((,class (:background ,blue7))))
+   `(secondary-selection ((,class (:background ,gray6))))
+   `(buffer-menu-buffer ((,class (:foreground ,blue3 :weight bold))))
+   `(cursor ((,class (:background ,blue3))))
+   `(file-name-shadow ((,class (:inherit shadow))))
+   `(highlight ((,class (:foreground ,white0 :background ,gray5))))
+
+   ;; font lock
+   `(font-lock-builtin-face ((,class (:foreground ,orange3))))
+   `(font-lock-comment-face ((,class (:foreground ,gray4))))
+   `(font-lock-comment-delimiter-face ((,class  (:foreground ,gray4))))
+   `(font-lock-constant-face ((,class (:foreground ,blue3))))
+   `(font-lock-doc-face ((,class (:foreground ,gray4))))
+   `(font-lock-function-name-face ((,class (:foreground ,purple2))))
+   `(font-lock-keyword-face ((,class (:foreground ,red3))))
+   `(font-lock-negation-char-face ((,class (:foreground ,red3))))
+   `(font-lock-preprocessor-face ((,class (:foreground ,red3))))
+   `(font-lock-reference-face ((,class (:foreground ,red3))))
+   `(font-lock-regexp-grouping-backslash ((,class (:foreground ,orange3))))
+   `(font-lock-regexp-grouping-construct ((,class (:foreground ,orange3))))
+   `(font-lock-string-face ((,class (:foreground ,blue3))))
+   `(font-lock-type-face ((,class (:foreground ,orange3))))
+   `(font-lock-variable-name-face ((,class (:foreground ,blue3))))
+   `(font-lock-warning-face ((,class (:foreground ,yellow3))))
+
+   ;; minibuffer
+   `(minibuffer-prompt ((,class (:foreground ,blue3 :weight bold))))
+
+   ;; isearch
+   `(isearch ((,class (:background ,blue6))))
+   `(isearch-fail ((,class (:foreground ,red3))))
+   `(lazy-highlight ((,class (:background ,gray6))))
+   `(match ((,class (:inherit isearch))))
+
+   ;; modeline
+   `(mode-line ((,class (:foreground ,white0 :background ,gray8))))
+   `(mode-line-buffer-id ((,class (:weight bold))))
+   `(mode-line-highlight ((,class (:inherit highlight))))
+   `(mode-line-inactive ((,class (:foreground ,gray4 :background ,gray9))))
+
+   ;; doom modeline
+   `(doom-modeline-bar ((,class (:foreground ,red3 :background ,red3))))
+   `(doom-modeline-bar-inactive ((,class :foreground ,gray8 :background ,black0)))
+
+   ;; ivy
+
+   ))
+
+;;;###autoload
+(when (and (boundp 'custom-theme-load-path) load-file-name)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
+
+(provide-theme 'github-dark)

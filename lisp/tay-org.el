@@ -10,6 +10,12 @@
 (setq org-M-RET-may-split-line nil)
 (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
 
+(setq org-todo-keywords
+      '((sequence "TODO" "IN PROGRESS" "|" "DONE" "REVIEW")))
+
+(setq org-todo-keyword-faces
+      '(("IN PROGRESS" . org-warning) ("REVIEW" . org-warning)))
+
 (setq org-agenda-files '("~/notes/notes.org"))
 
 (provide 'tay-org)

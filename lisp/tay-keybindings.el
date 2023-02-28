@@ -6,6 +6,8 @@
 (tay/bind-key "C-M-," nil)
 (tay/bind-key "C-x C-r" nil)
 (tay/bind-key-map flyspell-mode-map "C-;" nil)
+(tay/bind-key-map flyspell-mode-map "C-." nil)
+(tay/bind-key-map flyspell-mode-map "C-," nil)
 (tay/bind-key "M-l" nil)
 (tay/bind-key "M-c" nil)
 
@@ -49,13 +51,27 @@
       ;; (tay/bind-key "C-r" 'swiper-backward)
       ;; (tay/bind-key "C-;" 'avy-goto-char)
       (tay/bind-key "C-'" 'avy-goto-line)
-      ;; (tay/bind-key "M-i r" 'anzu-query-replace-regexp)
+      (tay/bind-key "M-i r" 'anzu-query-replace-regexp)
       ;; (tay/bind-key "C-M-r" 'anzu-query-replace-at-cursor-thing))
       )
   (progn
     (tay/bind-key "M-i a" 'tay/git-grep)
     (tay/bind-key "M-i o" 'occur)
     (tay/bind-key "M-i p" 'project-find-file)))
+
+(if tay/evil
+    (progn
+      (evil-set-leader 'normal (kbd "SPC"))
+      (evil-define-key 'normal 'global (kbd "<leader>f") 'find-file)
+      (evil-define-key 'normal 'global (kbd "<leader>x") 'execute-extended-command)
+      (evil-define-key 'normal 'global (kbd "<leader>b") 'switch-to-buffer)
+      (evil-define-key 'normal 'global (kbd "<leader>g") 'magit-status)
+      (evil-define-key 'normal 'global (kbd "<leader>t") 'tay/eshell-new)
+      (evil-define-key 'normal 'global (kbd "<leader>p") 'project-find-file)
+      (evil-define-key 'normal 'global (kbd "<leader>a") 'tay/git-grep)
+      (evil-define-key 'normal 'global (kbd "<leader>o") 'occur)
+
+      ))
 
 (tay/bind-key "M-i c" 'org-capture)
 

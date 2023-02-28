@@ -14,4 +14,15 @@
   (setq hungry-delete-join-reluctantly t)
   (global-hungry-delete-mode))
 
+(use-package rainbow-mode
+  :config
+  (rainbow-mode))
+
+;; (use-package ivy-posframe
+;;   :config
+;;   (setq ivy-posframe-display-functions-alist
+;;         '((counsel-ag . ivy-display-function-fallback)
+;;           (t . ivy-posframe-display)))
+;;   (ivy-posframe-mode 1))
+
 (provide 'tay-editor)

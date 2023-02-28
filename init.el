@@ -12,6 +12,9 @@
 ;; (require 'nord-theme)
 ;; (load-theme 'nord t)
 
+;; (require 'github-dark-theme)
+;; (load-theme 'github-dark t)
+
 ;; load the core settings and custom functions before external packages
 (require 'tay-core)
 (require 'taymacs)
@@ -32,8 +35,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; flags to enable extra features as they are wanted/needed
-(setq tay/evil nil)
-(setq tay/ivy t)
+(setq tay/evil t)
+(setq tay/ivy nil)
 (setq tay/vterm nil)
 (setq tay/fancy-editor t)
 
@@ -43,6 +46,7 @@
 (require 'tay-path)
 (require 'tay-paredit)
 (require 'tay-iedit)
+;; (require 'tay-icons)
 
 ;; evil mode specific setup
 (if tay/evil
@@ -53,15 +57,16 @@
     (progn
       (require 'tay-ivy)
       ;; (require 'tay-avy)
-      (require 'tay-anzu))
+      ;; (require 'tay-anzu)
+      )
   (require 'tay-fido))
 
-;; ;; use vterm or built in eshell
+;; use vterm or built in eshell
 (if tay/vterm
     (require 'tay-vterm)
   (require 'tay-eshell))
 
-;; ;; enable fancy editing features that modify default behavior
+;; enable fancy editing features that modify default behavior
 (when tay/fancy-editor
   (require 'tay-editor))
 
@@ -72,10 +77,9 @@
 (require 'tay-lsp)
 
 ;; utility applications
-(when tay/ivy
-  (require 'tay-dash))
 (require 'tay-scratch)
-(require 'tay-dashboard)
+;; (require 'tay-dashboard)
+;; (require 'tay-gcloud)
 
 ;; mode specific packages
 (require 'tay-cc)
@@ -109,3 +113,4 @@
 
 (setq gc-cons-threshold (* 2 1000 1000))
 (put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)

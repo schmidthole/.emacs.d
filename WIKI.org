@@ -3,6 +3,9 @@
 * Incremental Search
 ** isearch-occur
 When in isearch-mode, use ~M-s o~ to enter an Occur buffer.
+** isearch-query-replace
+When in isearch-mode, use ~M-%~ to enter a query replace based on the current
+search
 * Selection
 ** Select Paragraph
 ~M-h~ Marks the entire paragraph. Using this binding multiple times expands the
