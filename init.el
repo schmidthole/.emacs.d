@@ -8,13 +8,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; load the theme early
-;; (require 'nord-theme)
-;; (load-theme 'nord t)
-
-;; (require 'github-dark-theme)
-;; (load-theme 'github-dark t)
-
 ;; load the core settings and custom functions before external packages
 (require 'tay-core)
 (require 'taymacs)

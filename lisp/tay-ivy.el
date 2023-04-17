@@ -1,3 +1,6 @@
+(use-package wgrep
+  :defer 0.1
+  :diminish)
 
 (use-package ivy
   :defer 0.2
