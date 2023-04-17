@@ -34,41 +34,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; flags to enable extra features as they are wanted/needed
-(setq tay/evil t)
-(setq tay/ivy nil)
-(setq tay/vterm nil)
-(setq tay/fancy-editor t)
-
 ;; load ui elements such as theme, modeline, and font
 (require 'tay-font)
 (require 'tay-theme)
 (require 'tay-path)
-(require 'tay-paredit)
-(require 'tay-iedit)
-;; (require 'tay-icons)
-
-;; evil mode specific setup
-(if tay/evil
-    (require 'tay-evil))
 
 ;; enable all of the ivy/counsel/swiper/avy stuff or use vanilla navigation
-(if tay/ivy
-    (progn
-      (require 'tay-ivy)
-      ;; (require 'tay-avy)
-      ;; (require 'tay-anzu)
-      )
-  (require 'tay-fido))
+(require 'tay-ivy)
+(require 'tay-avy)
+(require 'tay-anzu)
 
-;; use vterm or built in eshell
-(if tay/vterm
-    (require 'tay-vterm)
-  (require 'tay-eshell))
+;; shell
+(require 'tay-eshell)
 
-;; enable fancy editing features that modify default behavior
-(when tay/fancy-editor
-  (require 'tay-editor))
+;; enable fancy editing features
+(require 'tay-editor)
 
 ;; completion, linting, goto definition
 (require 'tay-company)
@@ -78,16 +58,11 @@
 
 ;; utility applications
 (require 'tay-scratch)
-;; (require 'tay-dashboard)
-;; (require 'tay-gcloud)
 
 ;; mode specific packages
 (require 'tay-cc)
 (require 'cmake-mode)
-(require 'tay-ediff)
 (require 'tay-git)
-(require 'tay-clojure)
-;; (require 'tay-indent)
 (require 'tay-kconfig)
 (require 'tay-markdown)
 (require 'tay-python)

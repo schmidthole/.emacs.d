@@ -10,7 +10,7 @@
 ;; disable any sort of startup messaging
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message user-login-name)
-(setq initial-major-mode 'org-mode)
+(setq initial-major-mode 'fundamental-mode)
 (setq initial-scratch-message nil)
 
 ;; setup the user's custom settings file

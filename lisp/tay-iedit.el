@@ -1,4 +1,3 @@
-(use-package iedit
-  )
+(use-package iedit)
 
 (provide 'tay-iedit)

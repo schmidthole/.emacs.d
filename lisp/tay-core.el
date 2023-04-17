@@ -19,7 +19,6 @@
 (setq-default cursor-in-non-selected-windows nil)
 
 (blink-cursor-mode -1)
-;; (global-hl-line-mode)
 (show-paren-mode 1)
 
 (setq display-line-numbers-type 'relative)
@@ -40,7 +39,6 @@
 (setq find-file-visit-truename t)
 (setq vc-follow-symlinks t)
 (setq find-file-suppress-same-file-warnings t)
-;; (setq require-final-newline t)
 (setq kill-do-not-save-duplicates t)
 (setq confirm-nonexistent-file-or-buffer nil)
 (setq save-interprogram-paste-before-kill t)
@@ -61,7 +59,6 @@
 ;; MINIBUFFER
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq enable-recursive-minibuffers t)
 (setq echo-keystrokes 0.02)
 
 (fset #'yes-or-no-p #'y-or-n-p)
@@ -73,10 +70,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq display-time-mail-string "")
-;; (setq display-time-day-and-date t)
 (setq display-time-default-load-average nil)
 
-;; (display-time-mode 1)
 (column-number-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

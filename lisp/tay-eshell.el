@@ -15,4 +15,8 @@
 (use-package shrink-path
   :defer)
 
+(use-package eat
+  :config
+  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
+
 (provide 'tay-eshell)

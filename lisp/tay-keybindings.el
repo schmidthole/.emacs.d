@@ -17,8 +17,6 @@
 (tay/bind-key "C-," 'tay/go-to-char-backward)
 (tay/bind-key "C-." 'tay/go-to-char-forward)
 
-(tay/bind-key "C-M-." 'next-buffer)
-(tay/bind-key "C-M-," 'previous-buffer)
 (tay/bind-key "C-x C-k" 'tay/kill-this-buffer)
 (tay/bind-key "M-i k" 'tay/cleanup)
 
@@ -26,58 +24,27 @@
 
 (tay/bind-key "M-i g" 'magit)
 
+(tay/bind-key "M-i m" 'modus-themes-toggle)
+
 (tay/bind-key "M-o" 'other-window)
 (tay/bind-key "M-i s" 'split-window-below)
 (tay/bind-key "M-i v" 'split-window-right)
 
-(if tay/vterm
-    (tay/bind-key "M-i t" 'tay/vterm-new)
-  (progn
-    (tay/bind-key "M-i t" 'tay/eshell-new)
-    (tay/bind-key "M-i y" 'shell)))
+(tay/bind-key "M-i t" 'tay/eshell-new)
+(tay/bind-key "M-i y" 'shell)
 
-(when tay/fancy-editor
-  (when (not tay/evil)
-    (tay/bind-key "C-=" 'er/expand-region)
-    (tay/bind-key "M-c" 'change-inner)
-    (tay/bind-key "M-l" 'change-outer)))
+(tay/bind-key "C-=" 'er/expand-region)
+(tay/bind-key "M-c" 'change-inner)
+(tay/bind-key "M-l" 'change-outer)
 
-(if tay/ivy
-    (progn
-      (tay/bind-key "M-i a" 'counsel-ag)
-      (tay/bind-key "M-i p" 'counsel-git)
-      (tay/bind-key "C-x C-r" 'counsel-recentf)
-      ;; (tay/bind-key "C-s" 'swiper)
-      ;; (tay/bind-key "C-r" 'swiper-backward)
-      ;; (tay/bind-key "C-;" 'avy-goto-char)
-      (tay/bind-key "C-'" 'avy-goto-line)
-      (tay/bind-key "M-i r" 'anzu-query-replace-regexp)
-      ;; (tay/bind-key "C-M-r" 'anzu-query-replace-at-cursor-thing))
-      )
-  (progn
-    (tay/bind-key "M-i a" 'tay/git-grep)
-    (tay/bind-key "M-i o" 'occur)
-    (tay/bind-key "M-i p" 'project-find-file)))
-
-(if tay/evil
-    (progn
-      (evil-set-leader 'normal (kbd "SPC"))
-      (evil-define-key 'normal 'global (kbd "<leader>f") 'find-file)
-      (evil-define-key 'normal 'global (kbd "<leader>x") 'execute-extended-command)
-      (evil-define-key 'normal 'global (kbd "<leader>b") 'switch-to-buffer)
-      (evil-define-key 'normal 'global (kbd "<leader>g") 'magit-status)
-      (evil-define-key 'normal 'global (kbd "<leader>t") 'tay/eshell-new)
-      (evil-define-key 'normal 'global (kbd "<leader>p") 'project-find-file)
-      (evil-define-key 'normal 'global (kbd "<leader>a") 'tay/git-grep)
-      (evil-define-key 'normal 'global (kbd "<leader>o") 'occur)
-
-      ))
-
-(tay/bind-key "M-i c" 'org-capture)
-
-(tay/bind-key "M-i i" 'tay/echo-info)
-
-(tay/bind-key "M-i m" 'modus-themes-toggle)
+(tay/bind-key "M-i a" 'counsel-ag)
+(tay/bind-key "M-i p" 'counsel-git)
+(tay/bind-key "C-x C-r" 'counsel-recentf)
+(tay/bind-key "C-s" 'swiper)
+(tay/bind-key "C-r" 'swiper-backward)
+(tay/bind-key "C-;" 'avy-goto-char)
+(tay/bind-key "C-'" 'avy-goto-line)
+(tay/bind-key "M-i r" 'anzu-query-replace-regexp)
 
 (tay/bind-key "M-i n" (lambda () (interactive) (find-file "~/notes/notes.org")))
 

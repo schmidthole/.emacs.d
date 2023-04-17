@@ -1,22 +1,12 @@
-;; (use-package modus-themes
-;;   :config
-;;   ;; (setq modus-themes-syntax '(faint))
-;;   ;; (setq modus-themes-italic-constructs t)
-;;   (setq modus-themes-completions '((selection . (intense accented background))))
-;;   (setq modus-themes-headings '((t . (background bold rainbow))))
-;;   (setq modus-themes-mode-line '(borderless moody))
-;;   (setq modus-themes-prompts '(background intense))
-;;   (setq modus-themes-lang-checkers '(straight-underline background))
-;;   (setq modus-themes-subtle-line-numbers t)
-;;   (load-theme 'modus-vivendi t))
-
-(use-package doom-themes
+(use-package modus-themes
   :config
-  (load-theme 'doom-dracula t))
-
-(use-package solaire-mode
-  :config
-  (solaire-global-mode +1))
+  (setq modus-themes-completions '((selection . (intense accented background))))
+  (setq modus-themes-headings '((t . (background bold rainbow))))
+  (setq modus-themes-mode-line '(borderless moody))
+  (setq modus-themes-prompts '(background intense))
+  (setq modus-themes-lang-checkers '(straight-underline background))
+  (setq modus-themes-subtle-line-numbers t)
+  (load-theme 'modus-operandi t))
 
 (use-package doom-modeline
   :config
@@ -34,13 +24,6 @@
   (add-hook 'doom-modeline-mode-hook
             (lambda () (doom-modeline-set-modeline 'tay/doom-modeline 'default)))
   (doom-modeline-mode 1))
-
-;; (use-package moody
-;;   :config
-;;   (setq x-underline-at-descent-line t)
-;;   (moody-replace-mode-line-buffer-identification)
-;;   (moody-replace-vc-mode)
-;;   (moody-replace-eldoc-minibuffer-message-function))
 
 (use-package ns-auto-titlebar
   :config
