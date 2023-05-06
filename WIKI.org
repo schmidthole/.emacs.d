@@ -36,6 +36,15 @@ VC mode works on "filesets" which means:
 + files marked in vc directory mode
 + marked files in dired
 
-| Keybinding | Function       |
-|------------+----------------|
-| ~C-x v v~  | vc next action |
+when operating on a vc fileset outside of vc directory mode, the
+~C-x v~ prefix of most vc commands can be omitted.
+
+| Keybinding  | Function                                             |
+|-------------+------------------------------------------------------|
+| ~C-x v v~   | vc next action                                       |
+| ~C-x v l~   | vc log                                               |
+| ~C-x v =~   | vc diff                                              |
+| ~C-x v P~   | vc push                                              |
+| ~C-x v b s~ | vc switch branch                                     |
+| ~C-x v b c~ | vc create branch                                     |
+| ~C-x v h~   | vc region history (git blame for highlighted region) |

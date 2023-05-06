@@ -15,27 +15,12 @@
 ;; enable use package and melpa
 (tay/enable-ext-pkg)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;  ______  ______  __   __  ______ __  ______
-;; /\  ___\/\  __ \/\ "-.\ \/\  ___/\ \/\  ___\
-;; \ \ \___\ \ \/\ \ \ \-.  \ \  __\ \ \ \ \__ \
-;;  \ \_____\ \_____\ \_\\"\_\ \_\  \ \_\ \_____\
-;;   \/_____/\/_____/\/_/ \/_/\/_/   \/_/\/_____/
-;;
-;; this section covers all of the module configuration for taymacs.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; load ui elements such as theme, modeline, and font
 (require 'tay-font)
 (require 'tay-theme)
 (require 'tay-path)
 
-;; enable all of the ivy/counsel/swiper/avy stuff or use vanilla navigation
-(require 'tay-ivy)
-(require 'tay-avy)
-(require 'tay-anzu)
+(require 'tay-fido)
 
 ;; shell
 (require 'tay-eshell)
@@ -45,17 +30,11 @@
 
 ;; completion, linting, goto definition
 (require 'tay-company)
-(require 'tay-flycheck)
-(require 'tay-flyspell)
-(require 'tay-lsp)
-
-;; utility applications
-(require 'tay-scratch)
+(require 'tay-eglot)
 
 ;; mode specific packages
 (require 'tay-cc)
 (require 'cmake-mode)
-(require 'tay-git)
 (require 'tay-kconfig)
 (require 'tay-markdown)
 (require 'tay-python)
@@ -66,17 +45,7 @@
 (require 'tay-org)
 (require 'tay-kotlin)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  __  __  ______  __  __  ______
-;; /\ \/ / /\  ___\/\ \_\ \/\  ___\
-;; \ \  _"-\ \  __\\ \____ \ \___  \
-;;  \ \_\ \_\ \_____\/\_____\/\_____\
-;;   \/_/\/_/\/_____/\/_____/\/_____/
-;;
-;; all custom keybindings are contained in a single module
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; all custom keybindings are defined in separate module
 (require 'tay-keybindings)
 
 (setq gc-cons-threshold (* 2 1000 1000))

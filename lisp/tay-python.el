@@ -1,6 +1,5 @@
 (setq python-indent-offset 4
-      python-shell-completion-native-enable nil
-      python-shell-interpreter "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3")
+      python-shell-completion-native-enable nil)
 
 (use-package blacken
   :diminish

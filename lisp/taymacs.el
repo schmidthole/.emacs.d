@@ -147,10 +147,10 @@ the decoded string"
   (interactive)
   (mapc (lambda (s)
           (let* ((bname (buffer-name s))
-                (not-special-buffer (not (string-prefix-p " " bname)))
-                (not-exception-buffer (not (member bname tay/cleanup-exceptions))))
+                 (not-special-buffer (not (string-prefix-p " " bname)))
+                 (not-exception-buffer (not (member bname tay/cleanup-exceptions))))
 	        (if (and not-special-buffer
-                    not-exception-buffer)
+                     not-exception-buffer)
                 (progn
                   (message (concat "killing " bname))
 	              (kill-buffer s)))))
@@ -172,5 +172,11 @@ the decoded string"
             (buffer-name) " | "
             (symbol-name major-mode)  " | "
             (format-time-string "%Y-%m-%d %H:%M"))))
+
+(defun tay/dired-project-dir ()
+  "Go to the current project's base directory in dired"
+  (interactive)
+  (dired (vc-root-dir))
+  (dired-hide-details-mode))
 
 (provide 'taymacs)

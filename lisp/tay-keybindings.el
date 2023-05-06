@@ -5,9 +5,6 @@
 (tay/bind-key "C-M-." nil)
 (tay/bind-key "C-M-," nil)
 (tay/bind-key "C-x C-r" nil)
-(tay/bind-key-map flyspell-mode-map "C-;" nil)
-(tay/bind-key-map flyspell-mode-map "C-." nil)
-(tay/bind-key-map flyspell-mode-map "C-," nil)
 (tay/bind-key "M-l" nil)
 (tay/bind-key "M-c" nil)
 
@@ -34,17 +31,6 @@
 (tay/bind-key "M-i y" 'shell)
 
 (tay/bind-key "C-=" 'er/expand-region)
-(tay/bind-key "M-c" 'change-inner)
-(tay/bind-key "M-l" 'change-outer)
-
-(tay/bind-key "M-i a" 'counsel-ag)
-(tay/bind-key "M-i p" 'counsel-git)
-(tay/bind-key "C-x C-r" 'counsel-recentf)
-(tay/bind-key "C-s" 'swiper)
-(tay/bind-key "C-r" 'swiper-backward)
-(tay/bind-key "C-;" 'avy-goto-char)
-(tay/bind-key "C-'" 'avy-goto-line)
-(tay/bind-key "M-i r" 'anzu-query-replace-regexp)
 
 (tay/bind-key "M-i n" (lambda () (interactive) (find-file "~/notes/notes.org")))
 

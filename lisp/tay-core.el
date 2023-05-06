@@ -94,6 +94,7 @@
                                   obsolete
                                   noruntime
                                   cl-functions
-                                  interactive-only))
+                                  interactive-only
+                                  ))
 
 (provide 'tay-core)

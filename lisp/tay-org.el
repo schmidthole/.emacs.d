@@ -17,4 +17,8 @@
 
 (setq org-agenda-files '("~/notes/notes.org"))
 
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
 (provide 'tay-org)
