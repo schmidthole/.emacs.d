@@ -14,3 +14,28 @@ selection to the next paragraph down
 ** Editing
 + When in an Occur buffer, use ~e~ to enter editing mode.
 + Use ~C-c C-c~ to submit changes when finished. ~C-c C-q~ cancels.
+
+* Project
+The built-in Emacs project module does literally everything ivy/counsel did
+
+| Keybinding | Function                            |
+|------------+-------------------------------------|
+| ~C-x p f~  | Open file in project                |
+| ~C-x p b~  | Switch between only project buffers |
+| ~C-x p D~  | Open dired buffer at project root   |
+| ~C-x p g~  | Search for regexp in project        |
+| ~C-x p k~  | Kill all buffers for project        |
+| ~C-x p e~  | Eshell at project root              |
+| ~C-x p s~  | Shell at project root               |
+
+* VC Mode
+
+VC mode works on "filesets" which means:
+
++ the current buffer
++ files marked in vc directory mode
++ marked files in dired
+
+| Keybinding | Function       |
+|------------+----------------|
+| ~C-x v v~  | vc next action |
