@@ -15,11 +15,10 @@
 (tay/bind-key "C-." 'tay/go-to-char-forward)
 
 (tay/bind-key "C-x C-k" 'tay/kill-this-buffer)
+(tay/bind-key "C-x C-r" 'recentf)
 (tay/bind-key "M-i k" 'tay/cleanup)
 
 (tay/bind-key "M-i 0" 'toggle-frame-fullscreen)
-
-(tay/bind-key "M-i g" 'magit)
 
 (tay/bind-key "M-i m" 'modus-themes-toggle)
 

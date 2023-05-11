@@ -1,5 +1,10 @@
 #+TITLE: Taylor Emacs Wiki
 
+* Dired
+** Writeable Dired
+~C-x C-q~ enables editing of a dired buffer
+~C-c C-c~ commits edits
+
 * Incremental Search
 ** isearch-occur
 When in isearch-mode, use ~M-s o~ to enter an Occur buffer.
