@@ -2,6 +2,24 @@
 
 (setq load-prefer-newer noninteractive)
 
+;; These functions are taken from the ns-auto-titlebar package
+;; The functionality was so simple that it didn't need to be pulled in with use-package
+(defun ns-auto-titlebar-set-frame (frame &rest _)
+  "Set ns-appearance frame parameter for FRAME to match its background-mode parameter."
+  (when (display-graphic-p frame)
+    (let ((mode (frame-parameter frame 'background-mode)))
+      (modify-frame-parameters frame `((ns-transparent-titlebar . t) (ns-appearance . ,mode))))))
+
+(defun ns-auto-titlebar-set-all-frames (&rest _)
+  "Set ns-appearance frame parameter for all frames to match their background-mode parameter."
+  (mapc 'ns-auto-titlebar-set-frame (frame-list)))
+
+;; Set a nice transparent titlebar for macos
+(when (eq system-type 'darwin)
+  (add-hook 'after-init-hook 'ns-auto-titlebar-set-all-frames)
+  (add-hook 'after-make-frame-functions 'ns-auto-titlebar-set-frame)
+  (advice-add 'frame-set-background-mode :after 'ns-auto-titlebar-set-frame))
+
 ;; get rid of ui elements immediately so they don't linger
 (tool-bar-mode 0)
 (menu-bar-mode 0)

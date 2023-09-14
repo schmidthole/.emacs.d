@@ -15,10 +15,10 @@
 (setq org-todo-keyword-faces
       '(("IN PROGRESS" . org-warning) ("REVIEW" . org-warning)))
 
-(setq org-agenda-files '("~/notes/notes.org"))
+(setq org-agenda-files '("~/notes/agenda.org"))
 
-(use-package org-bullets
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; (use-package org-bullets
+;;   :config
+;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (provide 'tay-org)

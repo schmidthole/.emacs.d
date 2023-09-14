@@ -12,9 +12,6 @@
 (require 'tay-core)
 (require 'taymacs)
 
-;; enable use package and melpa
-(tay/enable-ext-pkg)
-
 ;; load ui elements such as theme, modeline, and font
 (require 'tay-font)
 (require 'tay-theme)
@@ -32,6 +29,8 @@
 (require 'tay-company)
 (require 'tay-eglot)
 
+(require 'tay-git)
+
 ;; mode specific packages
 (require 'tay-cc)
 (require 'cmake-mode)
@@ -43,7 +42,8 @@
 ;; (require 'tay-web)
 (require 'tay-dired)
 (require 'tay-org)
-(require 'tay-kotlin)
+(require 'tay-golang)
+(require 'tay-dockerfile)
 
 ;; all custom keybindings are defined in separate module
 (require 'tay-keybindings)

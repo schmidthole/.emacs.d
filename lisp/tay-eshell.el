@@ -12,8 +12,4 @@
             (setq-local global-hl-line-mode nil)
             (add-to-list 'eshell-visual-commands "pytest")))
 
-(use-package eat
-  :config
-  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
-
 (provide 'tay-eshell)

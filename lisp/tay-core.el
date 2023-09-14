@@ -4,17 +4,10 @@
 
 (setq hl-line-sticky-flag nil)
 (setq global-hl-line-sticky-flag nil)
-(setq blink-matching-paren nil)
-(setq x-stretch-cursor nil)
-(setq show-paren-delay 0.1)
-(setq show-paren-highlight-openparen t)
 (setq show-paren-when-point-inside-paren t)
 (setq show-paren-when-point-in-periphery t)
-(setq highlight-nonselected-windows nil)
-(setq idle-update-delay 1.0)
 (setq fast-but-imprecise-scrolling t)
-(setq indicate-buffer-boundaries nil)
-(setq indicate-empty-lines nil)
+(setq frame-resize-pixelwise t)
 
 (setq-default cursor-in-non-selected-windows nil)
 
@@ -25,13 +18,14 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'org-mode-hook 'display-line-numbers-mode)
 
+(setq frame-title-format "TAYMACS")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EDITOR
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq create-lockfiles nil)
 (setq auto-save-default nil)
-(setq create-lockfiles nil)
 (setq make-backup-files nil)
 (setq uniquify-buffer-name-style 'forward)
 (setq ring-bell-function #'ignore)
@@ -80,21 +74,32 @@
 
 (setq scroll-conservatively 101)
 (setq scroll-preserve-screen-position t)
+(pixel-scroll-precision-mode)
 
 (add-hook 'eshell-mode-hook (lambda () hscroll-margin 0))
+(add-hook 'shell-mode-hook (lambda () hscroll-margin 0))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; EXTERNAL PACKAGE SETUP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'use-package)
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+
+(require 'package)
+(setq package-check-signature nil)
+(add-to-list 'package-archives
+	         '("melpa" . "https://melpa.org/packages/")
+             '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; STARTUP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq byte-compile-warnings '(not nresolved
-                                  free-vars
-                                  callargs
-                                  redefine
-                                  obsolete
-                                  noruntime
-                                  cl-functions
-                                  interactive-only
-                                  ))
+(setq byte-compile-warnings '(not all))
 
 (provide 'tay-core)

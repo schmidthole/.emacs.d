@@ -1,31 +1,16 @@
-(setq modus-themes-completions '((selection . (intense accented background))))
-(setq modus-themes-headings '((t . (background bold rainbow))))
-(setq modus-themes-mode-line '(borderless moody))
-(setq modus-themes-prompts '(background intense))
-(setq modus-themes-lang-checkers '(straight-underline background))
-(setq modus-themes-subtle-line-numbers t)
-(load-theme 'modus-vivendi t)
+;; (setq modus-themes-completions '((selection . (intense accented background))))
+;; (setq modus-themes-headings '((t . (background bold rainbow))))
+;; (setq modus-themes-mode-line '(borderless moody))
+;; (setq modus-themes-prompts '(background intense))
+;; (setq modus-themes-lang-checkers '(straight-underline background))
+;; (setq modus-themes-subtle-line-numbers t)
+;; (load-theme 'modus-vivendi t)
 
-(use-package doom-modeline
+(use-package ef-themes
   :config
-  (setq doom-modeline-height 20)
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-bar-width 2)
-  (setq doom-modeline-percent-position nil)
-  (setq doom-modeline-lsp nil)
-  (setq doom-modeline-buffer-modification-icon nil)
-  (setq doom-modeline-repl nil)
-  (setq doom-modeline-env-version nil)
-  (doom-modeline-def-modeline 'tay/doom-modeline
-    '(bar matches follow buffer-info buffer-position remote-host selection-info)
-    '(compilation major-mode process))
-  (add-hook 'doom-modeline-mode-hook
-            (lambda () (doom-modeline-set-modeline 'tay/doom-modeline 'default)))
-  (doom-modeline-mode 1))
-
-(use-package ns-auto-titlebar
-  :config
-  (when (eq system-type 'darwin) (ns-auto-titlebar-mode)))
+  (setq ef-themes-variable-pitch-ui nil)
+  (setq ef-themes-to-toggle '(ef-dark ef-light))
+  (load-theme 'ef-dark))
 
 (use-package diminish)
 

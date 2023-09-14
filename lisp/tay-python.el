@@ -1,5 +1,6 @@
 (setq python-indent-offset 4
-      python-shell-completion-native-enable nil)
+      python-shell-completion-native-enable nil
+      python-interpreter "/opt/homebrew/bin/python3")
 
 (use-package blacken
   :diminish

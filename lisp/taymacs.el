@@ -14,33 +14,6 @@
   (define-key mode-map (kbd keychord) func))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; EXTERNAL PACKAGES
-;;
-;; Setup external package management. taymacs uses elpa/melpa and use-package
-;; for management
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun tay/enable-ext-pkg ()
-  "setup elpa/melpa and use-package for management of external modules"
-  (require 'package)
-  (setq package-check-signature nil)
-  (add-to-list 'package-archives
-	           '("melpa" . "https://melpa.org/packages/")
-               '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-  (package-initialize)
-
-  (unless package-archive-contents
-    (package-refresh-contents))
-
-  ;; setup use-package
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-  (require 'use-package)
-  (setq use-package-verbose t)
-  (setq use-package-always-ensure t))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MOVEMENT
 ;;
 ;; custom opinionated buffer editing functions
@@ -62,16 +35,6 @@ line like the standard emacs binding"
   (progn
     (previous-line)
     (tay/vi-line-below)))
-
-(defun tay/up-chunk ()
-  "moves up 20 lines at a time"
-  (interactive)
-  (previous-line 20))
-
-(defun tay/down-chunk ()
-  "moves down 20 lines at a time"
-  (interactive)
-  (next-line 20))
 
 (setq tay/last-go-to-char nil)
 
@@ -120,19 +83,6 @@ the decoded string"
     (base64-decode-region (point-min) (point-max))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; SEARCH
-;;
-;; custom search functions to replace ivy, counsel, swiper with built in
-;; emacs functionality.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun tay/git-grep (expr)
-  "Search for `expr' in all files contained in the current repository"
-  (interactive "sSEARCH: ")
-  (vc-git-grep expr "*" (vc-root-dir)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXTRAS
 ;;
 ;; extra collected functions for various tasks
@@ -172,11 +122,5 @@ the decoded string"
             (buffer-name) " | "
             (symbol-name major-mode)  " | "
             (format-time-string "%Y-%m-%d %H:%M"))))
-
-(defun tay/dired-project-dir ()
-  "Go to the current project's base directory in dired"
-  (interactive)
-  (dired (vc-root-dir))
-  (dired-hide-details-mode))
 
 (provide 'taymacs)

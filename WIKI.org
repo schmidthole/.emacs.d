@@ -54,3 +54,4 @@ when operating on a vc fileset outside of vc directory mode, the
 | ~C-x v b c~ | vc create branch                                     |
 | ~C-x v h~   | vc region history (git blame for highlighted region) |
 | ~C-x v u~   | vc discard changes                                   |
+| ~C-x v L~   | vc log for all branches                              |
