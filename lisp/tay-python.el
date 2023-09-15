@@ -9,6 +9,7 @@
   (setq blacken-line-length 100)
   (add-hook 'python-mode-hook 'blacken-mode))
 
-(use-package python-pytest)
+(use-package python-pytest
+  :defer)
 
 (provide 'tay-python)

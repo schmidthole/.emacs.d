@@ -15,6 +15,7 @@
 ;; load ui elements such as theme, modeline, and font
 (require 'tay-font)
 (require 'tay-theme)
+(require 'tay-modeline)
 (require 'tay-path)
 
 (require 'tay-fido)
