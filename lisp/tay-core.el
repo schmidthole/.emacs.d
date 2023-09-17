@@ -49,6 +49,13 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(setq tab-bar-show 1)
+(setq tab-bar-close-button-show nil)
+(setq tab-bar-new-button-show nil)
+(setq tab-bar-new-tab-choice "*scratch*")
+(tab-bar-mode 1)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MINIBUFFER
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
