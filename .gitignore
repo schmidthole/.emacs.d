@@ -1,0 +1,12 @@
+.persistent-scratch
+chatgpt/
+custom.el
+elpa/
+eshell/
+projects
+tramp
+smex-items
+transient/
+auto-save-list/
+private.el
+.chatgpt-shell.el
