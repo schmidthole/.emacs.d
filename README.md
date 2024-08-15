@@ -11,6 +11,8 @@
 
 taylor's emacs config.
 
+![emacs_screenshot](img/screenshot.png)
+
 ---
 
 modern emacs is pretty awesome and for my use doesn't need a ton of customization to
