@@ -192,6 +192,7 @@
 
 (tay/bind-key "C-=" 'er/expand-region)
 (tay/bind-key "C-x C-k" 'tay/kill-this-buffer)
+(tay/bind-key "C-x C-b" 'switch-to-buffer)
 (tay/bind-key "M-i 0" 'toggle-frame-fullscreen)
 (tay/bind-key "M-i t" 'tay/eshell-new)
 (tay/bind-key-map eglot-mode-map "M-i r" 'eglot-rename)
