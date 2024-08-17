@@ -179,13 +179,6 @@
             (lambda () (doom-modeline-set-modeline 'tay/doom-modeline 'default)))
   (doom-modeline-mode 1))
 
-(use-package flymake-diagnostic-at-point
-  :after flymake
-  :config
-  (setq flymake-diagnostic-at-point-timer-delay 1.0)
-  (setq flymake-diagnostic-at-point-display-diagnostic-function 'flymake-diagnostic-at-point-display-minibuffer)
-  (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -205,5 +198,7 @@
 (tay/bind-key-map eglot-mode-map "M-i i" 'eglot-code-action-organize-imports)
 (tay/bind-key-map eglot-mode-map "M-i e" 'flymake-show-buffer-diagnostics)
 (tay/bind-key "M-o" 'other-window)
+(tay/bind-key-map eglot-mode-map "M-[" 'flymake-goto-prev-error)
+(tay/bind-key-map eglot-mode-map "M-]" 'flymake-goto-next-error)
 
 (tay/bind-key "M-i g" 'magit-status)
