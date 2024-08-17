@@ -72,6 +72,7 @@
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda ()
                           (add-hook 'before-save-hook 'eglot-format-buffer nil t)))
+
 (add-hook 'eshell-mode-hook
 	      (lambda ()
             (eshell/alias "clear" "clear 1")))
@@ -131,8 +132,7 @@
   (setq company-minimum-prefix-length 2)
   (with-eval-after-load 'company
     (tay/bind-key-map company-active-map "ESC" 'company-abort))
-  (add-hook 'prog-mode-hook 'company-mode)
-  (add-hook 'eshell-mode-hook 'company-mode))
+  (add-hook 'prog-mode-hook 'company-mode))
 
 (use-package markdown-mode
   :config
@@ -179,6 +179,13 @@
             (lambda () (doom-modeline-set-modeline 'tay/doom-modeline 'default)))
   (doom-modeline-mode 1))
 
+(use-package flymake-diagnostic-at-point
+  :after flymake
+  :config
+  (setq flymake-diagnostic-at-point-timer-delay 1.0)
+  (setq flymake-diagnostic-at-point-display-diagnostic-function 'flymake-diagnostic-at-point-display-minibuffer)
+  (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -195,6 +202,7 @@
 (tay/bind-key "M-i 0" 'toggle-frame-fullscreen)
 (tay/bind-key "M-i t" 'tay/eshell-new)
 (tay/bind-key-map eglot-mode-map "M-i r" 'eglot-rename)
+(tay/bind-key-map eglot-mode-map "M-i i" 'eglot-code-action-organize-imports)
 (tay/bind-key-map eglot-mode-map "M-i e" 'flymake-show-buffer-diagnostics)
 (tay/bind-key "M-o" 'other-window)
 
