@@ -44,7 +44,8 @@
       dired-create-destination-dirs 'ask
       eglot-autoshutdown t
       eldoc-echo-area-use-multiline-p nil
-      display-line-numbers-type 'relative)
+      display-line-numbers-type 'relative
+      tab-always-indent 'complete)
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -126,14 +127,6 @@
 (use-package expand-region)
 (use-package iedit)
 
-(use-package company
-  :config
-  (setq company-idle-delay 0.1)
-  (setq company-minimum-prefix-length 2)
-  (with-eval-after-load 'company
-    (tay/bind-key-map company-active-map "ESC" 'company-abort))
-  (add-hook 'prog-mode-hook 'company-mode))
-
 (use-package markdown-mode
   :config
   (add-hook 'markdown-mode-hook 'display-line-numbers-mode)
@@ -178,6 +171,14 @@
   (add-hook 'doom-modeline-mode-hook
             (lambda () (doom-modeline-set-modeline 'tay/doom-modeline 'default)))
   (doom-modeline-mode 1))
+
+(use-package corfu
+  :init
+  (setq corfu-auto t
+        corfu-auto-delay 1
+        corfu-auto-prefix 2
+        corfu-quit-no-match 'separator)
+  (global-corfu-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
