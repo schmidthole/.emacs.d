@@ -44,8 +44,9 @@
       dired-create-destination-dirs 'ask
       eglot-autoshutdown t
       eldoc-echo-area-use-multiline-p nil
-      display-line-numbers-type 'relative
       tab-always-indent 'complete)
+
+(setq modus-themes-prompts '(bold))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -77,10 +78,9 @@
 (add-hook 'eshell-mode-hook
 	      (lambda ()
             (eshell/alias "clear" "clear 1")))
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (defun tay/eshell-new ()
-  "Make a brand new eshell buffer in the current location."
+  "make a brand new eshell buffer in the current location."
   (interactive)
   (eshell 'N))
 
@@ -96,6 +96,18 @@
   "kill the current buffer"
   (interactive)
   (kill-buffer (current-buffer)))
+
+(defun tay/show-me-the-light ()
+  "switch to modus operandi theme"
+  (interactive)
+  (disable-theme (car custom-enabled-themes))
+  (load-theme 'modus-operandi t))
+
+(defun tay/plunge-into-dark ()
+  "switch to modus operandi theme"
+  (interactive)
+  (disable-theme (car custom-enabled-themes))
+  (load-theme 'fleetish t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; external packages
