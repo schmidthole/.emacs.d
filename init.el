@@ -179,11 +179,22 @@
 (use-package corfu
   :custom
   (corfu-auto t)
-  (corfu-auto-delay 1)
+  (corfu-auto-delay 0.3)
   (corfu-auto-prefix 2)
   (corfu-quit-no-match 'separator)
   :init
   (global-corfu-mode))
+
+(use-package casual-calc
+  :bind
+  (:map calc-mode-map ("C-o" . casual-calc-tmenu)
+   :map calc-alg-map ("C-o" . casual-calc-tmenu))
+  :after (calc))
+
+(use-package avy
+  :bind
+  ("C-'" . avy-goto-char)
+  ("M-'" . avy-goto-line))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
