@@ -205,7 +205,11 @@
 (tay/bind-key-map eglot-mode-map "M-i i" 'eglot-code-action-organize-imports)
 (tay/bind-key-map eglot-mode-map "M-i e" 'flymake-show-buffer-diagnostics)
 (tay/bind-key "M-o" 'other-window)
+(tay/bind-key "M-i v" 'split-window-right)
+(tay/bind-key "M-i s" 'split-window-below)
+(tay/bind-key "M-i d" 'delete-window)
+(tay/bind-key "M-i c" 'chatgpt-shell)
 (tay/bind-key-map eglot-mode-map "M-[" 'flymake-goto-prev-error)
 (tay/bind-key-map eglot-mode-map "M-]" 'flymake-goto-next-error)
-
+(tay/bind-key-map isearch-mode-map "C-o" 'isearch-occur)
 (tay/bind-key "M-i g" 'magit-status)
