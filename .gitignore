@@ -10,3 +10,4 @@ transient/
 auto-save-list/
 private.el
 .chatgpt-shell.el
+ielm-history.eld
