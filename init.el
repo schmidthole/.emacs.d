@@ -19,7 +19,6 @@
 (setq frame-title-format "TAYMACS"
       inhibit-startup-message t
       inhibit-startup-echo-area-message user-login-name
-      initial-major-mode 'fundamental-mode
       initial-scratch-message nil
       fast-but-imprecise-scrolling t
       frame-resize-pixelwise t
@@ -46,8 +45,6 @@
       eldoc-echo-area-use-multiline-p nil
       tab-always-indent 'complete)
 
-(setq modus-themes-prompts '(bold))
-
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default tab-always-indent nil)
@@ -57,6 +54,8 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
+
+(load-theme 'modus-operandi t)
 
 (pixel-scroll-precision-mode)
 (show-paren-mode 1)
@@ -69,6 +68,8 @@
 
 (add-hook 'dired-load-hook (function (lambda ()
                                        (load "dired-x"))))
+(add-hook 'dired-mode-hook (function (lambda ()
+                                       (dired-hide-details-mode 1))))
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'web-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'eglot-ensure)
@@ -97,17 +98,20 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
-(defun tay/show-me-the-light ()
-  "switch to modus operandi theme"
-  (interactive)
-  (disable-theme (car custom-enabled-themes))
-  (load-theme 'modus-operandi t))
+(defun tay/open-line-up (n)
+  (interactive "p")
+  (move-beginning-of-line 1)
+  (open-line n))
 
-(defun tay/plunge-into-dark ()
-  "switch to modus operandi theme"
-  (interactive)
-  (disable-theme (car custom-enabled-themes))
-  (load-theme 'fleetish t))
+(defun tay/open-line-down (n)
+  (interactive "p")
+  (move-end-of-line 1)
+  (newline n))
+
+(defun tay/kill-line-down (n)
+  (interactive "p")
+  (move-beginning-of-line 1)
+  (kill-line n))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; external packages
@@ -131,10 +135,6 @@
 (use-package ns-auto-titlebar
   :config
   (when (eq system-type 'darwin) (ns-auto-titlebar-mode)))
-
-(use-package fleetish-theme
-  :config
-  (load-theme 'fleetish t))
 
 (use-package go-mode)
 (use-package go-dlv)
@@ -206,7 +206,7 @@
 (use-package avy
   :bind
   ("C-'" . avy-goto-char)
-  ("M-'" . avy-goto-line))
+  ("M-;" . avy-goto-line))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
@@ -218,6 +218,9 @@
 (tay/bind-key "C-x C-r" nil)
 (tay/bind-key "M-l" nil)
 (tay/bind-key "M-c" nil)
+(tay/bind-key "C-o" nil)
+(tay/bind-key "C-j" nil)
+(tay/bind-key "M-k" nil)
 
 (tay/bind-key "C-=" 'er/expand-region)
 (tay/bind-key "C-x C-k" 'tay/kill-this-buffer)
@@ -236,3 +239,8 @@
 (tay/bind-key-map eglot-mode-map "M-]" 'flymake-goto-next-error)
 (tay/bind-key-map isearch-mode-map "C-o" 'isearch-occur)
 (tay/bind-key "M-i g" 'magit-status)
+
+;; editing mods
+(tay/bind-key "C-o" 'tay/open-line-up)
+(tay/bind-key "C-j" 'tay/open-line-down)
+(tay/bind-key "M-k" 'tay/kill-line-down)
