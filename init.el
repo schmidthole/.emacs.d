@@ -22,13 +22,10 @@
       initial-scratch-message nil
       fast-but-imprecise-scrolling t
       frame-resize-pixelwise t
-      column-number-mode t
-      scroll-conservatively 101
-      scroll-preserve-screen-position t
       kill-do-not-save-duplicates t
+      column-number-mode t
       save-interprogram-paste-before-kill t
       js-indent-level 2
-      ring-bell-function #'ignore
       visible-bell nil
       custom-file (expand-file-name "custom.el" user-emacs-directory)
       create-lockfiles nil
@@ -57,7 +54,6 @@
 
 (load-theme 'modus-operandi t)
 
-(pixel-scroll-precision-mode)
 (show-paren-mode 1)
 (delete-selection-mode 1)
 (fset #'yes-or-no-p #'y-or-n-p)
@@ -72,9 +68,6 @@
                                        (dired-hide-details-mode 1))))
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'web-mode-hook 'eglot-ensure)
-(add-hook 'go-mode-hook 'eglot-ensure)
-(add-hook 'go-mode-hook (lambda ()
-                          (add-hook 'before-save-hook 'eglot-format-buffer nil t)))
 
 (add-hook 'eshell-mode-hook
 	      (lambda ()
@@ -84,14 +77,6 @@
   "make a brand new eshell buffer in the current location."
   (interactive)
   (eshell 'N))
-
-(defun tay/bind-key (keychord func)
-  "simply setup a global keybinding"
-  (global-set-key (kbd keychord) func))
-
-(defun tay/bind-key-map (mode-map keychord func)
-  "bind a key for a specific mode map"
-  (define-key mode-map (kbd keychord) func))
 
 (defun tay/kill-this-buffer ()
   "kill the current buffer"
@@ -136,20 +121,22 @@
   :config
   (when (eq system-type 'darwin) (ns-auto-titlebar-mode)))
 
-(use-package go-mode)
 (use-package go-dlv)
 (use-package expand-region)
 (use-package iedit)
+(use-package chatgpt-shell)
+(use-package magit)
+
+(use-package go-mode
+  :config
+  (add-hook 'go-mode-hook 'eglot-ensure)
+  (add-hook 'go-mode-hook (lambda ()
+                            (add-hook 'before-save-hook 'eglot-format-buffer nil t))))
 
 (use-package markdown-mode
   :config
   (add-hook 'markdown-mode-hook 'display-line-numbers-mode)
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
-
-(use-package yaml-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 
 (use-package web-mode
   :custom
@@ -164,10 +151,6 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.html'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.css'" . web-mode)))
-
-(use-package chatgpt-shell)
-
-(use-package magit)
 
 (use-package doom-modeline
   :custom
@@ -212,35 +195,35 @@
 ;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(tay/bind-key "M-i" nil)
-(tay/bind-key "C-z" nil)
-(tay/bind-key "C-x C-z" nil)
-(tay/bind-key "C-x C-r" nil)
-(tay/bind-key "M-l" nil)
-(tay/bind-key "M-c" nil)
-(tay/bind-key "C-o" nil)
-(tay/bind-key "C-j" nil)
-(tay/bind-key "M-k" nil)
+(global-set-key (kbd "M-i") nil)
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-x C-z") nil)
+(global-set-key (kbd "C-x C-r") nil)
+(global-set-key (kbd "M-l") nil)
+(global-set-key (kbd "M-c") nil)
+(global-set-key (kbd "C-o") nil)
+(global-set-key (kbd "C-j") nil)
+(global-set-key (kbd "M-k") nil)
 
-(tay/bind-key "C-=" 'er/expand-region)
-(tay/bind-key "C-x C-k" 'tay/kill-this-buffer)
-(tay/bind-key "C-x C-b" 'switch-to-buffer)
-(tay/bind-key "M-i 0" 'toggle-frame-fullscreen)
-(tay/bind-key "M-i t" 'tay/eshell-new)
-(tay/bind-key-map eglot-mode-map "M-i r" 'eglot-rename)
-(tay/bind-key-map eglot-mode-map "M-i i" 'eglot-code-action-organize-imports)
-(tay/bind-key-map eglot-mode-map "M-i e" 'flymake-show-buffer-diagnostics)
-(tay/bind-key "M-o" 'other-window)
-(tay/bind-key "M-i v" 'split-window-right)
-(tay/bind-key "M-i s" 'split-window-below)
-(tay/bind-key "M-i d" 'delete-window)
-(tay/bind-key "M-i c" 'chatgpt-shell)
-(tay/bind-key-map eglot-mode-map "M-[" 'flymake-goto-prev-error)
-(tay/bind-key-map eglot-mode-map "M-]" 'flymake-goto-next-error)
-(tay/bind-key-map isearch-mode-map "C-o" 'isearch-occur)
-(tay/bind-key "M-i g" 'magit-status)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
+(global-set-key (kbd "M-i 0") 'toggle-frame-fullscreen)
+(global-set-key (kbd "M-i t") 'tay/eshell-new)
+(define-key eglot-mode-map (kbd "M-i r") 'eglot-rename)
+(define-key eglot-mode-map (kbd "M-i i") 'eglot-code-action-organize-imports)
+(define-key eglot-mode-map (kbd "M-i e") 'flymake-show-buffer-diagnostics)
+(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-i v") 'split-window-right)
+(global-set-key (kbd "M-i s") 'split-window-below)
+(global-set-key (kbd "M-i d") 'delete-window)
+(global-set-key (kbd "M-i c") 'chatgpt-shell)
+(define-key eglot-mode-map (kbd "M-[") 'flymake-goto-prev-error)
+(define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+(global-set-key (kbd "M-i g") 'magit-status)
 
 ;; editing mods
-(tay/bind-key "C-o" 'tay/open-line-up)
-(tay/bind-key "C-j" 'tay/open-line-down)
-(tay/bind-key "M-k" 'tay/kill-line-down)
+(global-set-key (kbd "C-o") 'tay/open-line-up)
+(global-set-key (kbd "C-j") 'tay/open-line-down)
+(global-set-key (kbd "M-k") 'tay/kill-line-down)
