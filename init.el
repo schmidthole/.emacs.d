@@ -19,8 +19,6 @@
 (setq frame-title-format "TAYMACS"
       inhibit-startup-message t
       inhibit-startup-echo-area-message user-login-name
-      initial-scratch-message nil
-      fast-but-imprecise-scrolling t
       frame-resize-pixelwise t
       kill-do-not-save-duplicates t
       column-number-mode t
@@ -45,11 +43,8 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default tab-always-indent nil)
-(setq-default c-default-style "linux")
-(setq-default c-basic-offset 4)
 
 (tool-bar-mode 0)
-(menu-bar-mode 0)
 (scroll-bar-mode 0)
 
 (load-theme 'modus-operandi t)
@@ -179,12 +174,6 @@
   (corfu-quit-no-match 'separator)
   :init
   (global-corfu-mode))
-
-(use-package casual-calc
-  :bind
-  (:map calc-mode-map ("C-o" . casual-calc-tmenu)
-   :map calc-alg-map ("C-o" . casual-calc-tmenu))
-  :after (calc))
 
 (use-package avy
   :bind
