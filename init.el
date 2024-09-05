@@ -13,7 +13,7 @@
 (load (expand-file-name "private.el" user-emacs-directory))
 (require 'tay-private)
 
-(load-file (expand-file-name "letter.el" user-emacs-directory))
+(load-file (expand-file-name "letters.el" user-emacs-directory))
 
 (unless (file-exists-p "~/.emacs.d/backups")
   (make-directory "~/.emacs.d/backups" t))

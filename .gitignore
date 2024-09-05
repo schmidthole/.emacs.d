@@ -12,3 +12,4 @@ private.el
 .chatgpt-shell.el
 ielm-history.eld
 recentf
+backups/
