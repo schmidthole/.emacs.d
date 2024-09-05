@@ -13,6 +13,11 @@
 (load (expand-file-name "private.el" user-emacs-directory))
 (require 'tay-private)
 
+(load-file (expand-file-name "letter.el" user-emacs-directory))
+
+(unless (file-exists-p "~/.emacs.d/backups")
+  (make-directory "~/.emacs.d/backups" t))
+
 (when (window-system)
   (set-frame-font "Jetbrains Mono"))
 
@@ -27,8 +32,6 @@
       visible-bell nil
       custom-file (expand-file-name "custom.el" user-emacs-directory)
       create-lockfiles nil
-      auto-save-default nil
-      make-backup-files nil
       uniquify-buffer-name-style 'forward
       dired-auto-revert-buffer t
       dired-dwim-target t
@@ -38,7 +41,10 @@
       dired-create-destination-dirs 'ask
       eglot-autoshutdown t
       eldoc-echo-area-use-multiline-p nil
-      tab-always-indent 'complete)
+      tab-always-indent 'complete
+      org-agenda-files '("~/org/agenda.org")
+      backup-directory-alist `(("." . "~/.emacs.d/backups"))
+      auto-save-file-name-transforms `((".*" "~/.emacs.d/backups/" t)))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -47,6 +53,12 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 
+(setq modus-themes-common-palette-overrides
+      '((border-mode-line-active bg-mode-line-active)
+        (border-mode-line-inactive bg-mode-line-inactive)
+        (fringe unspecified)
+        (fg-prompt cyan)
+        (bg-prompt bg-cyan-nuanced)))
 (load-theme 'modus-operandi t)
 
 (show-paren-mode 1)
@@ -179,22 +191,6 @@
   :bind
   ("C-'" . avy-goto-char)
   ("M-;" . avy-goto-line))
-
-(use-package dashboard
-  :custom
-  (dashboard-center-content t)
-  (dashboard-items '((recents   . 5)
-                     (bookmarks . 5)
-                     (projects  . 5)))
-  (dashboard-startupify-list '(dashboard-insert-banner
-                               dashboard-insert-newline
-                               dashboard-insert-banner-title
-                               dashboard-insert-newline
-                               dashboard-insert-navigator
-                               dashboard-insert-newline
-                               dashboard-insert-items))
-  :config
-  (dashboard-setup-startup-hook))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
