@@ -44,7 +44,8 @@
       tab-always-indent 'complete
       org-agenda-files '("~/org/agenda.org")
       backup-directory-alist `(("." . "~/.emacs.d/backups"))
-      auto-save-file-name-transforms `((".*" "~/.emacs.d/backups/" t)))
+      auto-save-file-name-transforms `((".*" "~/.emacs.d/backups/" t))
+      auto-save-interval 50)
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -59,7 +60,7 @@
         (fringe unspecified)
         (fg-prompt cyan)
         (bg-prompt bg-cyan-nuanced)))
-(load-theme 'modus-operandi t)
+;; (load-theme 'modus-operandi t)
 
 (show-paren-mode 1)
 (delete-selection-mode 1)
@@ -67,7 +68,6 @@
 (global-auto-revert-mode t)
 (load custom-file 'noerror)
 (fido-vertical-mode 1)
-(electric-pair-mode 1)
 
 (add-hook 'dired-load-hook (function (lambda ()
                                        (load "dired-x"))))
@@ -105,6 +105,17 @@
   (move-beginning-of-line 1)
   (kill-line n))
 
+(global-set-key (kbd "M-i") nil)
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-x C-z") nil)
+(global-set-key (kbd "C-x C-r") nil)
+(global-set-key (kbd "M-l") nil)
+(global-set-key (kbd "M-c") nil)
+(global-set-key (kbd "C-o") nil)
+(global-set-key (kbd "C-j") nil)
+(global-set-key (kbd "M-k") nil)
+(global-set-key (kbd "C-i") nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; external packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -131,8 +142,8 @@
 (use-package go-dlv)
 (use-package expand-region)
 (use-package iedit)
-(use-package chatgpt-shell)
 (use-package magit)
+(use-package hcl-mode)
 
 (use-package go-mode
   :config
@@ -142,7 +153,6 @@
 
 (use-package markdown-mode
   :config
-  (add-hook 'markdown-mode-hook 'display-line-numbers-mode)
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 (use-package web-mode
@@ -189,22 +199,38 @@
 
 (use-package avy
   :bind
-  ("C-'" . avy-goto-char)
-  ("M-;" . avy-goto-line))
+  ("C-'" . avy-goto-line)
+  ("C-i" . avy-goto-word-1))
+
+(use-package gptel
+  :init
+  (setq gptel-model "gpt-4o")
+  :config
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
+
+(use-package fleetish-theme
+  :config
+  (load-theme 'fleetish t))
+
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package dockerfile-mode)
+
+(use-package volatile-highlights
+  :config
+  (volatile-highlights-mode t))
+
+(use-package pulsar
+  :config
+  (pulsar-global-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-set-key (kbd "M-i") nil)
-(global-set-key (kbd "C-z") nil)
-(global-set-key (kbd "C-x C-z") nil)
-(global-set-key (kbd "C-x C-r") nil)
-(global-set-key (kbd "M-l") nil)
-(global-set-key (kbd "M-c") nil)
-(global-set-key (kbd "C-o") nil)
-(global-set-key (kbd "C-j") nil)
-(global-set-key (kbd "M-k") nil)
 
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
@@ -218,11 +244,11 @@
 (global-set-key (kbd "M-i v") 'split-window-right)
 (global-set-key (kbd "M-i s") 'split-window-below)
 (global-set-key (kbd "M-i d") 'delete-window)
-(global-set-key (kbd "M-i c") 'chatgpt-shell)
 (define-key eglot-mode-map (kbd "M-[") 'flymake-goto-prev-error)
 (define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 (global-set-key (kbd "M-i g") 'magit-status)
+(global-set-key (kbd "C-c RET") 'gptel-send)
 
 ;; editing mods
 (global-set-key (kbd "C-o") 'tay/open-line-up)
