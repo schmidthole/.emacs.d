@@ -114,7 +114,7 @@
 (global-set-key (kbd "C-o") nil)
 (global-set-key (kbd "C-j") nil)
 (global-set-key (kbd "M-k") nil)
-(global-set-key (kbd "C-i") nil)
+(global-set-key (kbd "C-t") nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; external packages
@@ -200,7 +200,7 @@
 (use-package avy
   :bind
   ("C-'" . avy-goto-line)
-  ("C-i" . avy-goto-word-1))
+  ("C-t" . avy-goto-word-1))
 
 (use-package gptel
   :init
@@ -219,18 +219,21 @@
 
 (use-package dockerfile-mode)
 
-(use-package volatile-highlights
+(use-package evil
+  :init
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t) 
   :config
-  (volatile-highlights-mode t))
+  (evil-mode 1))
 
-(use-package pulsar
+(use-package evil-collection
+  :after evil
   :config
-  (pulsar-global-mode 1))
+  (evil-collection-init))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
