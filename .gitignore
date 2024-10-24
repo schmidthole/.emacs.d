@@ -13,3 +13,6 @@ private.el
 ielm-history.eld
 recentf
 backups/
+history
+places
+tree-sitter/
