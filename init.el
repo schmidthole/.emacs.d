@@ -8,77 +8,129 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'eglot)
+(require 'package)
+(add-to-list 'package-archives
+	         '("melpa" . "https://melpa.org/packages/"))
 
-(load (expand-file-name "private.el" user-emacs-directory))
-(require 'tay-private)
+(use-package emacs
+  :ensure nil
+  :custom
+  (frame-title-format "TAYMACS")
+  (inhibit-startup-message t)
+  (inhibit-startup-echo-area-message user-login-name)
+  (initial-scratch-message "")
+  (frame-resize-pixelwise t)
+  (kill-do-not-save-duplicates t)
+  (column-number-mode t)
+  (save-interprogram-paste-before-kill t)
+  (visible-bell nil)
+  (create-lockfiles nil)
+  (uniquify-buffer-name-style 'forward)
+  (tab-always-indent 'complete)
+  (make-backup-files nil)
+  (auto-save-default nil)
+  (warning-minimum-level :emergency)
+  (treesit-font-lock-level 4)
+  (delete-by-moving-to-trash t)
+  (go-ts-mode-indent-offset 4)
+  (js-indent-level 2)
+  (use-short-answers t)
+  (pixel-scroll-precision-mode t)
+  (pixel-scroll-precision-use-momentum nil)
+  (scroll-margin 0)
+  (scroll-conservatively 101)
+  (scroll-preserve-screen-position t)
+  (indent-tabs-mode nil)
+  (tab-width 4)
+  (tab-always-indent nil)
+  (display-line-numbers-type 'relative)
+  (custom-file (expand-file-name "custom.el" user-emacs-directory))
+  :bind
+  (("M-i" . nil)
+   ("C-z" . nil)
+   ("C-x C-z" . nil)
+   ("C-x C-r" . nil)
+   ("M-l" . nil)
+   ("M-c" . nil)
+   ("C-o" . nil)
+   ("C-j" . nil)
+   ("M-k" . nil)
+   ("C-t" . nil)
 
-(load-file (expand-file-name "letters.el" user-emacs-directory))
+   ("C-x C-k" . tay/kill-this-buffer)
+   ("C-x C-b" . switch-to-buffer)
+   ("C-o" . tay/open-line-up)
+   ("C-j" . tay/open-line-down)
+   ("M-k" . tay/kill-line-down)
+   ("M-i 0" . toggle-frame-fullscreen)
+   ("M-o" . other-window)
+   ("M-i v" . split-window-right)
+   ("M-i s" . split-window-below)
+   ("M-i d" . delete-window))
+  :init
+  (when (window-system)
+    (set-frame-font "Jetbrains Mono"))
+  
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0)
+  (show-paren-mode 1)
+  (delete-selection-mode 1)
+  (global-auto-revert-mode t)
+  (fido-vertical-mode 1)
+  (recentf-mode 1)
+  (savehist-mode 1)
+  (save-place-mode 1)
+  :config
+  (load custom-file 'noerror)
+  (load (expand-file-name "private.el" user-emacs-directory))
+  (require 'tay-private)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
-(unless (file-exists-p "~/.emacs.d/backups")
-  (make-directory "~/.emacs.d/backups" t))
+(use-package eldoc
+  :ensure nil
+  :custom
+  (eldoc-echo-area-use-multiline-p nil)
+  :init
+  (global-eldoc-mode))
 
-(when (window-system)
-  (set-frame-font "Jetbrains Mono"))
+(use-package eglot
+  :ensure nil
+  :custom
+  (eglot-auto-shutdown t)
+  :bind
+  (:map eglot-mode-map
+        ("M-i r" . eglot-rename)
+        ("M-i i" . eglot-code-action-organize-imports)
+        ("M-i e" . flymake-show-buffer-diagnostics)
+        ("M-i r" . eglot-rename)
+        ("M-i i" . eglot-code-action-organize-imports)
+        ("M-[" . flymake-goto-prev-error)
+        ("M-]" . flymake-goto-next-error))
+  :config
+  (add-hook 'go-ts-mode-hook 'eglot-ensure)
+  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
+  (add-hook 'typescript-ts-mode-hook 'eglot-ensure))
 
-(setq frame-title-format "TAYMACS"
-      inhibit-startup-message t
-      inhibit-startup-echo-area-message user-login-name
-      frame-resize-pixelwise t
-      kill-do-not-save-duplicates t
-      column-number-mode t
-      save-interprogram-paste-before-kill t
-      js-indent-level 2
-      visible-bell nil
-      custom-file (expand-file-name "custom.el" user-emacs-directory)
-      create-lockfiles nil
-      uniquify-buffer-name-style 'forward
-      dired-auto-revert-buffer t
-      dired-dwim-target t
-      dired-hide-details-hide-symlink-targets nil
-      dired-recursive-copies  'always
-      dired-recursive-deletes 'always
-      dired-create-destination-dirs 'ask
-      eglot-autoshutdown t
-      eldoc-echo-area-use-multiline-p nil
-      tab-always-indent 'complete
-      org-agenda-files '("~/org/agenda.org")
-      backup-directory-alist `(("." . "~/.emacs.d/backups"))
-      auto-save-file-name-transforms `((".*" "~/.emacs.d/backups/" t))
-      auto-save-interval 50)
+(use-package dired
+  :ensure nil
+  :custom
+  (dired-auto-revert-buffer t)
+  (dired-dwim-target t)
+  (dired-hide-details-hide-symlink-targets nil)
+  (dired-recursive-copies  'always)
+  (dired-recursive-deletes 'always)
+  (dired-create-destination-dirs 'ask)
+  (dired-kill-when-opening-new-dired-buffer t)
+  :init
+  (add-hook 'dired-load-hook (function (lambda ()
+                                         (load "dired-x"))))
+  (add-hook 'dired-mode-hook (function (lambda ()
+                                         (dired-hide-details-mode 1))))))
 
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default tab-always-indent nil)
-
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
-
-(setq modus-themes-common-palette-overrides
-      '((border-mode-line-active bg-mode-line-active)
-        (border-mode-line-inactive bg-mode-line-inactive)
-        (fringe unspecified)
-        (fg-prompt cyan)
-        (bg-prompt bg-cyan-nuanced)))
-;; (load-theme 'modus-operandi t)
-
-(show-paren-mode 1)
-(delete-selection-mode 1)
-(fset #'yes-or-no-p #'y-or-n-p)
-(global-auto-revert-mode t)
-(load custom-file 'noerror)
-(fido-vertical-mode 1)
-
-(add-hook 'dired-load-hook (function (lambda ()
-                                       (load "dired-x"))))
-(add-hook 'dired-mode-hook (function (lambda ()
-                                       (dired-hide-details-mode 1))))
-(add-hook 'js-mode-hook 'eglot-ensure)
-(add-hook 'web-mode-hook 'eglot-ensure)
-
-(add-hook 'eshell-mode-hook
-	      (lambda ()
-            (eshell/alias "clear" "clear 1")))
+(use-package eshell
+  :ensure nil
+  :bind
+  ("M-i t" . (lambda () (interactive) (eshell 'N))))
 
 (defun tay/eshell-new ()
   "make a brand new eshell buffer in the current location."
@@ -105,57 +157,36 @@
   (move-beginning-of-line 1)
   (kill-line n))
 
-(global-set-key (kbd "M-i") nil)
-(global-set-key (kbd "C-z") nil)
-(global-set-key (kbd "C-x C-z") nil)
-(global-set-key (kbd "C-x C-r") nil)
-(global-set-key (kbd "M-l") nil)
-(global-set-key (kbd "M-c") nil)
-(global-set-key (kbd "C-o") nil)
-(global-set-key (kbd "C-j") nil)
-(global-set-key (kbd "M-k") nil)
-(global-set-key (kbd "C-t") nil)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; external packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'package)
-(setq package-check-signature nil)
-
-(require 'use-package)
-(setq use-package-verbose t)
-(setq use-package-always-ensure t)
-
-(add-to-list 'package-archives
-	         '("melpa" . "https://melpa.org/packages/")
-             '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
 (use-package ns-auto-titlebar
+  :ensure t
   :config
   (when (eq system-type 'darwin) (ns-auto-titlebar-mode)))
 
-(use-package go-dlv)
-(use-package expand-region)
-(use-package iedit)
-(use-package magit)
-(use-package hcl-mode)
+(use-package go-dlv
+  :ensure t
+  :defer t)
 
-(use-package go-mode
-  :config
-  (add-hook 'go-mode-hook 'eglot-ensure)
-  (add-hook 'go-mode-hook (lambda ()
-                            (add-hook 'before-save-hook 'eglot-format-buffer nil t))))
+(use-package magit
+  :ensure t
+  :defer t
+  :bind
+  (("M-i g" . magit-status)))
+
+(use-package hcl-mode :ensure t)
 
 (use-package markdown-mode
+  :ensure t
+  :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 (use-package web-mode
+  :ensure t
+  :defer t
   :custom
   (web-mode-enable-engine-detection t)
   (web-mode-markup-indent-offset 2)
@@ -170,6 +201,7 @@
   (add-to-list 'auto-mode-alist '("\\.css'" . web-mode)))
 
 (use-package doom-modeline
+  :ensure t
   :custom
   (doom-modeline-icon nil)
   :config
@@ -189,71 +221,72 @@
   (doom-modeline-mode 1))
 
 (use-package corfu
+  :ensure t
   :custom
   (corfu-auto t)
   (corfu-auto-delay 0.3)
   (corfu-auto-prefix 2)
   (corfu-quit-no-match 'separator)
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  :config
+  (add-hook 'eshell-mode-hook (lambda ()
+                                (setq-local corfu-auto nil)
+                                (corfu-mode)))
+  (add-hook 'markdown-mode-hook (lambda ()
+                                  (setq-local corfu-auto nil)))
+  (add-hook 'org-mode-hook (lambda ()
+                             (setq-local corfu-auto nil))))
 
-(use-package avy
-  :bind
-  ("C-'" . avy-goto-line)
-  ("C-t" . avy-goto-word-1))
+(use-package marginalia
+  :ensure t
+  :init
+  (marginalia-mode))
 
 (use-package gptel
+  :ensure t
+  :defer t
+  :bind
+  (("C-c RET" . gptel-send))
   :init
   (setq gptel-model "gpt-4o")
+  (setq gptel-prompt-prefix-alist '((markdown-mode . "# ")
+                                    (org-mode . "* ")
+                                    (text-mode . "# ")))
+  (setq gptel-default-mode 'org-mode)
   :config
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 
 (use-package fleetish-theme
+  :ensure t
   :config
   (load-theme 'fleetish t))
 
 (use-package exec-path-from-shell
+  :ensure t
   :config
   (exec-path-from-shell-initialize))
 
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :ensure t
+  :defer t)
 
-(use-package evil
-  :init
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t) 
+(use-package apheleia
+  :ensure t
   :config
-  (evil-mode 1))
+  (apheleia-global-mode +1))
 
-(use-package evil-collection
-  :after evil
+(use-package treesit-auto
+  :ensure t
+  :after eglot
+  :custom
+  (treesit-auto-install 'prompt)
   :config
-  (evil-collection-init))
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; keybindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
-(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
-(global-set-key (kbd "M-i 0") 'toggle-frame-fullscreen)
-(global-set-key (kbd "M-i t") 'tay/eshell-new)
-(define-key eglot-mode-map (kbd "M-i r") 'eglot-rename)
-(define-key eglot-mode-map (kbd "M-i i") 'eglot-code-action-organize-imports)
-(define-key eglot-mode-map (kbd "M-i e") 'flymake-show-buffer-diagnostics)
-(global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "M-i v") 'split-window-right)
-(global-set-key (kbd "M-i s") 'split-window-below)
-(global-set-key (kbd "M-i d") 'delete-window)
-(define-key eglot-mode-map (kbd "M-[") 'flymake-goto-prev-error)
-(define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
-(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-(global-set-key (kbd "M-i g") 'magit-status)
-(global-set-key (kbd "C-c RET") 'gptel-send)
-
-;; editing mods
-(global-set-key (kbd "C-o") 'tay/open-line-up)
-(global-set-key (kbd "C-j") 'tay/open-line-down)
-(global-set-key (kbd "M-k") 'tay/kill-line-down)
+(use-package expand-region
+  :ensure t
+  :bind
+  (("C-=" . er/expand-region)))
