@@ -12,6 +12,8 @@
 (add-to-list 'package-archives
 	         '("melpa" . "https://melpa.org/packages/"))
 
+
+
 (use-package emacs
   :ensure nil
   :custom
@@ -83,8 +85,17 @@
   :config
   (load custom-file 'noerror)
   (load (expand-file-name "private.el" user-emacs-directory))
+  (setq-default truncate-lines t)
   (require 'tay-private)
   (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+
+(use-package org
+  :ensure nil
+  :custom
+  (org-startup-truncated t)
+  (org-startup-indented t)
+  :hook
+  ((org-mode . visual-line-mode)))
 
 (use-package eldoc
   :ensure nil
@@ -95,8 +106,9 @@
 
 (use-package eglot
   :ensure nil
+  :demand t
   :custom
-  (eglot-auto-shutdown t)
+  (eglot-autoshutdown t)
   :bind
   (:map eglot-mode-map
         ("M-i r" . eglot-rename)
@@ -106,10 +118,10 @@
         ("M-i i" . eglot-code-action-organize-imports)
         ("M-[" . flymake-goto-prev-error)
         ("M-]" . flymake-goto-next-error))
-  :config
-  (add-hook 'go-ts-mode-hook 'eglot-ensure)
-  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
-  (add-hook 'typescript-ts-mode-hook 'eglot-ensure))
+  :hook
+  ((go-ts-mode . eglot-ensure)
+   (typescript-ts-mode . eglot-ensure)
+   (tsx-ts-mode . eglot-ensure)))
 
 (use-package dired
   :ensure nil
@@ -125,12 +137,18 @@
   (add-hook 'dired-load-hook (function (lambda ()
                                          (load "dired-x"))))
   (add-hook 'dired-mode-hook (function (lambda ()
-                                         (dired-hide-details-mode 1))))))
+                                         (dired-hide-details-mode 1)))))
 
 (use-package eshell
   :ensure nil
   :bind
   ("M-i t" . (lambda () (interactive) (eshell 'N))))
+
+(use-package which-key
+  :ensure nil
+  :defer t   
+  :config
+  (add-hook 'after-init-hook 'which-key-mode))
 
 (defun tay/eshell-new ()
   "make a brand new eshell buffer in the current location."
@@ -160,6 +178,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; external packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package fleetish-theme
+  :ensure t
+  :config
+  (load-theme 'fleetish t))
 
 (use-package ns-auto-titlebar
   :ensure t
@@ -258,11 +281,6 @@
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 
-(use-package fleetish-theme
-  :ensure t
-  :config
-  (load-theme 'fleetish t))
-
 (use-package exec-path-from-shell
   :ensure t
   :config
@@ -280,6 +298,7 @@
 (use-package treesit-auto
   :ensure t
   :after eglot
+  :demand t
   :custom
   (treesit-auto-install 'prompt)
   :config
