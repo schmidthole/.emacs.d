@@ -144,9 +144,15 @@
 
 (use-package which-key
   :ensure nil
-  :defer t   
   :config
   (add-hook 'after-init-hook 'which-key-mode))
+
+(use-package winner
+  :bind
+  (("M-i h" . winner-undo)
+   ("M-i l" . winner-redo))
+  :config
+  (winner-mode))
 
 (defun tay/eshell-new ()
   "make a brand new eshell buffer in the current location."
@@ -257,7 +263,9 @@
   (add-hook 'markdown-mode-hook (lambda ()
                                   (setq-local corfu-auto nil)))
   (add-hook 'org-mode-hook (lambda ()
-                             (setq-local corfu-auto nil))))
+                             (setq-local corfu-auto nil)))
+  (add-hook 'git-commit-mode-hook (lambda ()
+                                    (setq-local corfu-auto nil))))
 
 (use-package marginalia
   :ensure t
