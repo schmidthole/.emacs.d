@@ -12,8 +12,6 @@
 (add-to-list 'package-archives
 	         '("melpa" . "https://melpa.org/packages/"))
 
-
-
 (use-package emacs
   :ensure nil
   :custom
@@ -307,5 +305,4 @@
 
 (use-package expand-region
   :ensure t
-  :bind
-  (("C-=" . er/expand-region)))
+  :bind  (("C-=" . er/expand-region)))
