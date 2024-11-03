@@ -66,7 +66,9 @@
    ("M-o" . other-window)
    ("M-i v" . split-window-right)
    ("M-i s" . split-window-below)
-   ("M-i d" . delete-window))
+   ("M-i d" . delete-window)
+   ("M-p" . beginning-of-defun)
+   ("M-n" . end-of-defun))
   :init
   (when (window-system)
     (set-frame-font "Jetbrains Mono"))
@@ -140,7 +142,9 @@
 (use-package eshell
   :ensure nil
   :bind
-  ("M-i t" . (lambda () (interactive) (eshell 'N))))
+  ("M-i t" . (lambda () (interactive) (eshell 'N)))
+  :hook
+  ((eshell-mode . visual-line-mode)))
 
 (use-package which-key
   :ensure nil
@@ -202,8 +206,6 @@
   :defer t
   :bind
   (("M-i g" . magit-status)))
-
-(use-package hcl-mode :ensure t)
 
 (use-package markdown-mode
   :ensure t
@@ -292,10 +294,6 @@
   :config
   (exec-path-from-shell-initialize))
 
-(use-package dockerfile-mode
-  :ensure t
-  :defer t)
-
 (use-package apheleia
   :ensure t
   :config
@@ -314,3 +312,17 @@
 (use-package expand-region
   :ensure t
   :bind  (("C-=" . er/expand-region)))
+
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-want-C-u-scroll t)
+;;   (setq evil-want-keybinding nil)
+;;   :config
+;;   (evil-mode 1))
+
+;; (use-package evil-collection
+;;   :after evil
+;;   :ensure t
+;;   :config
+;;   (evil-collection-init))
