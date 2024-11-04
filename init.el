@@ -43,7 +43,6 @@
   (indent-tabs-mode nil)
   (tab-width 4)
   (tab-always-indent nil)
-  (display-line-numbers-type 'relative)
   (custom-file (expand-file-name "custom.el" user-emacs-directory))
   :bind
   (("M-i" . nil)
@@ -312,6 +311,12 @@
 (use-package expand-region
   :ensure t
   :bind  (("C-=" . er/expand-region)))
+
+(use-package avy
+  :ensure t
+  :bind
+  (("C-;" . avy-goto-word-1)
+   ("C-'" . avy-goto-line)))
 
 ;; (use-package evil
 ;;   :ensure t
