@@ -91,6 +91,8 @@
 (use-package org
   :ensure nil
   :custom
+  (org-agenda-files '("~/org/agenda.org"))
+  (org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
   (org-startup-truncated t)
   (org-startup-indented t)
   :hook
@@ -317,17 +319,3 @@
   :bind
   (("C-;" . avy-goto-word-1)
    ("C-'" . avy-goto-line)))
-
-;; (use-package evil
-;;   :ensure t
-;;   :init
-;;   (setq evil-want-C-u-scroll t)
-;;   (setq evil-want-keybinding nil)
-;;   :config
-;;   (evil-mode 1))
-
-;; (use-package evil-collection
-;;   :after evil
-;;   :ensure t
-;;   :config
-;;   (evil-collection-init))
