@@ -214,22 +214,6 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
-(use-package web-mode
-  :ensure t
-  :defer t
-  :custom
-  (web-mode-enable-engine-detection t)
-  (web-mode-markup-indent-offset 2)
-  (web-mode-css-indent-offset 2)
-  (web-mode-enable-css-colorization t)
-  (web-mode-enable-auto-pairing t)
-  (web-mode-enable-current-element-highlight t)
-  (web-mode-enable-current-column-highlight t)
-  (web-mode-code-indent-offset 2)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.html'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.css'" . web-mode)))
-
 (use-package doom-modeline
   :ensure t
   :custom
