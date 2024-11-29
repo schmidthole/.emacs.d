@@ -15,7 +15,7 @@
 (use-package emacs
   :ensure nil
   :custom
-  (frame-title-format "TAYMACS")
+  (frame-title-format "taymacs")
   (inhibit-startup-message t)
   (inhibit-startup-echo-area-message user-login-name)
   (initial-scratch-message "")
@@ -62,7 +62,7 @@
    ("C-j" . tay/open-line-down)
    ("M-k" . tay/kill-line-down)
    ("M-i 0" . toggle-frame-fullscreen)
-   ("M-o" . other-window)
+   ;; ("M-o" . other-window)
    ("M-i v" . split-window-right)
    ("M-i s" . split-window-below)
    ("M-i d" . delete-window)
@@ -81,6 +81,7 @@
   (recentf-mode 1)
   (savehist-mode 1)
   (save-place-mode 1)
+  (python-shell-interpreter "/usr/bin/python3")
   :config
   (load custom-file 'noerror)
   (load (expand-file-name "private.el" user-emacs-directory))
@@ -122,7 +123,8 @@
   :hook
   ((go-ts-mode . eglot-ensure)
    (typescript-ts-mode . eglot-ensure)
-   (tsx-ts-mode . eglot-ensure)))
+   (tsx-ts-mode . eglot-ensure)
+   (python-ts-mode . eglot-ensure)))
 
 (use-package dired
   :ensure nil
@@ -158,6 +160,10 @@
    ("M-i l" . winner-redo))
   :config
   (winner-mode))
+
+(use-package html-ts-mode
+  :config
+  (define-key html-mode-map (kbd "M-o") nil))
 
 (defun tay/eshell-new ()
   "make a brand new eshell buffer in the current location."
@@ -296,10 +302,18 @@
 
 (use-package expand-region
   :ensure t
-  :bind  (("C-=" . er/expand-region)))
+  :bind
+  (("C-=" . er/expand-region)))
 
 (use-package avy
   :ensure t
   :bind
   (("C-;" . avy-goto-word-1)
    ("C-'" . avy-goto-line)))
+
+(use-package ace-window
+  :ensure t
+  :custom
+  ((aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+  :bind
+  (("M-o" . ace-window)))
