@@ -8,237 +8,131 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'package)
-(add-to-list 'package-archives
-	         '("melpa" . "https://melpa.org/packages/"))
+(require 'tay-functions)
+(require 'email)
 
-(use-package emacs
-  :ensure nil
-  :custom
-  (frame-title-format "taymacs")
-  (inhibit-startup-message t)
-  (inhibit-startup-echo-area-message user-login-name)
-  (initial-scratch-message "")
-  (frame-resize-pixelwise t)
-  (kill-do-not-save-duplicates t)
-  (column-number-mode t)
-  (save-interprogram-paste-before-kill t)
-  (visible-bell nil)
-  (create-lockfiles nil)
-  (uniquify-buffer-name-style 'forward)
-  (tab-always-indent 'complete)
-  (make-backup-files nil)
-  (auto-save-default nil)
-  (warning-minimum-level :emergency)
-  (treesit-font-lock-level 4)
-  (delete-by-moving-to-trash t)
-  (go-ts-mode-indent-offset 4)
-  (js-indent-level 2)
-  (use-short-answers t)
-  (pixel-scroll-precision-mode t)
-  (pixel-scroll-precision-use-momentum nil)
-  (scroll-margin 0)
-  (scroll-conservatively 101)
-  (scroll-preserve-screen-position t)
-  (indent-tabs-mode nil)
-  (tab-width 4)
-  (tab-always-indent nil)
-  (custom-file (expand-file-name "custom.el" user-emacs-directory))
-  :bind
-  (("M-i" . nil)
-   ("C-z" . nil)
-   ("C-x C-z" . nil)
-   ("C-x C-r" . nil)
-   ("M-l" . nil)
-   ("M-c" . nil)
-   ("C-o" . nil)
-   ("C-j" . nil)
-   ("M-k" . nil)
-   ("C-t" . nil)
+;; load private settings
+(load (expand-file-name "private.el" user-emacs-directory))
+(require 'private)
 
-   ("C-x C-k" . tay/kill-this-buffer)
-   ("C-x C-b" . switch-to-buffer)
-   ("C-o" . tay/open-line-up)
-   ("C-j" . tay/open-line-down)
-   ("M-k" . tay/kill-line-down)
-   ("M-i 0" . toggle-frame-fullscreen)
-   ;; ("M-o" . other-window)
-   ("M-i v" . split-window-right)
-   ("M-i s" . split-window-below)
-   ("M-i d" . delete-window)
-   ("M-p" . beginning-of-defun)
-   ("M-n" . end-of-defun))
-  :init
-  (when (window-system)
-    (set-frame-font "Jetbrains Mono"))
-  
-  (tool-bar-mode 0)
-  (scroll-bar-mode 0)
-  (show-paren-mode 1)
-  (delete-selection-mode 1)
-  (global-auto-revert-mode t)
-  (fido-vertical-mode 1)
-  (recentf-mode 1)
-  (savehist-mode 1)
-  (save-place-mode 1)
-  (python-shell-interpreter "/usr/bin/python3")
-  :config
-  (load custom-file 'noerror)
-  (load (expand-file-name "private.el" user-emacs-directory))
-  (setq-default truncate-lines t)
-  (require 'tay-private)
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+(setq modus-themes-bold-constructs t)
+(setq modus-themes-italic-constructs t)
+(setq modus-themes-common-palette-overrides
+      '((border-mode-line-active bg-mode-line-active)
+        (border-mode-line-inactive bg-mode-line-inactive)
+	(fringe unspecified)
+	(prose-done green-intense)
+        (prose-todo red-intense)
+	(fg-prompt fg-main)
+        (bg-prompt bg-cyan-intense)))
+(load-theme 'modus-vivendi t)
 
-(use-package org
-  :ensure nil
-  :custom
-  (org-agenda-files '("~/org/agenda.org"))
-  (org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
-  (org-startup-truncated t)
-  (org-startup-indented t)
-  :hook
-  ((org-mode . visual-line-mode)))
+;; base emacs settings
+(setq frame-resize-pixelwise t)
+(setq kill-do-not-save-duplicates t)
+(setq column-number-mode t)
+(setq save-interprogram-paste-before-kill t)
+(setq visible-bell nil)
+(setq create-lockfiles nil)
+(setq uniquify-buffer-name-style 'forward)
+(setq tab-always-indent 'complete)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq warning-minimum-level :emergency)
+(setq treesit-font-lock-level 4)
+(setq delete-by-moving-to-trash t)
+(setq use-short-answers t)
+(setq pixel-scroll-precision-mode t)
+(setq pixel-scroll-precision-use-momentum nil)
+(setq scroll-margin 0)
+(setq scroll-conservatively 101)
+(setq scroll-preserve-screen-position t)
+(setq indent-tabs-mode nil)
+(setq tab-width 4)
+(setq tab-always-indent nil)
+(setq global-auto-revert-non-file-buffers t)  
+(setq-default comint-process-echoes t)
 
-(use-package eldoc
-  :ensure nil
-  :custom
-  (eldoc-echo-area-use-multiline-p nil)
-  :init
-  (global-eldoc-mode))
+(setq-default truncate-lines t)
 
-(use-package eglot
-  :ensure nil
-  :demand t
-  :custom
-  (eglot-autoshutdown t)
-  :bind
-  (:map eglot-mode-map
-        ("M-i r" . eglot-rename)
-        ("M-i i" . eglot-code-action-organize-imports)
-        ("M-i e" . flymake-show-buffer-diagnostics)
-        ("M-i r" . eglot-rename)
-        ("M-i i" . eglot-code-action-organize-imports)
-        ("M-[" . flymake-goto-prev-error)
-        ("M-]" . flymake-goto-next-error))
-  :hook
-  ((go-ts-mode . eglot-ensure)
-   (typescript-ts-mode . eglot-ensure)
-   (tsx-ts-mode . eglot-ensure)
-   (python-ts-mode . eglot-ensure)))
+(when (window-system)
+  (set-frame-font "Jetbrains Mono"))
 
-(use-package dired
-  :ensure nil
-  :custom
-  (dired-auto-revert-buffer t)
-  (dired-dwim-target t)
-  (dired-hide-details-hide-symlink-targets nil)
-  (dired-recursive-copies  'always)
-  (dired-recursive-deletes 'always)
-  (dired-create-destination-dirs 'ask)
-  (dired-kill-when-opening-new-dired-buffer t)
-  :init
-  (add-hook 'dired-load-hook (function (lambda ()
-                                         (load "dired-x"))))
-  (add-hook 'dired-mode-hook (function (lambda ()
-                                         (dired-hide-details-mode 1)))))
+(show-paren-mode 1)
+(delete-selection-mode 1)
+(global-auto-revert-mode t)
+(recentf-mode 1)
+(savehist-mode 1)
+(save-place-mode 1)
+(fido-vertical-mode 1)
 
-(use-package eshell
-  :ensure nil
-  :bind
-  ("M-i t" . (lambda () (interactive) (eshell 'N)))
-  :hook
-  ((eshell-mode . visual-line-mode)))
+;; dired
+(setq dired-auto-revert-buffer t)
+(setq dired-dwim-target t)
+(setq dired-hide-details-hide-symlink-targets nil)
+(setq dired-recursive-copies  'always)
+(setq dired-recursive-deletes 'always)
+(setq dired-create-destination-dirs 'ask)
+(setq dired-kill-when-opening-new-dired-buffer t)
 
-(use-package which-key
-  :ensure nil
-  :config
-  (add-hook 'after-init-hook 'which-key-mode))
+(add-hook 'dired-load-hook (function (lambda ()
+                                       (load "dired-x"))))
+(add-hook 'dired-mode-hook (function (lambda ()
+                                       (dired-hide-details-mode 1))))
 
-(use-package winner
-  :bind
-  (("M-i h" . winner-undo)
-   ("M-i l" . winner-redo))
-  :config
-  (winner-mode))
+;; eglot
+(setq eglot-autoshutdown t)
+(require 'eglot)
 
-(use-package html-ts-mode
-  :config
-  (define-key html-mode-map (kbd "M-o") nil))
+(add-hook 'go-ts-mode-hook 'eglot-ensure)
+(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+(add-hook 'tsx-ts-mode-hook 'eglot-ensure)
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
 
-(defun tay/eshell-new ()
-  "make a brand new eshell buffer in the current location."
-  (interactive)
-  (eshell 'N))
+;; eldoc
+(setq eldoc-echo-area-use-multiline-p nil)
+(global-eldoc-mode)
 
-(defun tay/kill-this-buffer ()
-  "kill the current buffer"
-  (interactive)
-  (kill-buffer (current-buffer)))
+;; eshell
+(setq eshell-visual-commands nil)
+(add-hook 'eshell-mode-hook 'visual-line-mode)
+(add-hook 'eshell-mode-hook
+	  (lambda ()
+            (eshell/alias "ll" "ls -la")
+	    (eshell/alias "python" "python3 $*")
+	    (eshell/alias "pip" "pip3 $*")
+	    (eshell/alias "clear" "clear 1")
+            (setq-local global-hl-line-mode nil)))
 
-(defun tay/open-line-up (n)
-  (interactive "p")
-  (move-beginning-of-line 1)
-  (open-line n))
+;; isearch
+(setq isearch-lazy-count t)
+(setq search-whitespace-regexp ".*?")
 
-(defun tay/open-line-down (n)
-  (interactive "p")
-  (move-end-of-line 1)
-  (newline n))
+;; javascript
+(setq-default js-indent-level 2)
 
-(defun tay/kill-line-down (n)
-  (interactive "p")
-  (move-beginning-of-line 1)
-  (kill-line n))
+;; org-mode
+(setq org-agenda-files '("~/org/agenda.org"))
+(setq org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
+(setq org-startup-truncated t)
+(setq org-startup-indented t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'org-mode-hook 'visual-line-mode)
+
+;; which-key
+(add-hook 'after-init-hook 'which-key-mode)
+
 ;; external packages
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package fleetish-theme
+(use-package apheleia
   :ensure t
   :config
-  (load-theme 'fleetish t))
+  (apheleia-global-mode +1))
 
-(use-package ns-auto-titlebar
+(use-package avy
   :ensure t
-  :config
-  (when (eq system-type 'darwin) (ns-auto-titlebar-mode)))
-
-(use-package go-dlv
-  :ensure t
-  :defer t)
-
-(use-package magit
-  :ensure t
-  :defer t
   :bind
-  (("M-i g" . magit-status)))
-
-(use-package markdown-mode
-  :ensure t
-  :defer t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
-
-(use-package doom-modeline
-  :ensure t
-  :custom
-  (doom-modeline-icon nil)
-  :config
-  (doom-modeline-def-modeline 'tay/doom-modeline
-    '(bar
-      matches
-      follow
-      buffer-info
-      buffer-position
-      remote-host
-      selection-info)
-    '(compilation
-      major-mode
-      process))
-  (add-hook 'doom-modeline-mode-hook
-            (lambda () (doom-modeline-set-modeline 'tay/doom-modeline 'default)))
-  (doom-modeline-mode 1))
+  (("C-;" . avy-goto-word-1)
+   ("C-'" . avy-goto-line)))
 
 (use-package corfu
   :ensure t
@@ -260,10 +154,29 @@
   (add-hook 'git-commit-mode-hook (lambda ()
                                     (setq-local corfu-auto nil))))
 
-(use-package marginalia
+(use-package coterm
   :ensure t
-  :init
-  (marginalia-mode))
+  :config
+  (coterm-mode))
+
+(use-package csv-mode
+  :ensure t
+  :config
+  (require 'rainbow-csv)
+  (add-hook 'csv-mode-hook 'rainbow-csv-mode))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package expand-region
+  :ensure t
+  :bind
+  (("C-=" . er/expand-region)))
+
+(use-package magit
+  :ensure t)
 
 (use-package gptel
   :ensure t
@@ -271,7 +184,10 @@
   :bind
   (("C-c RET" . gptel-send))
   :init
-  (setq gptel-model "gpt-4o")
+  (setq gptel-model "claude-3-opus-20240229")
+  (setq gptel-backend (gptel-make-anthropic "Claude"
+                        :stream t
+                        :key claude-api-key))
   (setq gptel-prompt-prefix-alist '((markdown-mode . "# ")
                                     (org-mode . "* ")
                                     (text-mode . "# ")))
@@ -280,18 +196,18 @@
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 
-(use-package exec-path-from-shell
+(use-package marginalia
   :ensure t
-  :config
-  (exec-path-from-shell-initialize))
+  :init
+  (marginalia-mode))
 
-(use-package apheleia
+(use-package markdown-mode
   :ensure t
+  :defer t
   :config
-  (apheleia-global-mode +1))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 (use-package treesit-auto
-  :ensure t
   :after eglot
   :demand t
   :custom
@@ -300,20 +216,28 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode t))
 
-(use-package expand-region
-  :ensure t
-  :bind
-  (("C-=" . er/expand-region)))
+;; keybindings
+(global-set-key (kbd "M-i") nil)
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-x C-z") nil)
+(global-set-key (kbd "C-x C-r") nil)
+(global-set-key (kbd "M-l") nil)
+(global-set-key (kbd "M-c") nil)
+(global-set-key (kbd "C-o") nil)
+(global-set-key (kbd "C-j") nil)
+(global-set-key (kbd "M-k") nil)
+(global-set-key (kbd "C-t") nil)
 
-(use-package avy
-  :ensure t
-  :bind
-  (("C-;" . avy-goto-word-1)
-   ("C-'" . avy-goto-line)))
+(global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
+(global-set-key (kbd "C-o") 'tay/open-line-up)
+(global-set-key (kbd "C-j") 'tay/open-line-down)
+(global-set-key (kbd "M-k") 'tay/kill-line-down)
 
-(use-package ace-window
-  :ensure t
-  :custom
-  ((aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-  :bind
-  (("M-o" . ace-window)))
+(define-key eglot-mode-map (kbd "M-i i") 'eglot-code-action-organize-imports)
+(define-key eglot-mode-map (kbd "M-i e") 'flymake-show-buffer-diagnostics)
+(define-key eglot-mode-map (kbd "M-i r") 'eglot-rename)
+(define-key eglot-mode-map (kbd "M-i i") 'eglot-code-action-organize-imports)
+(define-key eglot-mode-map (kbd "M-[") 'flymake-goto-prev-error)
+(define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
+
