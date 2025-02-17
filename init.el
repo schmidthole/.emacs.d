@@ -117,6 +117,7 @@
 (setq org-startup-truncated t)
 (setq org-startup-indented t)
 
+
 (add-hook 'org-mode-hook 'visual-line-mode)
 
 ;; which-key
@@ -175,9 +176,6 @@
   :bind
   (("C-=" . er/expand-region)))
 
-(use-package magit
-  :ensure t)
-
 (use-package gptel
   :ensure t
   :defer t
@@ -188,9 +186,8 @@
   (setq gptel-backend (gptel-make-anthropic "Claude"
                         :stream t
                         :key claude-api-key))
-  (setq gptel-prompt-prefix-alist '((markdown-mode . "# ")
-                                    (org-mode . "* ")
-                                    (text-mode . "# ")))
+  (setq gptel-prompt-prefix-alist '((org-mode . "*PROMPT*\n\n")))
+  (setq gptel-response-prefix-alist '((org-mode . "*RESPONSE*\n\n")))
   (setq gptel-default-mode 'org-mode)
   :config
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
@@ -227,6 +224,7 @@
 (global-set-key (kbd "C-j") nil)
 (global-set-key (kbd "M-k") nil)
 (global-set-key (kbd "C-t") nil)
+(define-key org-mode-map (kbd "C-'") nil)
 
 (global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
@@ -241,3 +239,4 @@
 (define-key eglot-mode-map (kbd "M-[") 'flymake-goto-prev-error)
 (define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
 
+(require 'weather-mode)

@@ -15,6 +15,7 @@
 (add-hook 'mu4e-view-mode-hook (lambda () (setq truncate-lines nil)))
 
 (setq message-send-mail-function 'smtpmail-send-it)
+(setq message-charset-mail-charset 'utf-8)
 
 (setq message-cite-function  'message-cite-original
       message-citation-line-function  'message-insert-formatted-citation-line
@@ -31,7 +32,6 @@
 				  nil
 				  :with-author nil
 				  :with-toc nil))
-  (add-hook 'message-send-hook 'org-mime-htmlize)
-  (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart))
+  (add-hook 'message-send-hook 'org-mime-htmlize))
 
 (provide 'email)
