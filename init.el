@@ -8,12 +8,35 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'tay-functions)
-(require 'email)
+;; setup the custom settings file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
 
 ;; load private settings
 (load (expand-file-name "private.el" user-emacs-directory))
 (require 'private)
+
+;; load the directory that contains all custom modules
+(setq tay/lisp-modules (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path tay/lisp-modules)
+
+(setq frame-title-format "taymacs")
+
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
+
+(global-set-key (kbd "M-i") nil)
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-x C-z") nil)
+(global-set-key (kbd "C-x C-r") nil)
+(global-set-key (kbd "M-l") nil)
+(global-set-key (kbd "M-c") nil)
+(global-set-key (kbd "C-o") nil)
+(global-set-key (kbd "C-j") nil)
+(global-set-key (kbd "M-k") nil)
+(global-set-key (kbd "C-t") nil)
+
+(require 'tay-functions)
 
 (setq modus-themes-bold-constructs t)
 (setq modus-themes-italic-constructs t)
@@ -25,9 +48,12 @@
         (prose-todo red-intense)
 	(fg-prompt fg-main)
         (bg-prompt bg-cyan-intense)))
-(load-theme 'modus-vivendi t)
+(load-theme 'modus-operandi t)
 
 ;; base emacs settings
+(setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message user-login-name)
+(setq initial-scratch-message "")
 (setq frame-resize-pixelwise t)
 (setq kill-do-not-save-duplicates t)
 (setq column-number-mode t)
@@ -65,6 +91,17 @@
 (savehist-mode 1)
 (save-place-mode 1)
 (fido-vertical-mode 1)
+
+;; completions
+(add-hook 'prog-mode-hook #'completion-preview-mode)
+
+(with-eval-after-load 'completion-preview
+  (setq completion-preview-minimum-symbol-length 2)
+  (push 'org-self-insert-command completion-preview-commands)
+
+  (keymap-set completion-preview-active-mode-map "M-n" #'completion-preview-next-candidate)
+  (keymap-set completion-preview-active-mode-map "M-p" #'completion-preview-prev-candidate)
+  (keymap-set completion-preview-active-mode-map "M-i" #'completion-preview-insert))
 
 ;; dired
 (setq dired-auto-revert-buffer t)
@@ -117,13 +154,17 @@
 (setq org-startup-truncated t)
 (setq org-startup-indented t)
 
-
 (add-hook 'org-mode-hook 'visual-line-mode)
 
 ;; which-key
 (add-hook 'after-init-hook 'which-key-mode)
 
 ;; external packages
+;; (use-package fleetish-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'fleetish t))
+
 (use-package apheleia
   :ensure t
   :config
@@ -134,26 +175,6 @@
   :bind
   (("C-;" . avy-goto-word-1)
    ("C-'" . avy-goto-line)))
-
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-auto t)
-  (corfu-auto-delay 0.3)
-  (corfu-auto-prefix 2)
-  (corfu-quit-no-match 'separator)
-  :init
-  (global-corfu-mode)
-  :config
-  (add-hook 'eshell-mode-hook (lambda ()
-                                (setq-local corfu-auto nil)
-                                (corfu-mode)))
-  (add-hook 'markdown-mode-hook (lambda ()
-                                  (setq-local corfu-auto nil)))
-  (add-hook 'org-mode-hook (lambda ()
-                             (setq-local corfu-auto nil)))
-  (add-hook 'git-commit-mode-hook (lambda ()
-                                    (setq-local corfu-auto nil))))
 
 (use-package coterm
   :ensure t
@@ -182,21 +203,17 @@
   :bind
   (("C-c RET" . gptel-send))
   :init
-  (setq gptel-model "claude-3-opus-20240229")
+  (setq gptel-model "claude-3-7-sonnet-20250219")
   (setq gptel-backend (gptel-make-anthropic "Claude"
                         :stream t
-                        :key claude-api-key))
-  (setq gptel-prompt-prefix-alist '((org-mode . "*PROMPT*\n\n")))
-  (setq gptel-response-prefix-alist '((org-mode . "*RESPONSE*\n\n")))
+                        :key claude-api-key
+			:models '(claude-3-7-sonnet-20250219)))
+  (setq gptel-prompt-prefix-alist '((org-mode . "* PROMPT\n\n")))
+  (setq gptel-response-prefix-alist '((org-mode . "* RESPONSE\n\n")))
   (setq gptel-default-mode 'org-mode)
   :config
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
-
-(use-package marginalia
-  :ensure t
-  :init
-  (marginalia-mode))
 
 (use-package markdown-mode
   :ensure t
@@ -213,24 +230,22 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode t))
 
-;; keybindings
-(global-set-key (kbd "M-i") nil)
-(global-set-key (kbd "C-z") nil)
-(global-set-key (kbd "C-x C-z") nil)
-(global-set-key (kbd "C-x C-r") nil)
-(global-set-key (kbd "M-l") nil)
-(global-set-key (kbd "M-c") nil)
-(global-set-key (kbd "C-o") nil)
-(global-set-key (kbd "C-j") nil)
-(global-set-key (kbd "M-k") nil)
-(global-set-key (kbd "C-t") nil)
-(define-key org-mode-map (kbd "C-'") nil)
+(use-package magit
+  :ensure t)
 
+(use-package vterm
+  :ensure t
+  :init
+  (setq vterm-always-compile-module t))
+
+;; keybindings
 (global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-o") 'tay/open-line-up)
 (global-set-key (kbd "C-j") 'tay/open-line-down)
 (global-set-key (kbd "M-k") 'tay/kill-line-down)
+
+(global-set-key (kbd "M-i g") 'magit-status)
 
 (define-key eglot-mode-map (kbd "M-i i") 'eglot-code-action-organize-imports)
 (define-key eglot-mode-map (kbd "M-i e") 'flymake-show-buffer-diagnostics)
@@ -240,3 +255,5 @@
 (define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
 
 (require 'weather-mode)
+(require 'email)
+(put 'downcase-region 'disabled nil)
