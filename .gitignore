@@ -6,3 +6,9 @@ recentf
 straight/
 transient/
 tree-sitter/
+custom.el
+private.el
+newsticker*
+projects
+ielm-history.eld
+tramp

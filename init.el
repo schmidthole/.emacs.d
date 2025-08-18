@@ -25,6 +25,12 @@
 
 ;; ____________________________________________________________________________
 ;;|
+;;| custom modules
+(require 'weather-mode)
+(require 'claudia)
+
+;; ____________________________________________________________________________
+;;|
 ;;| custom functions
 
 (defun tay/eshell-new ()
@@ -126,16 +132,71 @@
 ;;|
 ;;| modeline
 
-(defun emacs-solo/shorten-vc-mode (vc)
-  "Shorten VC string to at most 20 characters.
-Replacing `Git-' with a branch symbol."
+(defun tay/shorten-vc-mode (vc)
   (let* ((vc (replace-regexp-in-string "^ Git[:-]"
                                        (if (char-displayable-p ?) "  " "Git: ")
-                                       vc))) ;; Options:   ᚠ ⎇
+                                       vc)))
     (if (> (length vc) 20)
         (concat (substring vc 0 20)
                 (if (char-displayable-p ?…) "…" "..."))
       vc)))
+
+(defun tay/mode-line-position ()
+  "mode-line lighter function for only display row/column without the buffer percentage"
+  `((line-number-mode
+     (column-number-mode
+      (column-number-indicator-zero-based
+       (10
+        (:propertize
+         mode-line-position-column-line-format
+         display (min-width (10.0))
+         ,@mode-line-position--column-line-properties))
+       (10
+        (:propertize
+         (:eval (string-replace
+                 "%c" "%C" (car mode-line-position-column-line-format)))
+         display (min-width (10.0))
+         ,@mode-line-position--column-line-properties)))
+      (6
+       (:propertize
+	mode-line-position-line-format
+        display (min-width (6.0))
+        ,@mode-line-position--column-line-properties)))
+     (column-number-mode
+      (column-number-indicator-zero-based
+       (6
+        (:propertize
+         mode-line-position-column-format
+         display (min-width (6.0))
+         ,@mode-line-position--column-line-properties))
+       (6
+        (:propertize
+         (:eval (string-replace
+                 "%c" "%C" (car mode-line-position-column-format)))
+         display (min-width (6.0))
+         ,@mode-line-position--column-line-properties)))))))
+
+(defun tay/mode-line-major-modes ()
+  "mode-line lighter function for only displaying the major mode"
+  (let ((recursive-edit-help-echo
+         "Recursive edit, type C-M-c to get out"))
+    (list (propertize "%[" 'help-echo recursive-edit-help-echo)
+	  "("
+	  `(:propertize ("" mode-name)
+			help-echo "Major mode\n\
+mouse-1: Display major mode menu\n\
+mouse-2: Show help for major mode\n\
+mouse-3: Toggle minor modes"
+			mouse-face mode-line-highlight
+			local-map ,mode-line-major-mode-keymap)
+	  '("" mode-line-process)
+	  (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
+		      'mouse-face 'mode-line-highlight
+		      'local-map (make-mode-line-mouse-map
+				  'mouse-2 #'mode-line-widen))
+	  ")"
+	  (propertize "%]" 'help-echo recursive-edit-help-echo)
+	  " ")))
 
 (setq-default mode-line-format
               '("%e" "  "
@@ -148,15 +209,14 @@ Replacing `Git-' with a branch symbol."
                 mode-line-frame-identification
                 mode-line-buffer-identification
                 "   "
-                mode-line-position
+                (:eval (tay/mode-line-position))
                 mode-line-format-right-align
                 "  "
                 (project-mode-line project-mode-line-format)
                 "  "
-                (vc-mode (:eval (emacs-solo/shorten-vc-mode vc-mode)))
+                (vc-mode (:eval (tay/shorten-vc-mode vc-mode)))
                 "  "
-                mode-line-modes
-                mode-line-misc-info
+                (:eval (tay/mode-line-major-modes))
                 "  ")
               project-mode-line t
               mode-line-buffer-identification '(" %b")
@@ -188,8 +248,7 @@ Replacing `Git-' with a branch symbol."
       dired-recursive-copies 'always
       dired-recursive-deletes 'always
       dired-create-destination-dirs 'ask
-      dired-kill-when-opening-new-dired-buffer t
-      dired-hide-details-hide-absolute-location t)
+      dired-kill-when-opening-new-dired-buffer t)
 
 (add-hook 'dired-load-hook (function (lambda ()
                                        (load "dired-x"))))
@@ -261,6 +320,11 @@ Replacing `Git-' with a branch symbol."
 
 ;; ____________________________________________________________________________
 ;;|
+;;| which-key
+(which-key-mode 1)
+
+;; ____________________________________________________________________________
+;;|
 ;;| vc
 
 (setq vc-auto-revert-mode t
@@ -270,21 +334,21 @@ Replacing `Git-' with a branch symbol."
 ;;|
 ;;| diff
 
-(setq diff-default-read-only t)
-(setq diff-advance-after-apply-hunk t)
-(setq diff-update-on-the-fly t)
-(setq diff-font-lock-syntax 'hunk-also)
-(setq diff-font-lock-prettify nil)
+(setq diff-default-read-only t
+      diff-advance-after-apply-hunk t
+      diff-update-on-the-fly t
+      diff-font-lock-syntax 'hunk-also
+      diff-font-lock-prettify nil)
 
 ;; ____________________________________________________________________________
 ;;|
 ;;| ediff
 
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(setq ediff-keep-variants nil)
-(setq ediff-make-buffers-readonly-at-startup nil)
-(setq ediff-show-clashes-only t)
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      ediff-keep-variants nil
+      ediff-make-buffers-readonly-at-startup nil
+      ediff-show-clashes-only t)
 
 ;; ____________________________________________________________________________
 ;;|
@@ -292,12 +356,12 @@ Replacing `Git-' with a branch symbol."
 
 (setq eglot-autoshutdown t)
 (require 'eglot)
-(setq eglot-autoshutdown t)
-(setq eglot-events-buffer-size 0)
-(setq eglot-events-buffer-config '(:size 0 :format full))
-(setq eglot-prefer-plaintext nil)
-(setq jsonrpc-event-hook nil)
-(setq eglot-code-action-indications nil)
+(setq eglot-autoshutdown t
+      eglot-events-buffer-size 0
+      eglot-events-buffer-config '(:size 0 :format full)
+      eglot-prefer-plaintext nil
+      jsonrpc-event-hook nil
+      eglot-code-action-indications nil)
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
 (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
@@ -314,9 +378,8 @@ Replacing `Git-' with a branch symbol."
 ;;|
 ;;| flymake
 
-(setq flymake-show-diagnostics-at-end-of-line 'short)
-(setq flymake-indicator-type 'margins)
-(setq flymake-margin-indicators-string
+(setq flymake-indicator-type 'margins
+      flymake-margin-indicators-string
       `((error "!" compilation-error)      
         (warning "?" compilation-warning)
         (note "i" compilation-info)))
@@ -330,12 +393,24 @@ Replacing `Git-' with a branch symbol."
 ;;|
 ;;| org
 
-(setq org-agenda-files '("~/agenda.org")
+(setq org-agenda-files '("~/org/agenda.org" "~/org/calsync.org")
       org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE"))
       org-startup-truncated t
       org-startup-indented t
       org-startup-folded t
-      org-insert-heading-respect-content t)
+      org-insert-heading-respect-content t
+      org-export-with-toc nil
+      org-export-with-author nil
+      org-export-time-stamp-file nil
+      org-export-with-section-numbers nil
+      org-html-validation-link nil
+      org-html-head-extra (concat "<style>\n"
+                                  (with-temp-buffer
+                                    (insert-file-contents (expand-file-name "css/org-export.css" user-emacs-directory))
+                                    (buffer-string))
+                                  "\n</style>"))
+
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 ;; ____________________________________________________________________________
 ;;|
@@ -414,7 +489,6 @@ Replacing `Git-' with a branch symbol."
 (use-package gptel
   :ensure t
   :straight t
-  :defer t
   :bind
   (("C-c RET" . gptel-send))
   :init
