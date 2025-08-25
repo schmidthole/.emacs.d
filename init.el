@@ -390,7 +390,9 @@ mouse-3: Toggle minor modes"
         (python . ("https://github.com/tree-sitter/tree-sitter-python"))
         (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
         (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
-        (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))))
+        (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
+        (yaml . ("https://github.com/tree-sitter-grammars/tree-sitter-yaml"))
+        (html . ("https://github.com/tree-sitter/tree-sitter-html"))))
 
 ;; automatically use tree-sitter modes
 (setq major-mode-remap-alist
@@ -401,7 +403,9 @@ mouse-3: Toggle minor modes"
         (js-mode . js-ts-mode)
         (typescript-mode . typescript-ts-mode)
         (js2-mode . js-ts-mode)
-        (rjsx-mode . tsx-ts-mode)))
+        (rjsx-mode . tsx-ts-mode)
+        (yaml-mode . yaml-ts-mode)
+        (html-mode . html-ts-mode)))
 
 ;; file associations for tree-sitter modes
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
@@ -411,6 +415,8 @@ mouse-3: Toggle minor modes"
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\(?:Dockerfile\\|dockerfile\\)\\'" . dockerfile-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . html-ts-mode))
 
 ;; ____________________________________________________________________________
 ;;|
