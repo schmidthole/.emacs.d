@@ -30,9 +30,10 @@
       '(:eval
         (let ((project (project-current)))
           (if project
-              (concat "Emacs - [p] "
-                      (file-name-nondirectory (directory-file-name (project-root project))))
-              (concat "Emacs - " (buffer-name))))))
+              (concat "taymacs ("
+                      (file-name-nondirectory (directory-file-name (project-root project)))
+                      ")")
+              (concat "taymacs " (buffer-name))))))
 
 ;; ____________________________________________________________________________
 ;;|

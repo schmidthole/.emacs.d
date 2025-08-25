@@ -39,6 +39,16 @@
 
 ;; ____________________________________________________________________________
 ;;|
+;;| frame title update hooks
+
+;; force frame title to update when switching buffers
+(add-hook 'buffer-list-update-hook
+          (lambda ()
+            (when (display-graphic-p)
+              (force-mode-line-update t))))
+
+;; ____________________________________________________________________________
+;;|
 ;;| custom functions
 
 (defun tay/eshell-new ()
