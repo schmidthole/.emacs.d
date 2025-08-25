@@ -6,6 +6,8 @@
 ;;    \ \_\\ \_\ \_\/\_____\ \_\ \ \_\ \_\ \_\ \_____\/\_____\
 ;;     \/_/ \/_/\/_/\/_____/\/_/  \/_/\/_/\/_/\/_____/\/_____/
 ;;
+;; init
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; ____________________________________________________________________________
@@ -63,6 +65,24 @@
   (move-beginning-of-line 1)
   (kill-line n))
 
+(defun tay/mark-thing-at-point ()
+  "mark the symbol at point"
+  (interactive)
+  (let ((bounds (bounds-of-thing-at-point 'symbol)))
+    (if bounds
+        (progn
+          (goto-char (car bounds))
+          (set-mark (point))
+          (goto-char (cdr bounds)))
+      (message "no symbol at point"))))
+
+(defun tay/mark-whole-line ()
+  "mark the entire current line"
+  (interactive)
+  (beginning-of-line)
+  (set-mark (point))
+  (end-of-line))
+
 ;; ____________________________________________________________________________
 ;;|
 ;;| core emacs settings
@@ -86,6 +106,8 @@
 (global-set-key (kbd "C-j") 'tay/open-line-down)
 (global-set-key (kbd "M-k") 'tay/kill-line-down)
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-l") 'tay/mark-whole-line)
+(global-set-key (kbd "M-c") 'tay/mark-thing-at-point)
 (global-set-key (kbd "M-i v") 'split-window-right)
 (global-set-key (kbd "M-i s") 'split-window-below)
 (global-set-key (kbd "C-;") 'jumpa)
