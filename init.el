@@ -28,6 +28,11 @@
 ;;| custom modules
 (require 'weather-mode)
 (require 'claudia)
+(require 'calsync)
+(require 'fleet-theme)
+(require 'jumpa)
+
+;; (calsync-setup)
 
 ;; ____________________________________________________________________________
 ;;|
@@ -83,6 +88,7 @@
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "M-i v") 'split-window-right)
 (global-set-key (kbd "M-i s") 'split-window-below)
+(global-set-key (kbd "C-;") 'jumpa)
 
 ;; startup things
 (setq inhibit-startup-message t
@@ -102,6 +108,7 @@
       auto-save-default nil
       warning-minimum-level :emergency
       treesit-font-lock-level 4
+      treesit-auto-install-grammar t
       delete-by-moving-to-trash t
       use-short-answers t
       pixel-scroll-precision-mode t
@@ -159,7 +166,7 @@
          ,@mode-line-position--column-line-properties)))
       (6
        (:propertize
-	mode-line-position-line-format
+	    mode-line-position-line-format
         display (min-width (6.0))
         ,@mode-line-position--column-line-properties)))
      (column-number-mode
@@ -181,22 +188,22 @@
   (let ((recursive-edit-help-echo
          "Recursive edit, type C-M-c to get out"))
     (list (propertize "%[" 'help-echo recursive-edit-help-echo)
-	  "("
-	  `(:propertize ("" mode-name)
-			help-echo "Major mode\n\
+	      "("
+	      `(:propertize ("" mode-name)
+			            help-echo "Major mode\n\
 mouse-1: Display major mode menu\n\
 mouse-2: Show help for major mode\n\
 mouse-3: Toggle minor modes"
-			mouse-face mode-line-highlight
-			local-map ,mode-line-major-mode-keymap)
-	  '("" mode-line-process)
-	  (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
-		      'mouse-face 'mode-line-highlight
-		      'local-map (make-mode-line-mouse-map
-				  'mouse-2 #'mode-line-widen))
-	  ")"
-	  (propertize "%]" 'help-echo recursive-edit-help-echo)
-	  " ")))
+			            mouse-face mode-line-highlight
+			            local-map ,mode-line-major-mode-keymap)
+	      '("" mode-line-process)
+	      (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
+		              'mouse-face 'mode-line-highlight
+		              'local-map (make-mode-line-mouse-map
+				                  'mouse-2 #'mode-line-widen))
+	      ")"
+	      (propertize "%]" 'help-echo recursive-edit-help-echo)
+	      " ")))
 
 (setq-default mode-line-format
               '("%e" "  "
@@ -352,6 +359,39 @@ mouse-3: Toggle minor modes"
 
 ;; ____________________________________________________________________________
 ;;|
+;;| treesitter
+
+;; configure tree-sitter grammar sources
+(setq treesit-language-source-alist
+      '((go . ("https://github.com/tree-sitter/tree-sitter-go"))
+        (dockerfile . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
+        (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+        (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
+        (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
+        (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))))
+
+;; automatically use tree-sitter modes
+(setq major-mode-remap-alist
+      '((go-mode . go-ts-mode)
+        (dockerfile-mode . dockerfile-ts-mode)
+        (python-mode . python-ts-mode)
+        (javascript-mode . js-ts-mode)
+        (js-mode . js-ts-mode)
+        (typescript-mode . typescript-ts-mode)
+        (js2-mode . js-ts-mode)
+        (rjsx-mode . tsx-ts-mode)))
+
+;; file associations for tree-sitter modes
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\(?:Dockerfile\\|dockerfile\\)\\'" . dockerfile-ts-mode))
+
+;; ____________________________________________________________________________
+;;|
 ;;| eglot
 
 (setq eglot-autoshutdown t)
@@ -362,6 +402,7 @@ mouse-3: Toggle minor modes"
       eglot-prefer-plaintext nil
       jsonrpc-event-hook nil
       eglot-code-action-indications nil)
+
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
 (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
@@ -393,8 +434,8 @@ mouse-3: Toggle minor modes"
 ;;|
 ;;| org
 
-(setq org-agenda-files '("~/org/agenda.org" "~/org/calsync.org")
-      org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE"))
+(setq org-agenda-files '("~/org/agenda.org" "~/org/calendar.org")
+      org-todo-keywords '((sequence "TODO" "IN PROGRESS" "BLOCKED" "|" "DONE"))
       org-startup-truncated t
       org-startup-indented t
       org-startup-folded t
@@ -445,83 +486,24 @@ mouse-3: Toggle minor modes"
 ;;|
 ;;| external packages
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; if for some reason, external packages are needed, uncomment the section below to enable straight
+;;
+;; (defvar bootstrap-version)
+;; (let ((bootstrap-file
+;;        (expand-file-name
+;;         "straight/repos/straight.el/bootstrap.el"
+;;         (or (bound-and-true-p straight-base-dir)
+;;             user-emacs-directory)))
+;;       (bootstrap-version 7))
+;;   (unless (file-exists-p bootstrap-file)
+;;     (with-current-buffer
+;;         (url-retrieve-synchronously
+;;          "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+;;          'silent 'inhibit-cookies)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp)))
+;;   (load bootstrap-file nil 'nomessage))
 
-(use-package fleetish-theme
-  :ensure t
-  :straight t
-  :config
-  (load-theme 'fleetish t))
 
-(use-package exec-path-from-shell
-  :ensure t
-  :straight t
-  :config
-  (exec-path-from-shell-initialize))
 
-(use-package avy
-  :ensure t
-  :straight t
-  :bind
-  (("C-;" . avy-goto-word-1)
-   ("C-'" . avy-goto-line)))
 
-(use-package expand-region
-  :ensure t
-  :straight t
-  :bind
-  (("C-=" . er/expand-region)))
-
-(use-package gptel
-  :ensure t
-  :straight t
-  :bind
-  (("C-c RET" . gptel-send))
-  :init
-  (setq gptel-model "claude-sonnet-4-20250514")
-  (setq gptel-backend (gptel-make-anthropic "Claude"
-                        :stream t
-                        :key claude-api-key
-			            :models '(claude-sonnet-4-20250514)))
-  (setq gptel-prompt-prefix-alist '((org-mode . "* PROMPT\n\n")))
-  (setq gptel-response-prefix-alist '((org-mode . "* RESPONSE\n\n")))
-  (setq gptel-default-mode 'org-mode)
-  :config
-  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
-
-(use-package treesit-auto
-  :after eglot
-  :straight t
-  :demand t
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode t))
-
-(use-package vterm
-  :ensure t
-  :straight t)
-
-(use-package claude-code-ide
-  :straight (:type git :host github :repo "manzaltu/claude-code-ide.el")
-  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
-  :init
-  (setq claude-code-ide-terminal-backend 'vterm)
-  :config
-  (claude-code-ide-emacs-tools-setup))

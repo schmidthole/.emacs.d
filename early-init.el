@@ -38,7 +38,22 @@
   "Set ns-appearance frame parameter for all frames to match their background-mode parameter."
   (mapc 'ns-auto-titlebar-set-frame (frame-list)))
 
-;; Set a nice transparent titlebar for macos
+;; set up exec-path from shell early
+(defun tay/set-exec-path-from-shell ()
+  "set up emacs' `exec-path' and PATH environment from zsh."
+  (interactive)
+  (let* ((command "zsh -i -l -c 'echo $PATH'")
+         (path-from-shell (replace-regexp-in-string
+                           "[ \t\n]*$" ""
+                           (shell-command-to-string command))))
+        (when (and path-from-shell (not (string= path-from-shell "")))
+          (setenv "PATH" path-from-shell)
+          (setq exec-path (append (split-string path-from-shell path-separator) (list exec-directory)))
+          (message "PATH loaded from zsh: %s" path-from-shell))))
+
+(tay/set-exec-path-from-shell)
+
+;; set a nice transparent titlebar for macos
 (when (eq system-type 'darwin)
   (add-hook 'after-init-hook 'ns-auto-titlebar-set-all-frames)
   (add-hook 'after-make-frame-functions 'ns-auto-titlebar-set-frame)
