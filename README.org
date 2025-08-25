@@ -1,0 +1,64 @@
+#+title: taymacs
+
+[[file:img/taymacs.png]]
+
+* about
+
+taymacs is a minimal emacs configuration for emacs 30+ that prioritizes performance and simplicity. it uses built-in emacs features exclusively, with a few custom modules.
+
+* features
+
+- no external dependencies
+- tree-sitter based syntax highlighting
+- eglot for lsp support  
+- custom modeline with project and git information
+- built-in completion with preview
+
+* custom modules
+
+the configuration includes several custom modules in the =lisp/= directory:
+
+- =weather-mode= - weather information display
+- =claudia= - claude ai integration
+- =calsync= - calendar synchronization
+- =fleet-theme= - custom theme (overriden modus theme)
+- =jumpa= - quick navigation (similar to avy)
+- =mdlite= - lightweight markdown support
+
+* keybindings
+
+** global bindings
+
+| key         | function                    | description                |
+|-------------|-----------------------------|----------------------------|
+| =C-x C-k=   | tay/kill-this-buffer        | kill current buffer        |
+| =C-x C-b=   | switch-to-buffer            | switch buffers             |
+| =C-o=       | tay/open-line-up            | open line above            |
+| =C-j=       | tay/open-line-down          | open line below            |
+| =M-k=       | tay/kill-line-down          | kill line from beginning   |
+| =M-o=       | other-window                | switch to other window     |
+| =M-l=       | tay/mark-whole-line         | mark entire line           |
+| =M-c=       | tay/mark-thing-at-point     | mark symbol at point       |
+| =M-i v=     | split-window-right          | split window vertically    |
+| =M-i s=     | split-window-below          | split window horizontally  |
+| =C-;=       | jumpa                       | quick navigation           |
+| =s-b=       | tay/window-dired-vc-root-left | open file explorer       |
+
+** eglot mode bindings
+
+| key      | function                              | description                |
+|----------|---------------------------------------|----------------------------|
+| =M-i i=  | eglot-code-action-organize-imports    | organize imports           |
+| =M-i e=  | flymake-show-buffer-diagnostics       | show diagnostics           |
+| =M-i r=  | eglot-rename                          | rename symbol              |
+| =M-[=    | flymake-goto-prev-error               | previous error             |
+| =M-]=    | flymake-goto-next-error               | next error                 |
+
+** completion preview bindings
+
+| key    | function                              | description                |
+|--------|---------------------------------------|----------------------------|
+| =M-n=  | completion-preview-next-candidate     | next completion            |
+| =M-p=  | completion-preview-prev-candidate     | previous completion        |
+| =M-i=  | completion-preview-insert             | insert completion          |
+
