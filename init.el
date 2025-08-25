@@ -33,6 +33,7 @@
 (require 'calsync)
 (require 'fleet-theme)
 (require 'jumpa)
+(require 'mdlite)
 
 ;; (calsync-setup)
 
