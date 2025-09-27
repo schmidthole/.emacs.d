@@ -35,6 +35,8 @@
                       ")")
               (concat "taymacs " (buffer-name))))))
 
+(setq package-enable-at-startup nil)
+
 ;; ____________________________________________________________________________
 ;;|
 ;;| ui elements

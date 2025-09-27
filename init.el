@@ -31,7 +31,8 @@
 (require 'weather-mode)
 (require 'claudia)
 (require 'calsync)
-(require 'fleet-theme)
+;; (require 'fleet-theme)
+(load-theme 'modus-operandi t)
 (require 'jumpa)
 (require 'mdlite)
 
@@ -526,23 +527,54 @@ mouse-3: Toggle minor modes"
 ;;| external packages
 
 ;; if for some reason, external packages are needed, uncomment the section below to enable straight
-;;
-;; (defvar bootstrap-version)
-;; (let ((bootstrap-file
-;;        (expand-file-name
-;;         "straight/repos/straight.el/bootstrap.el"
-;;         (or (bound-and-true-p straight-base-dir)
-;;             user-emacs-directory)))
-;;       (bootstrap-version 7))
-;;   (unless (file-exists-p bootstrap-file)
-;;     (with-current-buffer
-;;         (url-retrieve-synchronously
-;;          "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-;;          'silent 'inhibit-cookies)
-;;       (goto-char (point-max))
-;;       (eval-print-last-sexp)))
-;;   (load bootstrap-file nil 'nomessage))
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(setq straight-use-package-by-default t)
 
 
+;; ____________________________________________________________________________
+;;|
+;;| agent acp shell for claude code
 
+(use-package shell-maker)
 
+(use-package acp
+  :straight (:repo "https://github.com/xenodium/acp.el"))
+
+(use-package agent-shell
+  :straight (:repo "https://github.com/xenodium/agent-shell")
+  :config
+  (setq agent-shell-anthropic-authentication
+      (agent-shell-anthropic-make-authentication :login t)))
+
+;; ____________________________________________________________________________
+;;|
+;;| gtpel for claude chat
+
+(use-package gptel
+  :config
+  (global-set-key (kbd "C-c RET") 'gptel-send)
+  (setq gptel-default-mode 'org-mode)
+  (setq gptel-model 'claude-sonnet-4-20250514
+        gptel-backend (gptel-make-anthropic "Claude"
+                        :stream t
+                        :key claude-api-key))
+  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n")
+  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n")
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
