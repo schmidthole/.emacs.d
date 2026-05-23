@@ -28,15 +28,8 @@
 ;; ____________________________________________________________________________
 ;;|
 ;;| custom modules
-(require 'weather-mode)
-(require 'claudia)
-(require 'calsync)
-;; (require 'fleet-theme)
-(load-theme 'modus-operandi t)
+(require 'fleet-theme)
 (require 'jumpa)
-(require 'mdlite)
-
-;; (calsync-setup)
 
 ;; ____________________________________________________________________________
 ;;|
@@ -128,13 +121,13 @@
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message user-login-name
       initial-scratch-message ""
-      initial-major-mode 'outline-mode)
+      initial-major-mode 'org-mode)
 
 (setq frame-resize-pixelwise t
       kill-do-not-save-duplicates t
-      column-number-mode t
       save-interprogram-paste-before-kill t
       visible-bell nil
+      ring-bell-function #'ignore
       create-lockfiles nil
       uniquify-buffer-name-style 'forward
       tab-always-indent nil
@@ -145,12 +138,14 @@
       treesit-auto-install-grammar t
       delete-by-moving-to-trash t
       use-short-answers t
-      pixel-scroll-precision-mode t
       pixel-scroll-precision-use-momentum nil
       scroll-margin 2
       scroll-conservatively 101
       scroll-preserve-screen-position t
       global-auto-revert-non-file-buffers t
+      auto-revert-interval 1
+      auto-revert-use-notify t
+      auto-revert-verbose t
       kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
 
 (setq-default indent-tabs-mode nil
@@ -159,15 +154,23 @@
               truncate-lines t)
 
 (when (window-system)
-  (set-frame-font "Jetbrains Mono"))
+  (set-frame-font "Jetbrains Mono-13"))
 
 (show-paren-mode 1)
 (delete-selection-mode 1)
-(global-auto-revert-mode t)
+(global-auto-revert-mode 1)
+(column-number-mode 1)
+(pixel-scroll-precision-mode 1)
 (recentf-mode 1)
 (savehist-mode 1)
 (save-place-mode 1)
 (fido-vertical-mode 1)
+(tab-bar-mode 1)
+
+(setq tab-bar-new-tab-choice "*scratch*"
+      tab-bar-close-button-show nil
+      tab-bar-new-button-show nil
+      tab-bar-separator "  ")
 
 ;; ____________________________________________________________________________
 ;;|
@@ -291,36 +294,35 @@ mouse-3: Toggle minor modes"
       dired-create-destination-dirs 'ask
       dired-kill-when-opening-new-dired-buffer t)
 
-(add-hook 'dired-load-hook (function (lambda ()
-                                       (load "dired-x"))))
-(add-hook 'dired-mode-hook (function (lambda ()
-                                       (dired-hide-details-mode 1))))
+(with-eval-after-load 'dired
+  (require 'dired-x))
+(add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode 1)))
 
 (defun tay/window-dired-vc-root-left (&optional directory-path)
-  "Creates *Dired-Side* like an IDE side explorer"
+  "Toggle *Dired-Side* like an IDE side explorer"
   (interactive)
-  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
-
-  (let ((dir (if directory-path
-                 (dired-noselect directory-path)
-               (if (eq (vc-root-dir) nil)
-                   (dired-noselect default-directory)
-                 (dired-noselect (vc-root-dir))))))
-
-    (display-buffer-in-side-window
-     dir `((side . left)
-           (slot . 0)
-           (window-width . 30)
-           (window-parameters . ((no-other-window . t)
-                                 (no-delete-other-windows . t)
-                                 (mode-line-format . (" "
-                                                      "%b"))))))
-    (with-current-buffer dir
-      (let ((window (get-buffer-window dir)))
-        (when window
-          (select-window window)
-          (rename-buffer "*Dired-Side*")
-          )))))
+  (let ((existing (get-buffer-window "*Dired-Side*")))
+    (if existing
+        (delete-window existing)
+      (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+      (let ((dir (if directory-path
+                     (dired-noselect directory-path)
+                   (if (eq (vc-root-dir) nil)
+                       (dired-noselect default-directory)
+                     (dired-noselect (vc-root-dir))))))
+        (display-buffer-in-side-window
+         dir `((side . left)
+               (slot . 0)
+               (window-width . 30)
+               (window-parameters . ((no-other-window . t)
+                                     (no-delete-other-windows . t)
+                                     (mode-line-format . (" "
+                                                          "%b"))))))
+        (with-current-buffer dir
+          (let ((window (get-buffer-window dir)))
+            (when window
+              (select-window window)
+              (rename-buffer "*Dired-Side*"))))))))
 
 (global-set-key (kbd "s-b") 'tay/window-dired-vc-root-left)
 
@@ -368,8 +370,7 @@ mouse-3: Toggle minor modes"
 ;;|
 ;;| vc
 
-(setq vc-auto-revert-mode t
-      vc-dir-hide-up-to-date-on-revert t)
+(setq vc-dir-hide-up-to-date-on-revert t)
 
 ;; ____________________________________________________________________________
 ;;|
@@ -423,7 +424,7 @@ mouse-3: Toggle minor modes"
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\(?:Dockerfile\\|dockerfile\\)\\'" . dockerfile-ts-mode))
@@ -434,7 +435,6 @@ mouse-3: Toggle minor modes"
 ;;|
 ;;| eglot
 
-(setq eglot-autoshutdown t)
 (require 'eglot)
 (setq eglot-autoshutdown t
       eglot-events-buffer-size 0
@@ -442,6 +442,16 @@ mouse-3: Toggle minor modes"
       eglot-prefer-plaintext nil
       jsonrpc-event-hook nil
       eglot-code-action-indications nil)
+
+(let ((gopls-path (expand-file-name "~/go/bin/gopls")))
+  (when (file-executable-p gopls-path)
+    (let* ((gopls-dir (directory-file-name (file-name-directory gopls-path)))
+           (path-entries (delete-dups
+                          (append (list gopls-dir)
+                                  (split-string (or (getenv "PATH") "") path-separator t)))))
+      (add-to-list 'exec-path gopls-dir)
+      (setenv "PATH" (mapconcat #'identity path-entries path-separator))
+      (add-to-list 'eglot-server-programs `((go-mode go-ts-mode) . (,gopls-path))))))
 
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
@@ -545,36 +555,42 @@ mouse-3: Toggle minor modes"
   (load bootstrap-file nil 'nomessage))
 
 (setq straight-use-package-by-default t)
+(setq package-install-upgrade-built-in t)
 
+(straight-use-package 'use-package)
 
-;; ____________________________________________________________________________
-;;|
-;;| agent acp shell for claude code
+(use-package markdown-mode
+  :hook (markdown-mode . visual-line-mode))
 
-(use-package shell-maker)
-
-(use-package acp
-  :straight (:repo "https://github.com/xenodium/acp.el"))
-
-(use-package agent-shell
-  :straight (:repo "https://github.com/xenodium/agent-shell")
+(use-package vterm
+  :bind ("M-i t" . tay/vterm-new)
   :config
-  (setq agent-shell-anthropic-authentication
-      (agent-shell-anthropic-make-authentication :login t)))
+  (setq vterm-keymap-exceptions
+        (delete-dups (append vterm-keymap-exceptions '("M-i"))))
+  (defun tay/vterm-new ()
+    "make a brand new vterm buffer."
+    (interactive)
+    (vterm t))
+  (define-key vterm-mode-map (kbd "M-RET")
+              (lambda () (interactive) (vterm-send-key "\r" nil t nil)))
+  (define-key vterm-mode-map (kbd "M-<return>")
+              (lambda () (interactive) (vterm-send-key "\r" nil t nil))))
 
-;; ____________________________________________________________________________
-;;|
-;;| gtpel for claude chat
+(use-package protobuf-mode
+  :mode "\\.proto\\'")
 
-(use-package gptel
+(use-package persistent-scratch
   :config
-  (global-set-key (kbd "C-c RET") 'gptel-send)
-  (setq gptel-default-mode 'org-mode)
-  (setq gptel-model 'claude-sonnet-4-20250514
-        gptel-backend (gptel-make-anthropic "Claude"
-                        :stream t
-                        :key claude-api-key))
-  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n")
-  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n")
-  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
+  (persistent-scratch-setup-default))
+
+(use-package compat
+  :config
+  (when (< emacs-major-version 31)
+    (require 'compat-31)))
+
+(use-package transient
+  :demand t)
+
+(use-package magit
+  :after transient
+  :bind ("M-i g" . magit-status))

@@ -87,13 +87,14 @@
 (defun tay/set-exec-path-from-shell ()
   "set up emacs' `exec-path' and PATH environment from zsh."
   (interactive)
-  (let* ((command "zsh -i -l -c 'echo $PATH'")
+  (let* ((command "zsh -l -c 'print -r -- $PATH'")
          (path-from-shell (replace-regexp-in-string
                            "[ \t\n]*$" ""
                            (shell-command-to-string command))))
-        (when (and path-from-shell (not (string= path-from-shell "")))
-          (setenv "PATH" path-from-shell)
-          (setq exec-path (append (split-string path-from-shell path-separator) (list exec-directory)))
-          (message "PATH loaded from zsh: %s" path-from-shell))))
+    (when (and path-from-shell (not (string= path-from-shell "")))
+      (let ((path-entries (delete-dups (split-string path-from-shell path-separator t))))
+        (setenv "PATH" (mapconcat #'identity path-entries path-separator))
+        (setq exec-path (append path-entries (list exec-directory)))
+        (message "PATH loaded from zsh login shell")))))
 
 (tay/set-exec-path-from-shell)

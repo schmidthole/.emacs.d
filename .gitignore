@@ -13,3 +13,6 @@ projects
 ielm-history.eld
 tramp
 elpa/
+*.eld
+eln-cache/
+.persistent-scratch
