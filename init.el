@@ -1,596 +1,181 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;  ______ ______  __  __  __    __  ______  ______  ______
-;; /\__  _/\  __ \/\ \_\ \/\ "-./  \/\  __ \/\  ___\/\  ___\
-;; \/_/\ \\ \  __ \ \____ \ \ \-./\ \ \  __ \ \ \___\ \___  \
-;;    \ \_\\ \_\ \_\/\_____\ \_\ \ \_\ \_\ \_\ \_____\/\_____\
-;;     \/_/ \/_/\/_/\/_____/\/_/  \/_/\/_/\/_/\/_____/\/_____/
-;;
-;; init
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; init.el --- terminal emacs configuration -*- lexical-binding: t; -*-
 
-;; ____________________________________________________________________________
-;;|
-;;| load in custom files and directories which may contain lisp modules
+(when (< emacs-major-version 31)
+  (error "taymacs requires emacs 31 or newer"))
 
-;; setup the custom settings file
+;; custom settings
+
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
-;; load private settings
-(load (expand-file-name "private.el" user-emacs-directory) 'noerror)
+;; appearance
 
-;; load the directory that contains all custom modules
-(setq tay/lisp-modules (expand-file-name "lisp" user-emacs-directory))
-(add-to-list 'load-path tay/lisp-modules)
+(setq modus-themes-common-palette-overrides
+      '((bg-mode-line-active bg-dim)
+        (fg-mode-line-active fg-main)
+        (border-mode-line-active unspecified)
+        (bg-mode-line-inactive bg-main)
+        (fg-mode-line-inactive fg-dim)
+        (border-mode-line-inactive unspecified)))
 
-;; ____________________________________________________________________________
-;;|
-;;| custom modules
-(require 'fleet-theme)
-(require 'jumpa)
+(load-theme 'modus-vivendi t)
+(menu-bar-mode -1)
 
-;; ____________________________________________________________________________
-;;|
-;;| frame title update hooks
-
-;; force frame title to update when switching buffers
-(add-hook 'buffer-list-update-hook
-          (lambda ()
-            (when (display-graphic-p)
-              (force-mode-line-update t))))
-
-;; ____________________________________________________________________________
-;;|
-;;| custom functions
-
-(defun tay/eshell-new ()
-  "make a brand new eshell buffer in the current location."
-  (interactive)
-  (eshell 'N))
-
-(defun tay/kill-this-buffer ()
-  "kill the current buffer"
-  (interactive)
-  (kill-buffer (current-buffer)))
+;; editing commands
 
 (defun tay/open-line-up (n)
+  "open n lines above the current line."
   (interactive "p")
   (move-beginning-of-line 1)
   (open-line n))
 
 (defun tay/open-line-down (n)
+  "open n lines below the current line."
   (interactive "p")
   (move-end-of-line 1)
   (newline n))
 
 (defun tay/kill-line-down (n)
+  "kill n lines starting with the current line."
   (interactive "p")
   (move-beginning-of-line 1)
   (kill-line n))
 
-(defun tay/mark-thing-at-point ()
-  "mark the symbol at point"
-  (interactive)
-  (let ((bounds (bounds-of-thing-at-point 'symbol)))
-    (if bounds
-        (progn
-          (goto-char (car bounds))
-          (set-mark (point))
-          (goto-char (cdr bounds)))
-      (message "no symbol at point"))))
+;; keys
 
-(defun tay/mark-whole-line ()
-  "mark the entire current line"
-  (interactive)
-  (beginning-of-line)
-  (set-mark (point))
-  (end-of-line))
+(dolist (key '("M-i" "C-z" "C-x C-z" "C-x C-r"))
+  (keymap-global-unset key t))
 
-;; ____________________________________________________________________________
-;;|
-;;| core emacs settings
+(keymap-global-set "C-x C-k" #'kill-current-buffer)
+(keymap-global-set "C-x C-b" #'switch-to-buffer)
+(keymap-global-set "C-o" #'tay/open-line-up)
+(keymap-global-set "C-j" #'tay/open-line-down)
+(keymap-global-set "M-k" #'tay/kill-line-down)
+(keymap-global-set "M-o" #'other-window)
+(keymap-global-set "M-i v" #'split-window-right)
+(keymap-global-set "M-i s" #'split-window-below)
+(keymap-global-set "C-;" #'jumpa)
 
-;; unset keybindings we dont like or will be rebound later
-(global-set-key (kbd "M-i") nil)
-(global-set-key (kbd "C-z") nil)
-(global-set-key (kbd "C-x C-z") nil)
-(global-set-key (kbd "C-x C-r") nil)
-(global-set-key (kbd "M-l") nil)
-(global-set-key (kbd "M-c") nil)
-(global-set-key (kbd "C-o") nil)
-(global-set-key (kbd "C-j") nil)
-(global-set-key (kbd "M-k") nil)
-(global-set-key (kbd "C-t") nil)
+;; core
 
-;; set some basic keybindings that use custom functions
-(global-set-key (kbd "C-x C-k") 'tay/kill-this-buffer)
-(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
-(global-set-key (kbd "C-o") 'tay/open-line-up)
-(global-set-key (kbd "C-j") 'tay/open-line-down)
-(global-set-key (kbd "M-k") 'tay/kill-line-down)
-(global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "M-l") 'tay/mark-whole-line)
-(global-set-key (kbd "M-c") 'tay/mark-thing-at-point)
-(global-set-key (kbd "M-i v") 'split-window-right)
-(global-set-key (kbd "M-i s") 'split-window-below)
-(global-set-key (kbd "C-;") 'jumpa)
-
-;; startup things
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message user-login-name
       initial-scratch-message ""
-      initial-major-mode 'org-mode)
-
-(setq frame-resize-pixelwise t
-      kill-do-not-save-duplicates t
-      save-interprogram-paste-before-kill t
-      visible-bell nil
       ring-bell-function #'ignore
-      create-lockfiles nil
       uniquify-buffer-name-style 'forward
       tab-always-indent nil
-      make-backup-files nil
-      auto-save-default nil
-      warning-minimum-level :emergency
-      treesit-font-lock-level 4
-      treesit-auto-install-grammar t
       delete-by-moving-to-trash t
       use-short-answers t
-      pixel-scroll-precision-use-momentum nil
       scroll-margin 2
-      scroll-conservatively 101
-      scroll-preserve-screen-position t
       global-auto-revert-non-file-buffers t
-      auto-revert-interval 1
-      auto-revert-use-notify t
-      auto-revert-verbose t
-      kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
+      vc-handled-backends '(Git))
 
 (setq-default indent-tabs-mode nil
               tab-width 4
-              comint-process-echoes t
               truncate-lines t)
 
-(when (window-system)
-  (set-frame-font "Jetbrains Mono-13"))
-
-(show-paren-mode 1)
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
-(column-number-mode 1)
-(pixel-scroll-precision-mode 1)
-(recentf-mode 1)
-(savehist-mode 1)
-(save-place-mode 1)
 (fido-vertical-mode 1)
-(tab-bar-mode 1)
+(electric-pair-mode 1)
+(which-key-mode 1)
 
-(setq tab-bar-new-tab-choice "*scratch*"
-      tab-bar-close-button-show nil
-      tab-bar-new-button-show nil
-      tab-bar-separator "  ")
-
-;; ____________________________________________________________________________
-;;|
-;;| modeline
-
-(defun tay/shorten-vc-mode (vc)
-  (let* ((vc (replace-regexp-in-string "^ Git[:-]"
-                                       (if (char-displayable-p ?) "  " "Git: ")
-                                       vc)))
-    (if (> (length vc) 20)
-        (concat (substring vc 0 20)
-                (if (char-displayable-p ?…) "…" "..."))
-      vc)))
-
-(defun tay/mode-line-position ()
-  "mode-line lighter function for only display row/column without the buffer percentage"
-  `((line-number-mode
-     (column-number-mode
-      (column-number-indicator-zero-based
-       (10
-        (:propertize
-         mode-line-position-column-line-format
-         display (min-width (10.0))
-         ,@mode-line-position--column-line-properties))
-       (10
-        (:propertize
-         (:eval (string-replace
-                 "%c" "%C" (car mode-line-position-column-line-format)))
-         display (min-width (10.0))
-         ,@mode-line-position--column-line-properties)))
-      (6
-       (:propertize
-	    mode-line-position-line-format
-        display (min-width (6.0))
-        ,@mode-line-position--column-line-properties)))
-     (column-number-mode
-      (column-number-indicator-zero-based
-       (6
-        (:propertize
-         mode-line-position-column-format
-         display (min-width (6.0))
-         ,@mode-line-position--column-line-properties))
-       (6
-        (:propertize
-         (:eval (string-replace
-                 "%c" "%C" (car mode-line-position-column-format)))
-         display (min-width (6.0))
-         ,@mode-line-position--column-line-properties)))))))
-
-(defun tay/mode-line-major-modes ()
-  "mode-line lighter function for only displaying the major mode"
-  (let ((recursive-edit-help-echo
-         "Recursive edit, type C-M-c to get out"))
-    (list (propertize "%[" 'help-echo recursive-edit-help-echo)
-	      "("
-	      `(:propertize ("" mode-name)
-			            help-echo "Major mode\n\
-mouse-1: Display major mode menu\n\
-mouse-2: Show help for major mode\n\
-mouse-3: Toggle minor modes"
-			            mouse-face mode-line-highlight
-			            local-map ,mode-line-major-mode-keymap)
-	      '("" mode-line-process)
-	      (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
-		              'mouse-face 'mode-line-highlight
-		              'local-map (make-mode-line-mouse-map
-				                  'mouse-2 #'mode-line-widen))
-	      ")"
-	      (propertize "%]" 'help-echo recursive-edit-help-echo)
-	      " ")))
+;; mode line
 
 (setq-default mode-line-format
-              '("%e" "  "
-                (:propertize " " display (raise +0.1)) ;; Top padding
-                (:propertize " " display (raise -0.1)) ;; Bottom padding
-
-                (:propertize
-                 ("" mode-line-modified))
-
-                mode-line-frame-identification
+              '("%e"
+                mode-line-modified
                 mode-line-buffer-identification
-                "   "
-                (:eval (tay/mode-line-position))
+                "  %l:%c"
                 mode-line-format-right-align
-                "  "
                 (project-mode-line project-mode-line-format)
                 "  "
-                (vc-mode (:eval (tay/shorten-vc-mode vc-mode)))
+                (vc-mode vc-mode)
                 "  "
-                (:eval (tay/mode-line-major-modes))
-                "  ")
-              project-mode-line t
-              mode-line-buffer-identification '(" %b")
-              mode-line-position-column-line-format '(" %l:%c"))
+                mode-name
+                mode-line-process
+                " ")
+              mode-line-buffer-identification '(" %b"))
 
-(setq mode-line-modes-delimiters '("" . ""))
+(setq project-mode-line t)
 
-;; ____________________________________________________________________________
-;;|
-;;| completion
+;; completion
 
 (add-hook 'prog-mode-hook #'completion-preview-mode)
 
 (with-eval-after-load 'completion-preview
-  (setq completion-preview-minimum-symbol-length 2)
-  (push 'org-self-insert-command completion-preview-commands)
+  (keymap-set completion-preview-active-mode-map "M-n"
+              #'completion-preview-next-candidate)
+  (keymap-set completion-preview-active-mode-map "M-p"
+              #'completion-preview-prev-candidate)
+  (keymap-set completion-preview-active-mode-map "M-i"
+              #'completion-preview-insert))
 
-  (keymap-set completion-preview-active-mode-map "M-n" #'completion-preview-next-candidate)
-  (keymap-set completion-preview-active-mode-map "M-p" #'completion-preview-prev-candidate)
-  (keymap-set completion-preview-active-mode-map "M-i" #'completion-preview-insert))
+;; dired
 
-;; ____________________________________________________________________________
-;;|
-;;| dired
-
-(setq dired-auto-revert-buffer t
-      dired-dwim-target t
+(setq dired-dwim-target t
       dired-hide-details-hide-symlink-targets nil
       dired-recursive-copies 'always
       dired-recursive-deletes 'always
-      dired-create-destination-dirs 'ask
       dired-kill-when-opening-new-dired-buffer t)
 
-(with-eval-after-load 'dired
-  (require 'dired-x))
-(add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode 1)))
+(with-eval-after-load 'dired-aux
+  (setq dired-create-destination-dirs 'ask))
 
-(defun tay/window-dired-vc-root-left (&optional directory-path)
-  "Toggle *Dired-Side* like an IDE side explorer"
-  (interactive)
-  (let ((existing (get-buffer-window "*Dired-Side*")))
-    (if existing
-        (delete-window existing)
-      (add-hook 'dired-mode-hook 'dired-hide-details-mode)
-      (let ((dir (if directory-path
-                     (dired-noselect directory-path)
-                   (if (eq (vc-root-dir) nil)
-                       (dired-noselect default-directory)
-                     (dired-noselect (vc-root-dir))))))
-        (display-buffer-in-side-window
-         dir `((side . left)
-               (slot . 0)
-               (window-width . 30)
-               (window-parameters . ((no-other-window . t)
-                                     (no-delete-other-windows . t)
-                                     (mode-line-format . (" "
-                                                          "%b"))))))
-        (with-current-buffer dir
-          (let ((window (get-buffer-window dir)))
-            (when window
-              (select-window window)
-              (rename-buffer "*Dired-Side*"))))))))
+(add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
-(global-set-key (kbd "s-b") 'tay/window-dired-vc-root-left)
-
-;; ____________________________________________________________________________
-;;|
-;;| eshell
-
-(setq eshell-visual-commands nil)
-(add-hook 'eshell-mode-hook 'visual-line-mode)
-(add-hook 'eshell-mode-hook
-	      (lambda ()
-            (eshell/alias "ll" "ls -la")
-	        (eshell/alias "python" "python3 $*")
-	        (eshell/alias "pip" "pip3 $*")
-	        (eshell/alias "clear" "clear 1")
-            (setenv "TERM" "xterm-256color")
-            (setq-local global-hl-line-mode nil)))
-
-;; ____________________________________________________________________________
-;;|
-;;| isearch
+;; search
 
 (setq isearch-lazy-count t
       search-whitespace-regexp ".*?")
 
-;; ____________________________________________________________________________
-;;|
-;;| electric pair
+;; tree-sitter
 
-(electric-pair-mode)
+(setopt treesit-enabled-modes t
+        treesit-auto-install-grammar 'always
+        treesit-font-lock-level 4)
 
-;; ____________________________________________________________________________
-;;|
-;;| eldoc
+(autoload 'markdown-ts-mode "markdown-ts-mode" nil t)
+(add-to-list 'auto-mode-alist
+             '("\\.\\(?:md\\|markdown\\)\\'" . markdown-ts-mode))
+(add-hook 'markdown-ts-mode-hook #'visual-line-mode)
 
-(setq eldoc-echo-area-use-multiline-p nil)
-(global-eldoc-mode)
+;; language servers and diagnostics
 
-;; ____________________________________________________________________________
-;;|
-;;| which-key
-(which-key-mode 1)
+(dolist (hook '(go-ts-mode-hook
+                typescript-ts-mode-hook
+                tsx-ts-mode-hook
+                python-ts-mode-hook))
+  (add-hook hook #'eglot-ensure))
 
-;; ____________________________________________________________________________
-;;|
-;;| vc
+(with-eval-after-load 'eglot
+  (setq eglot-autoshutdown t
+        eglot-events-buffer-config '(:size 0 :format full))
+  (keymap-set eglot-mode-map "M-i i" #'eglot-code-action-organize-imports)
+  (keymap-set eglot-mode-map "M-i e" #'flymake-show-buffer-diagnostics)
+  (keymap-set eglot-mode-map "M-i r" #'eglot-rename)
+  (keymap-set eglot-mode-map "M-[" #'flymake-goto-prev-error)
+  (keymap-set eglot-mode-map "M-]" #'flymake-goto-next-error))
 
-(setq vc-dir-hide-up-to-date-on-revert t)
+(with-eval-after-load 'flymake
+  (setq flymake-indicator-type 'margins
+        flymake-margin-indicators-string
+        '((error "!" compilation-error)
+          (warning "?" compilation-warning)
+          (note "i" compilation-info))))
 
-;; ____________________________________________________________________________
-;;|
-;;| diff
+;; indentation
 
-(setq diff-default-read-only t
-      diff-advance-after-apply-hunk t
-      diff-update-on-the-fly t
-      diff-font-lock-syntax 'hunk-also
-      diff-font-lock-prettify nil)
-
-;; ____________________________________________________________________________
-;;|
-;;| ediff
-
-(setq ediff-split-window-function 'split-window-horizontally
-      ediff-window-setup-function 'ediff-setup-windows-plain
-      ediff-keep-variants nil
-      ediff-make-buffers-readonly-at-startup nil
-      ediff-show-clashes-only t)
-
-;; ____________________________________________________________________________
-;;|
-;;| treesitter
-
-;; configure tree-sitter grammar sources
-(setq treesit-language-source-alist
-      '((go . ("https://github.com/tree-sitter/tree-sitter-go"))
-        (dockerfile . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
-        (python . ("https://github.com/tree-sitter/tree-sitter-python"))
-        (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
-        (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
-        (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
-        (yaml . ("https://github.com/tree-sitter-grammars/tree-sitter-yaml"))
-        (html . ("https://github.com/tree-sitter/tree-sitter-html"))))
-
-;; automatically use tree-sitter modes
-(setq major-mode-remap-alist
-      '((go-mode . go-ts-mode)
-        (dockerfile-mode . dockerfile-ts-mode)
-        (python-mode . python-ts-mode)
-        (javascript-mode . js-ts-mode)
-        (js-mode . js-ts-mode)
-        (typescript-mode . typescript-ts-mode)
-        (js2-mode . js-ts-mode)
-        (rjsx-mode . tsx-ts-mode)
-        (yaml-mode . yaml-ts-mode)
-        (html-mode . html-ts-mode)))
-
-;; file associations for tree-sitter modes
-(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-(add-to-list 'auto-mode-alist '("\\(?:Dockerfile\\|dockerfile\\)\\'" . dockerfile-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . html-ts-mode))
-
-;; ____________________________________________________________________________
-;;|
-;;| eglot
-
-(require 'eglot)
-(setq eglot-autoshutdown t
-      eglot-events-buffer-size 0
-      eglot-events-buffer-config '(:size 0 :format full)
-      eglot-prefer-plaintext nil
-      jsonrpc-event-hook nil
-      eglot-code-action-indications nil)
-
-(let ((gopls-path (expand-file-name "~/go/bin/gopls")))
-  (when (file-executable-p gopls-path)
-    (let* ((gopls-dir (directory-file-name (file-name-directory gopls-path)))
-           (path-entries (delete-dups
-                          (append (list gopls-dir)
-                                  (split-string (or (getenv "PATH") "") path-separator t)))))
-      (add-to-list 'exec-path gopls-dir)
-      (setenv "PATH" (mapconcat #'identity path-entries path-separator))
-      (add-to-list 'eglot-server-programs `((go-mode go-ts-mode) . (,gopls-path))))))
-
-
-(add-hook 'go-ts-mode-hook 'eglot-ensure)
-(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
-(add-hook 'tsx-ts-mode-hook 'eglot-ensure)
-(add-hook 'python-ts-mode-hook 'eglot-ensure)
-
-(define-key eglot-mode-map (kbd "M-i i") 'eglot-code-action-organize-imports)
-(define-key eglot-mode-map (kbd "M-i e") 'flymake-show-buffer-diagnostics)
-(define-key eglot-mode-map (kbd "M-i r") 'eglot-rename)
-(define-key eglot-mode-map (kbd "M-[") 'flymake-goto-prev-error)
-(define-key eglot-mode-map (kbd "M-]") 'flymake-goto-next-error)
-
-;; ____________________________________________________________________________
-;;|
-;;| flymake
-
-(setq flymake-indicator-type 'margins
-      flymake-margin-indicators-string
-      `((error "!" compilation-error)      
-        (warning "?" compilation-warning)
-        (note "i" compilation-info)))
-
-(add-hook 'go-ts-mode-hook 'flymake-mode)
-(add-hook 'typescript-ts-mode-hook 'flymake-mode)
-(add-hook 'tsx-ts-mode-hook 'flymake-mode)
-(add-hook 'python-ts-mode-hook 'flymake-mode)
-
-;; ____________________________________________________________________________
-;;|
-;;| org
-
-(setq org-agenda-files '("~/org/agenda.org" "~/org/calendar.org")
-      org-todo-keywords '((sequence "TODO" "IN PROGRESS" "BLOCKED" "|" "DONE"))
-      org-startup-truncated t
-      org-startup-indented t
-      org-startup-folded t
-      org-insert-heading-respect-content t
-      org-export-with-toc nil
-      org-export-with-author nil
-      org-export-time-stamp-file nil
-      org-export-with-section-numbers nil
-      org-html-validation-link nil
-      org-html-head-extra (concat "<style>\n"
-                                  (with-temp-buffer
-                                    (insert-file-contents (expand-file-name "css/org-export.css" user-emacs-directory))
-                                    (buffer-string))
-                                  "\n</style>"))
-
-(add-hook 'org-mode-hook 'visual-line-mode)
-
-;; ____________________________________________________________________________
-;;|
-;;| golang
-
-(add-hook 'go-ts-mode-hook
-          (lambda ()
-            (setq tab-width 4)
-            (setq go-ts-mode-indent-offset 4)))
-
-;; ____________________________________________________________________________
-;;|
-;;| javascript
-
+(set-default 'go-ts-indent-offset 4)
 (setq-default js-indent-level 2)
-(setq-default typescript-indent-level 2)
 
-;; ____________________________________________________________________________
-;;|
-;;| sql
+;; packages
 
-(add-hook 'sql-mode-hook
-          (lambda ()
-            (setq tab-width 2)))
-;; ____________________________________________________________________________
-;;|
-;;| outline
-
-(add-to-list 'auto-mode-alist '("\\.txt\\'" . outline-mode))
-
-;; ____________________________________________________________________________
-;;|
-;;| external packages
-
-;; if for some reason, external packages are needed, uncomment the section below to enable straight
-
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(setq straight-use-package-by-default t)
-(setq package-install-upgrade-built-in t)
-
-(straight-use-package 'use-package)
-
-(use-package markdown-mode
-  :hook (markdown-mode . visual-line-mode))
-
-(use-package vterm
-  :bind ("M-i t" . tay/vterm-new)
-  :config
-  (setq vterm-keymap-exceptions
-        (delete-dups (append vterm-keymap-exceptions '("M-i"))))
-  (defun tay/vterm-new ()
-    "make a brand new vterm buffer."
-    (interactive)
-    (vterm t))
-  (define-key vterm-mode-map (kbd "M-RET")
-              (lambda () (interactive) (vterm-send-key "\r" nil t nil)))
-  (define-key vterm-mode-map (kbd "M-<return>")
-              (lambda () (interactive) (vterm-send-key "\r" nil t nil))))
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (use-package protobuf-mode
+  :ensure t
   :mode "\\.proto\\'")
 
-(use-package persistent-scratch
-  :config
-  (persistent-scratch-setup-default))
-
-(use-package compat
-  :config
-  (when (< emacs-major-version 31)
-    (require 'compat-31)))
-
-(use-package transient
-  :demand t)
-
-(use-package magit
-  :after transient
-  :bind ("M-i g" . magit-status))
+;;; init.el ends here

@@ -1,8 +1,13 @@
 ;;; jumpa.el --- simple line jumping functionality -*- lexical-binding: t; -*-
 
+(defgroup jumpa nil
+  "quickly jump to a visible line."
+  :group 'convenience)
+
 (defface jumpa-overlay-face
   '((t (:background "yellow" :foreground "black" :weight bold)))
-  "face used for jumpa overlays in the fringe.")
+  "face used for jumpa overlays."
+  :group 'jumpa)
 
 (defvar jumpa--overlays nil
   "list of active overlays.")
@@ -49,18 +54,17 @@
 (defun jumpa--show-lines ()
   "show overlays for visible lines."
   (let ((combinations (jumpa--generate-combinations))
-        (line-start (line-number-at-pos (window-start)))
         (line-end (line-number-at-pos (window-end)))
         (combo-index 0))
     (setq jumpa--line-map (make-hash-table :test 'equal))
     (save-excursion
       (goto-char (window-start))
-      (while (and (<= (line-number-at-pos) line-end) 
+      (while (and (<= (line-number-at-pos) line-end)
                   (< combo-index (length combinations))
                   (not (eobp)))
-        (unless (string-match-p "^[[:space:]]*$" 
-                               (buffer-substring-no-properties 
-                                (line-beginning-position) 
+        (unless (string-match-p "^[[:space:]]*$"
+                               (buffer-substring-no-properties
+                                (line-beginning-position)
                                 (line-end-position)))
           (let ((combo (nth combo-index combinations))
                 (line-num (line-number-at-pos)))
@@ -100,7 +104,6 @@
                 (jumpa--reset-state)
                 (setq continue nil)
                 (message "invalid character")))
-             
              (t
               (let* ((combo (char-to-string char))
                      (line (gethash combo jumpa--line-map)))
