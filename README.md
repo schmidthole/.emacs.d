@@ -32,8 +32,22 @@ including when Emacs starts outside a terminal. Restart Emacs after installation
 - Protocol Buffer mode
 - `jumpa` line navigation
 - `folio-md` Markdown reading buffers
+- Magit Git interface (`C-x g`)
 
-Protocol Buffer mode is installed automatically with `package.el` from MELPA.
+Magit and Protocol Buffer mode are installed automatically with `package.el` from MELPA.
+
+## magit
+
+Press `C-x g` in a repository to open its status buffer. Magit loads on demand.
+Use `TAB` to expand a diff, `s` to stage a file or hunk, `u` to unstage,
+`c c` to commit, `P` for the push menu, `?` for help, and `q` to quit.
+Finish a commit message with `C-c C-c`, or cancel with `C-c C-k`.
+
+The configuration uses Magit's defaults. For a full-frame status view, an optional
+setting is `magit-display-buffer-function` = `magit-display-buffer-fullframe-status-v1`.
+Pair it with `magit-bury-buffer-function` = `magit-restore-window-configuration`
+to restore the previous window layout with `q`. Change these through
+`M-x customize-variable`. See the [Magit display documentation](https://docs.magit.vc/magit/Modes-and-Buffers.html).
 
 ## folio-md
 

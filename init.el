@@ -183,6 +183,10 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status))
+
 (use-package protobuf-mode
   :ensure t
   :mode "\\.proto\\'")
