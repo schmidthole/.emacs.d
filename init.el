@@ -8,6 +8,15 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
+;; homebrew executables
+
+(when (eq system-type 'darwin)
+  (dolist (directory '("/usr/local/bin" "/opt/homebrew/bin"))
+    (when (file-directory-p directory)
+      (add-to-list 'exec-path directory)
+      (unless (member directory (split-string (or (getenv "PATH") "") path-separator))
+        (setenv "PATH" (concat directory path-separator (getenv "PATH")))))))
+
 ;; appearance
 
 (setq modus-themes-common-palette-overrides
