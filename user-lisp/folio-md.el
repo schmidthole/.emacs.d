@@ -395,7 +395,7 @@
                                                    (= (overlay-start o) body)))
                                  (overlays-in body end))))
       (if existing (delete-overlay existing)
-        (let ((o (make-overlay body end)))
+        (let ((o (make-overlay body (max body (1- end)))))
           (overlay-put o 'folio-md-fold t)
           (overlay-put o 'invisible 'folio-md)
           (overlay-put o 'isearch-open-invisible #'delete-overlay)))

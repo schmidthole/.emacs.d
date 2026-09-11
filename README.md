@@ -92,7 +92,7 @@ take precedence.
 
 ```sh
 python3 -m unittest discover -s tests -v
-emacs -Q --batch -L user-lisp -l tests/eml-test.el -f ert-run-tests-batch-and-exit
+emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -f ert-run-tests-batch-and-exit
 ```
 
 The reader test requires Pandoc. Format Python with
