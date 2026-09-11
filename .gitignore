@@ -1,5 +1,8 @@
 *.elc
 *.eld
+\#*#
+.#*
+*~
 auto-save-list/
 custom.el
 eln-cache/
@@ -12,3 +15,4 @@ transient/
 tramp
 tree-sitter/
 user-lisp/.user-lisp-autoloads.el
+__pycache__/

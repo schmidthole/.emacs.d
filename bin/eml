@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""open files and repository views in terminal emacs."""
+
+import argparse
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+
+
+def lisp_string(value):
+    return '"' + str(value).replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def resolve_target(action, target):
+    path = Path(target).expanduser()
+    line, column = 1, 1
+    if not path.exists():
+        match = re.fullmatch(r"(.+?):([1-9][0-9]*)(?::([1-9][0-9]*))?", target)
+        if match:
+            path = Path(match[1]).expanduser()
+            line, column = int(match[2]), int(match[3] or 1)
+    path = path.absolute()
+    if action == "magit":
+        if not path.exists():
+            raise ValueError("repository target does not exist")
+        directory = path if path.is_dir() else path.parent
+        result = subprocess.run(
+            ["git", "-C", str(directory), "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        path = Path(result.stdout.rstrip("\n"))
+    elif action == "folio" and not path.is_file():
+        raise ValueError("folio requires an existing file")
+    elif path.is_dir() or not path.parent.is_dir():
+        raise ValueError("expected a file in an existing directory")
+    return path, line, column
+
+
+def launch(action, target, split=False):
+    path, line, column = resolve_target(action, target)
+    client = shutil.which("emacsclient")
+    if not client:
+        raise ValueError("emacsclient is unavailable; run install.sh")
+    library = Path(__file__).resolve().parent.parent / "user-lisp" / "eml.el"
+    pandoc = shutil.which("pandoc") if action == "folio" else None
+    expression = (
+        f"(progn (load {lisp_string(library)} nil t) "
+        f"(eml-open {lisp_string(action)} {lisp_string(path)} {line} {column} "
+        f"{lisp_string(pandoc) if pandoc else 'nil'}))"
+    )
+    command = [client, "-t", "-a", "", "--eval", expression]
+    if not os.environ.get("TMUX"):
+        if not sys.stdin.isatty():
+            raise ValueError("run eml inside tmux or an interactive terminal")
+        os.execv(client, command)
+        return
+
+    origin = os.environ.get("TMUX_PANE")
+    if not origin:
+        raise ValueError("tmux pane is unknown; launch the agent from a tmux pane")
+    directory = path if action == "magit" else path.parent
+    title = f"{'em' if action == 'open' else action}:{path.name}".lower()
+    if split:
+        pane = subprocess.check_output(
+            [
+                "tmux",
+                "split-window",
+                "-h",
+                "-t",
+                origin,
+                "-c",
+                str(directory),
+                "-P",
+                "-F",
+                "#{pane_id}",
+                *command,
+            ],
+            text=True,
+        ).strip()
+        subprocess.run(["tmux", "select-pane", "-t", pane, "-T", title], check=True)
+    else:
+        session = subprocess.check_output(
+            ["tmux", "display-message", "-p", "-t", origin, "#{session_id}"],
+            text=True,
+        ).strip()
+        subprocess.run(
+            [
+                "tmux",
+                "new-window",
+                "-t",
+                session + ":",
+                "-n",
+                title,
+                "-c",
+                str(directory),
+                *command,
+            ],
+            check=True,
+        )
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--split", action="store_true", help="open a side-by-side pane")
+    parser.add_argument("action", choices=("open", "folio", "magit"))
+    parser.add_argument("target", nargs="?", help="file[:line[:column]] or repository")
+    args = parser.parse_args()
+    if args.target is None and args.action != "magit":
+        parser.error("a file is required")
+    try:
+        launch(args.action, args.target or ".", args.split)
+    except ValueError as error:
+        print(f"eml: {error}", file=sys.stderr)
+        return 1
+    except (OSError, subprocess.CalledProcessError):
+        print(
+            "eml: unable to open target; check the path, repository, and terminal tools",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

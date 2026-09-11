@@ -12,7 +12,7 @@ export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
 brew tap d12frosted/emacs-plus
 
-for formula in d12frosted/emacs-plus/emacs-plus@31 pandoc; do
+for formula in d12frosted/emacs-plus/emacs-plus@31 pandoc tmux; do
     if brew list --formula --versions "$formula" >/dev/null 2>&1; then
         printf '%s is already installed\n' "$formula"
     else
@@ -24,6 +24,10 @@ brew link pandoc
 brew_prefix=$(brew --prefix)
 export PATH="$brew_prefix/bin:$PATH"
 
+if ! command -v python3 >/dev/null 2>&1; then
+    brew install --formula python
+fi
+
 pandoc --version >/dev/null
 emacs_prefix=$(brew --prefix d12frosted/emacs-plus/emacs-plus@31)
 "$emacs_prefix/bin/emacs" -Q --batch --eval '
@@ -31,3 +35,6 @@ emacs_prefix=$(brew --prefix d12frosted/emacs-plus/emacs-plus@31)
              (zerop (call-process "pandoc" nil nil nil "--version")))
   (error "pandoc is unavailable to emacs"))'
 printf '%s\n' 'pandoc is on the path and available to emacs; restart emacs to use folio.'
+
+repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+python3 "$repo_dir/scripts/install-links.py"

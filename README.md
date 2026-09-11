@@ -11,7 +11,8 @@ With Homebrew installed and `brew` on your PATH, run:
 ```
 
 The script adds the [d12frosted/emacs-plus tap](https://github.com/d12frosted/homebrew-emacs-plus),
-installs `emacs-plus@31` with default build options, then installs Pandoc.
+installs `emacs-plus@31` with default build options, Pandoc, and tmux. It also
+installs Python if `python3` is unavailable.
 Already installed formulae are skipped. Automatic Homebrew updates, cleanup,
 and dependent checks are disabled for this run. If an installation fails,
 the script stops; rerun it to resume after resolving the error.
@@ -21,6 +22,82 @@ that Emacs can find and run it. Your shell should load Homebrew's environment
 as described by `brew shellenv`. This configuration adds `/opt/homebrew/bin`
 and `/usr/local/bin`, when present, to Emacs's `exec-path` and `PATH` on macOS,
 including when Emacs starts outside a terminal. Restart Emacs after installation.
+
+The installer links `bin/eml` into `~/.local/bin/eml` and the three folders under
+`skills/` into both `~/.agents/skills/` and `~/.claude/skills/`. Add `~/.local/bin`
+to your shell's `PATH` if needed. Existing matching links are left alone; stale
+links are updated. An existing file or directory at a destination is preserved
+and reported as a conflict. Your `em` alias is not changed. Keep this repository
+at `~/.emacs.d` so the Emacs daemon loads its configuration normally.
+
+## emacs launcher
+
+```sh
+eml open notes.md
+eml open src/main.go:42:3
+eml folio docs/plan.md
+eml magit .
+eml --split folio docs/plan.md
+```
+
+Each command creates and selects a fresh tmux window named `em:notes.md`,
+`folio:plan.md`, or `magit:repo`. `--split` opens a side-by-side pane instead,
+with the same label as its pane title. Pane titles are visible if your tmux
+configuration displays them. The launcher returns once tmux creates the view;
+the terminal client stays in the new window. The first launch starts an Emacs
+daemon if necessary; later launches share that server and its buffers.
+For Folio, the launcher supplies its Pandoc path if the existing server cannot
+find `pandoc`. An explicitly customized `folio-md-pandoc-program` is preserved.
+Outside tmux, run the same commands in an interactive terminal to open the
+client there. Agents must run inside tmux and preserve `TMUX` and `TMUX_PANE`.
+
+`open` can visit a new file in an existing directory. `folio` requires an
+existing file. Both accept `file:line` or `file:line:column` references; Folio
+uses the source line to position its rendered view. Magit accepts a repository
+directory or a file inside it and preserves the exact Git worktree. `eml magit`
+defaults to the current repository. The other CLI actions require a file.
+
+Save edits with `C-x C-s`, then close the tmux window or pane as usual. On your
+Command-key setup, `⌘ Shift w` closes a window and `⌘ w` closes a pane.
+The server keeps its buffers, including unsaved edits, after the client closes.
+Folio and Magit's `q` keys retain their normal buffer behavior.
+
+### agent commands
+
+| action | codex | claude |
+| --- | --- | --- |
+| edit a file | `$em [file]` | `/em [file]` |
+| read markdown | `$folio [file]` | `/folio [file]` |
+| inspect a repository | `$magit [repo or file]` | `/magit [repo or file]` |
+
+These skills choose an explicit target first. Without one, they use the most
+recent applicable file referenced in the conversation; Magit falls back to
+the agent's current repository. Descriptions such as "the earlier proposal"
+also work through the agent's conversation context. The agent passes a concrete
+absolute path to `eml`; the launcher does not parse chat history. Ask for a
+split when you want one. Restart the agent if newly installed skills do not
+appear. Codex also exposes skills through `/skills`; its built-in `/diff`
+continues to show its own diff output.
+
+See the [Codex skill documentation](https://learn.chatgpt.com/docs/build-skills)
+and [Claude skill documentation](https://code.claude.com/docs/en/skills).
+
+For feedback, use `eml open feedback.md`, write your requested changes, save,
+and return to the agent with "read feedback.md and apply the requested changes".
+Feedback is submitted only when you ask the agent to read it. Folio already
+refreshes visible documents as agents update them on disk; unsaved source edits
+take precedence.
+
+### checks
+
+```sh
+python3 -m unittest discover -s tests -v
+emacs -Q --batch -L user-lisp -l tests/eml-test.el -f ert-run-tests-batch-and-exit
+```
+
+The reader test requires Pandoc. Format Python with
+`black bin/eml scripts/install-links.py tests/test_eml.py`; use Emacs's
+`indent-region` for the Emacs Lisp and shell files.
 
 ## Features
 
