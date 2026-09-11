@@ -164,6 +164,49 @@ class InstallTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         self.destination = Path(self.directory.name)
 
+    def test_terminal_configs_are_copied_and_restored_on_reinstall(self):
+        configs = {
+            "config/tmux.conf": ".tmux.conf",
+            "config/ghostty/config": ".config/ghostty/config",
+            "config/ghostty/shaders/cursor_warp.glsl": ".config/ghostty/shaders/cursor_warp.glsl",
+        }
+        installer.install(REPO, self.destination)
+        for source, target in configs.items():
+            path = self.destination / target
+            self.assertFalse(path.is_symlink())
+            self.assertEqual(path.read_bytes(), (REPO / source).read_bytes())
+            path.write_text("machine changes")
+        for _ in range(2):
+            installer.install(REPO, self.destination)
+            for source, target in configs.items():
+                self.assertEqual(
+                    (self.destination / target).read_bytes(),
+                    (REPO / source).read_bytes(),
+                )
+
+    def test_terminal_config_symlinks_are_replaced_without_changing_referents(self):
+        referent = self.destination / "old-config"
+        referent.write_text("old config")
+        target = self.destination / ".tmux.conf"
+        target.symlink_to(referent)
+        installer.install(REPO, self.destination)
+        self.assertFalse(target.is_symlink())
+        self.assertEqual(target.read_bytes(), (REPO / "config/tmux.conf").read_bytes())
+        self.assertEqual(referent.read_text(), "old config")
+
+    def test_broken_terminal_config_symlink_is_replaced(self):
+        target = self.destination / ".tmux.conf"
+        target.symlink_to(self.destination / "missing-config")
+        installer.install(REPO, self.destination)
+        self.assertFalse(target.is_symlink())
+        self.assertEqual(target.read_bytes(), (REPO / "config/tmux.conf").read_bytes())
+
+    def test_terminal_config_directory_is_reported_before_installing(self):
+        (self.destination / ".tmux.conf").mkdir()
+        with self.assertRaisesRegex(ValueError, "destination is a directory"):
+            installer.install(REPO, self.destination)
+        self.assertFalse((self.destination / ".local").exists())
+
     def test_install_is_idempotent_and_shared(self):
         installer.install(REPO, self.destination)
         launcher = self.destination / ".local" / "bin" / "eml"

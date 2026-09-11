@@ -1,0 +1,40 @@
+theme = Modus Vivendi
+font-family = JetBrains Mono
+font-size = 13
+font-thicken = true
+mouse-hide-while-typing = true
+
+macos-titlebar-style = tabs
+window-padding-x = 4
+window-padding-y = 4
+window-padding-balance = true
+
+custom-shader = ~/.config/ghostty/shaders/cursor_warp.glsl
+
+# tmux shortcuts send f12 followed by the action key
+keybind = super+h=text:\x1b[24~h
+keybind = super+j=text:\x1b[24~j
+keybind = super+k=text:\x1b[24~k
+keybind = super+l=text:\x1b[24~l
+keybind = super+shift+h=text:\x1b[24~H
+keybind = super+shift+j=text:\x1b[24~J
+keybind = super+shift+k=text:\x1b[24~K
+keybind = super+shift+l=text:\x1b[24~L
+keybind = super+d=text:\x1b[24~\\
+keybind = super+shift+d=text:\x1b[24~-
+keybind = super+enter=text:\x1b[24~m
+keybind = super+t=text:\x1b[24~c
+keybind = super+digit_1=text:\x1b[24~1
+keybind = super+digit_2=text:\x1b[24~2
+keybind = super+digit_3=text:\x1b[24~3
+keybind = super+digit_4=text:\x1b[24~4
+keybind = super+digit_5=text:\x1b[24~5
+keybind = super+digit_6=text:\x1b[24~6
+keybind = super+digit_7=text:\x1b[24~7
+keybind = super+digit_8=text:\x1b[24~8
+keybind = super+digit_9=text:\x1b[24~9
+keybind = super+[=text:\x1b[24~[
+keybind = super+]=text:\x1b[24~]
+keybind = super+r=text:\x1b[24~n
+keybind = super+w=text:\x1b[24~q
+keybind = super+shift+w=text:\x1b[24~x

@@ -30,6 +30,39 @@ links are updated. An existing file or directory at a destination is preserved
 and reported as a conflict. Your `em` alias is not changed. Keep this repository
 at `~/.emacs.d` so the Emacs daemon loads its configuration normally.
 
+### terminal configs
+
+This repository is the authoritative source for your terminal configuration.
+Each `./install.sh` run copies these files, overwriting existing files or replacing
+symlinks at their destinations:
+
+| repository source | installed copy |
+| --- | --- |
+| `config/tmux.conf` | `~/.tmux.conf` |
+| `config/ghostty/config` | `~/.config/ghostty/config` |
+| `config/ghostty/shaders/cursor_warp.glsl` | `~/.config/ghostty/shaders/cursor_warp.glsl` |
+
+Edit the repository copies, then rerun `./install.sh` to apply them. Local edits
+to the installed copies are overwritten. Other Ghostty files are left alone.
+The installer ensures tmux is installed through Homebrew; it does not check for
+or install Ghostty.
+
+Reload Ghostty with `⌘ Shift ,`. For an existing tmux server, run
+`tmux source-file ~/.tmux.conf`; new servers load the file automatically.
+
+| shortcut | action |
+| --- | --- |
+| `⌘ d` / `⌘ Shift d` | split side by side / top and bottom |
+| `⌘ h/j/k/l` | select a pane |
+| `⌘ Shift h/j/k/l` | resize a pane |
+| `⌘ Return` | zoom a pane |
+| `⌘ t` | create a tmux window |
+| `⌘ 1–9` / `⌘ [` / `⌘ ]` | select / previous / next window |
+| `⌘ r` | rename a window |
+| `⌘ w` / `⌘ Shift w` | close a pane / window |
+
+`F12` remains the manual tmux prefix. Emacs Meta bindings remain available.
+
 ## emacs launcher
 
 ```sh
