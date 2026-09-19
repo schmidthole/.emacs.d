@@ -16,7 +16,10 @@
 
 (defun eml-open (action file &optional line column pandoc)
   "open file using action at one-based line and column.
+use utf-8 output for the requesting text terminal so unicode renders correctly.
 use the launcher's pandoc when the server cannot find the default executable."
+  (unless (display-graphic-p)
+    (set-terminal-coding-system 'utf-8-unix (selected-frame)))
   (pcase action
     ("magit"
      (require 'magit)

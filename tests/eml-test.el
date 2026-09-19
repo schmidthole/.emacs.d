@@ -22,6 +22,49 @@
       (when-let* ((buffer (get-file-buffer file))) (kill-buffer buffer))
       (delete-file file))))
 
+(ert-deftest eml-folio-initializes-terminal-unicode-output ()
+  (let* ((contents "# café\n\n## résumé\n\nnaïve 日本語\n\n---\n")
+         (file (make-temp-file "eml-test-" nil ".md" contents))
+         (terminal-coding (terminal-coding-system))
+         (keyboard-coding (keyboard-coding-system))
+         (default-file-coding (default-value 'buffer-file-coding-system))
+         reader source)
+    (unwind-protect
+        (save-window-excursion
+          (dotimes (_ 2)
+            (set-terminal-coding-system nil)
+            (should-not (terminal-coding-system))
+            (eml-open "folio" file)
+            (setq reader (current-buffer)
+                  source folio-md--source)
+            (should (eq (terminal-coding-system) 'utf-8-unix))
+            (dolist (text '("café" "› résumé" "naïve 日本語" "━" "─"))
+              (should (string-match-p text (buffer-string)))))
+          (should (eq (keyboard-coding-system) keyboard-coding))
+          (should (eq (default-value 'buffer-file-coding-system) default-file-coding))
+          (with-current-buffer source
+            (should (equal (buffer-string) contents))
+            (should-not (buffer-modified-p)))
+          (with-temp-buffer
+            (insert-file-contents file)
+            (should (equal (buffer-string) contents))))
+      (set-terminal-coding-system terminal-coding)
+      (when (buffer-live-p reader) (kill-buffer reader))
+      (when (buffer-live-p source) (kill-buffer source))
+      (delete-file file))))
+
+(ert-deftest eml-open-leaves-graphical-terminal-coding-alone ()
+  (let ((file (make-temp-file "eml-test-" nil ".txt" "café\n")))
+    (unwind-protect
+        (cl-letf (((symbol-function 'display-graphic-p) (lambda (&optional _) t))
+                  ((symbol-function 'set-terminal-coding-system)
+                   (lambda (&rest _) (ert-fail "changed graphical terminal coding"))))
+          (save-window-excursion
+            (eml-open "open" file)
+            (should (equal (buffer-string) "café\n"))))
+      (when-let* ((buffer (get-file-buffer file))) (kill-buffer buffer))
+      (delete-file file))))
+
 (ert-deftest eml-folio-opens-and-refreshes-without-losing-unsaved-edits ()
   (let ((file (make-temp-file "eml-test-" nil ".md" "# first\n\noriginal\n"))
         reader source)
