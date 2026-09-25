@@ -12,7 +12,7 @@ export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
 brew tap d12frosted/emacs-plus
 
-for formula in d12frosted/emacs-plus/emacs-plus@31 pandoc tmux; do
+for formula in d12frosted/emacs-plus/emacs-plus@31 pandoc tmux herdr; do
     if brew list --formula --versions "$formula" >/dev/null 2>&1; then
         printf '%s is already installed\n' "$formula"
     else
@@ -29,6 +29,7 @@ if ! command -v python3 >/dev/null 2>&1; then
 fi
 
 pandoc --version >/dev/null
+herdr --version >/dev/null
 emacs_prefix=$(brew --prefix d12frosted/emacs-plus/emacs-plus@31)
 "$emacs_prefix/bin/emacs" -Q --batch --eval '
 (unless (and (executable-find "pandoc")

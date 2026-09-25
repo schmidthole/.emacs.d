@@ -2,8 +2,10 @@
 
 from importlib.machinery import SourceFileLoader
 from importlib.util import module_from_spec, spec_from_loader
+import json
 import os
 from pathlib import Path
+import shlex
 import subprocess
 import tempfile
 import unittest
@@ -106,6 +108,9 @@ class TargetTests(unittest.TestCase):
 
 class LaunchTests(unittest.TestCase):
     def setUp(self):
+        environment = patch.dict(os.environ, {"HERDR_ENV": "", "TMUX": ""})
+        environment.start()
+        self.addCleanup(environment.stop)
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.path = Path(self.directory.name) / 'a "quote" $(touch nope).md'
@@ -153,9 +158,146 @@ class LaunchTests(unittest.TestCase):
     @patch.dict(os.environ, {"TMUX": ""})
     @patch.object(eml.shutil, "which", return_value="/tools/emacsclient")
     @patch.object(eml.sys.stdin, "isatty", return_value=False)
-    def test_agent_outside_tmux_gets_actionable_error(self, isatty, which):
-        with self.assertRaisesRegex(ValueError, "inside tmux"):
+    def test_agent_outside_multiplexers_gets_actionable_error(self, isatty, which):
+        with self.assertRaisesRegex(ValueError, "inside herdr, tmux"):
             eml.launch("open", str(self.path))
+
+    @patch.dict(
+        os.environ,
+        {
+            "HERDR_ENV": "1",
+            "HERDR_PANE_ID": "w1:p1",
+            "HERDR_WORKSPACE_ID": "w1",
+            "TMUX": "inherited",
+        },
+    )
+    @patch.object(eml.shutil, "which", side_effect=lambda name: "/tools/" + name)
+    @patch.object(eml.subprocess, "check_output")
+    def test_herdr_tab_uses_live_workspace_and_quotes_shell_command(
+        self, output, which
+    ):
+        for action in ("open", "folio", "magit"):
+            with self.subTest(action=action):
+                output.reset_mock()
+                output.side_effect = [
+                    json.dumps(
+                        {"result": {"pane": {"pane_id": "w2:p9", "workspace_id": "w2"}}}
+                    ),
+                    json.dumps({"result": {"root_pane": {"pane_id": "w2:p10"}}}),
+                    "",
+                ]
+                with patch.object(
+                    eml, "resolve_target", return_value=(self.path, 42, 3)
+                ):
+                    eml.launch(action, str(self.path))
+                calls = [call.args[0] for call in output.call_args_list]
+                self.assertEqual(
+                    calls[0], ["/tools/herdr", "pane", "current", "--current"]
+                )
+                self.assertEqual(
+                    calls[1],
+                    [
+                        "/tools/herdr",
+                        "tab",
+                        "create",
+                        "--workspace",
+                        "w2",
+                        "--cwd",
+                        str(self.path if action == "magit" else self.path.parent),
+                        "--label",
+                        f"{'em' if action == 'open' else action}:{self.path.name}".lower(),
+                        "--focus",
+                    ],
+                )
+                self.assertEqual(
+                    calls[2][:4], ["/tools/herdr", "pane", "run", "w2:p10"]
+                )
+                command = shlex.split(calls[2][4])
+                self.assertEqual(
+                    command[:6],
+                    ["exec", "/tools/emacsclient", "-t", "-a", "", "--eval"],
+                )
+                self.assertIn(f"{eml.lisp_string(self.path)} 42 3", command[6])
+                self.assertEqual(len(command), 7)
+
+    @patch.dict(os.environ, {"HERDR_ENV": "1", "HERDR_PANE_ID": "w1:p1"})
+    @patch.object(eml.shutil, "which", side_effect=lambda name: "/tools/" + name)
+    @patch.object(eml.subprocess, "check_output")
+    def test_herdr_split_targets_resolved_caller_and_labels_new_pane(
+        self, output, which
+    ):
+        output.side_effect = [
+            json.dumps(
+                {"result": {"pane": {"pane_id": "w2:p9", "workspace_id": "w2"}}}
+            ),
+            json.dumps({"result": {"pane": {"pane_id": "w2:p10"}}}),
+            "",
+            "",
+        ]
+        eml.launch("folio", str(self.path), split=True)
+        calls = [call.args[0] for call in output.call_args_list]
+        self.assertEqual(
+            calls[1],
+            [
+                "/tools/herdr",
+                "pane",
+                "split",
+                "--pane",
+                "w2:p9",
+                "--direction",
+                "right",
+                "--cwd",
+                str(self.path.parent),
+                "--focus",
+            ],
+        )
+        self.assertEqual(
+            calls[2],
+            [
+                "/tools/herdr",
+                "pane",
+                "rename",
+                "w2:p10",
+                f"folio:{self.path.name}".lower(),
+            ],
+        )
+        self.assertEqual(calls[3][:4], ["/tools/herdr", "pane", "run", "w2:p10"])
+
+    @patch.dict(os.environ, {"HERDR_ENV": "1", "HERDR_PANE_ID": ""})
+    @patch.object(eml.shutil, "which", return_value="/tools/emacsclient")
+    @patch.object(eml.subprocess, "check_output")
+    def test_herdr_missing_context_never_targets_focused_pane(self, output, which):
+        with self.assertRaisesRegex(ValueError, "herdr pane is unknown"):
+            eml.launch("open", str(self.path))
+        output.assert_not_called()
+
+    @patch.dict(
+        os.environ, {"HERDR_ENV": "1", "HERDR_PANE_ID": "w1:p1", "TMUX": "inherited"}
+    )
+    @patch.object(
+        eml.shutil,
+        "which",
+        side_effect=lambda name: None if name == "herdr" else "/tools/" + name,
+    )
+    @patch.object(eml.subprocess, "check_output")
+    def test_missing_herdr_does_not_fall_back_to_outer_tmux(self, output, which):
+        with self.assertRaisesRegex(ValueError, "herdr is unavailable"):
+            eml.launch("open", str(self.path))
+        output.assert_not_called()
+
+    @patch.dict(
+        os.environ, {"HERDR_ENV": "1", "HERDR_PANE_ID": "w1:p1", "TMUX": "inherited"}
+    )
+    @patch.object(eml.shutil, "which", side_effect=lambda name: "/tools/" + name)
+    @patch.object(eml.subprocess, "check_output")
+    def test_herdr_failure_stops_before_creating_a_view(self, output, which):
+        for response in ("not json", '{"result": {}}'):
+            with self.subTest(response=response):
+                output.reset_mock()
+                output.return_value = response
+                with self.assertRaisesRegex(ValueError, "invalid"):
+                    eml.launch("open", str(self.path))
+                self.assertEqual(output.call_count, 1)
 
 
 class InstallTests(unittest.TestCase):
@@ -167,6 +309,7 @@ class InstallTests(unittest.TestCase):
     def test_terminal_configs_are_copied_and_restored_on_reinstall(self):
         configs = {
             "config/tmux.conf": ".tmux.conf",
+            "config/herdr/config.toml": ".config/herdr/config.toml",
             "config/ghostty/config": ".config/ghostty/config",
             "config/ghostty/shaders/cursor_warp.glsl": ".config/ghostty/shaders/cursor_warp.glsl",
         }

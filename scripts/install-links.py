@@ -10,6 +10,10 @@ def install(repo, destination):
     configs = [
         (repo / "config" / "tmux.conf", destination / ".tmux.conf"),
         (
+            repo / "config" / "herdr" / "config.toml",
+            destination / ".config" / "herdr" / "config.toml",
+        ),
+        (
             repo / "config" / "ghostty" / "config",
             destination / ".config" / "ghostty" / "config",
         ),
@@ -54,4 +58,4 @@ if __name__ == "__main__":
     except (OSError, ValueError) as error:
         sys.exit(str(error))
     print("eml and agent skills are installed; add ~/.local/bin to your path if needed")
-    print("ghostty and tmux configs are installed from the repository")
+    print("ghostty, tmux, and herdr configs are installed from the repository")

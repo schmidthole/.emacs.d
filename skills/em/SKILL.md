@@ -10,8 +10,9 @@ line and column reference. Ask briefly only when no usable target is identifiabl
 Resolve the path against the relevant project or worktree, then execute
 `~/.local/bin/eml open '/absolute/path/to/file:line:column'`, omitting the position
 when absent. Quote the argument safely. Add `--split` only when requested.
-The launcher creates and selects a tmux window and returns immediately.
-Keep the existing tmux environment so it opens beside this agent's session.
+The launcher detects herdr (`HERDR_ENV=1`) first, then tmux, creates and selects
+a tab/window, and returns immediately. Preserve the inherited `HERDR_*`, `TMUX`,
+and `TMUX_PANE` environment so it opens beside this agent's session.
 
 Report the target opened briefly. Do not wait for the editor to close or make
 file changes as part of opening it. If launching fails, report the failure.

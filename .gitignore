@@ -7,8 +7,12 @@ auto-save-list/
 custom.el
 eln-cache/
 elpa/
+straight/
 eshell/
 history
+.persistent-scratch
+places
+recentf
 newsticker*
 projects
 transient/

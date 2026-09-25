@@ -23,11 +23,13 @@
       '((bg-mode-line-active bg-dim)
         (fg-mode-line-active fg-main)
         (border-mode-line-active unspecified)
-        (bg-mode-line-inactive bg-main)
+        (bg-mode-line-inactive bg-dim)
         (fg-mode-line-inactive fg-dim)
         (border-mode-line-inactive unspecified)))
 
-(load-theme 'modus-vivendi t)
+(load (expand-file-name "user-lisp/tay-appearance.el" user-emacs-directory)
+      nil t)
+(tay/appearance-start)
 (menu-bar-mode -1)
 
 ;; editing commands

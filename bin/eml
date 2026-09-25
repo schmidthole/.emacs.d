@@ -2,9 +2,11 @@
 """open files and repository views in terminal emacs."""
 
 import argparse
+import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -41,6 +43,62 @@ def resolve_target(action, target):
     return path, line, column
 
 
+def herdr_result(herdr, *args):
+    output = subprocess.check_output([herdr, *args], text=True)
+    # Some mutations (including pane run) acknowledge success without JSON.
+    if not output.strip():
+        return {}
+    try:
+        return json.loads(output)["result"]
+    except (ValueError, KeyError, TypeError) as error:
+        raise ValueError("invalid response from herdr") from error
+
+
+def launch_herdr(command, directory, title, split):
+    herdr = shutil.which("herdr")
+    if not herdr:
+        raise ValueError("herdr is unavailable; add it to PATH")
+    if not os.environ.get("HERDR_PANE_ID"):
+        raise ValueError("herdr pane is unknown; launch the agent from a herdr pane")
+    # Resolve live context: panes can move between workspaces after launch.
+    try:
+        origin = herdr_result(herdr, "pane", "current", "--current")["pane"]
+        pane_id, workspace_id = origin["pane_id"], origin["workspace_id"]
+        if split:
+            result = herdr_result(
+                herdr,
+                "pane",
+                "split",
+                "--pane",
+                pane_id,
+                "--direction",
+                "right",
+                "--cwd",
+                str(directory),
+                "--focus",
+            )
+            pane = result["pane"]["pane_id"]
+            herdr_result(herdr, "pane", "rename", pane, title)
+        else:
+            result = herdr_result(
+                herdr,
+                "tab",
+                "create",
+                "--workspace",
+                workspace_id,
+                "--cwd",
+                str(directory),
+                "--label",
+                title,
+                "--focus",
+            )
+            pane = result["root_pane"]["pane_id"]
+    except (KeyError, TypeError) as error:
+        raise ValueError("invalid pane context from herdr") from error
+    # Herdr runs shell text, unlike tmux's argv form. Quote every argument.
+    herdr_result(herdr, "pane", "run", pane, "exec " + shlex.join(command))
+
+
 def launch(action, target, split=False):
     path, line, column = resolve_target(action, target)
     client = shutil.which("emacsclient")
@@ -54,17 +112,21 @@ def launch(action, target, split=False):
         f"{lisp_string(pandoc) if pandoc else 'nil'}))"
     )
     command = [client, "-t", "-a", "", "--eval", expression]
+    directory = path if action == "magit" else path.parent
+    title = f"{'em' if action == 'open' else action}:{path.name}".lower()
+    # Herdr panes can inherit TMUX from the terminal that launched Herdr.
+    if os.environ.get("HERDR_ENV") == "1":
+        launch_herdr(command, directory, title, split)
+        return
     if not os.environ.get("TMUX"):
         if not sys.stdin.isatty():
-            raise ValueError("run eml inside tmux or an interactive terminal")
+            raise ValueError("run eml inside herdr, tmux, or an interactive terminal")
         os.execv(client, command)
         return
 
     origin = os.environ.get("TMUX_PANE")
     if not origin:
         raise ValueError("tmux pane is unknown; launch the agent from a tmux pane")
-    directory = path if action == "magit" else path.parent
-    title = f"{'em' if action == 'open' else action}:{path.name}".lower()
     if split:
         pane = subprocess.check_output(
             [

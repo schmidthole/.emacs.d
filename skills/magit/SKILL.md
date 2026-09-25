@@ -9,8 +9,9 @@ falling back to this agent's current repository. Preserve the exact worktree;
 do not substitute the main checkout. Ask briefly if no repository is identifiable.
 
 Execute `~/.local/bin/eml magit '/absolute/path/to/repository-or-file'` with a
-safely quoted argument. Add `--split` only when requested. The launcher creates
-and selects a tmux window and returns immediately. Keep the existing tmux
+safely quoted argument. Add `--split` only when requested. The launcher detects
+herdr (`HERDR_ENV=1`) first, then tmux, creates and selects a tab/window, and
+returns immediately. Preserve the inherited `HERDR_*`, `TMUX`, and `TMUX_PANE`
 environment so it opens beside this agent's session.
 
 Report the repository opened briefly. Do not wait for the editor to close,

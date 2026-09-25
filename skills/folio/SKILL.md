@@ -10,8 +10,9 @@ Preserve any line reference. Ask briefly only when no usable target is identifia
 Resolve the path against the relevant project or worktree, then execute
 `~/.local/bin/eml folio '/absolute/path/to/file.md:line'`, omitting the position
 when absent. Quote the argument safely. Add `--split` only when requested.
-The launcher creates and selects a tmux window and returns immediately.
-Keep the existing tmux environment so it opens beside this agent's session.
+The launcher detects herdr (`HERDR_ENV=1`) first, then tmux, creates and selects
+a tab/window, and returns immediately. Preserve the inherited `HERDR_*`, `TMUX`,
+and `TMUX_PANE` environment so it opens beside this agent's session.
 
 Report the target opened briefly. Do not wait for the reader to close or rewrite
 the document. If launching fails, report the failure.

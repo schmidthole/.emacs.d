@@ -11,7 +11,7 @@ With Homebrew installed and `brew` on your PATH, run:
 ```
 
 The script adds the [d12frosted/emacs-plus tap](https://github.com/d12frosted/homebrew-emacs-plus),
-installs `emacs-plus@31` with default build options, Pandoc, and tmux. It also
+installs `emacs-plus@31` with default build options, Pandoc, tmux, and herdr. It also
 installs Python if `python3` is unavailable.
 Already installed formulae are skipped. Automatic Homebrew updates, cleanup,
 and dependent checks are disabled for this run. If an installation fails,
@@ -39,16 +39,28 @@ symlinks at their destinations:
 | repository source | installed copy |
 | --- | --- |
 | `config/tmux.conf` | `~/.tmux.conf` |
+| `config/herdr/config.toml` | `~/.config/herdr/config.toml` |
 | `config/ghostty/config` | `~/.config/ghostty/config` |
 | `config/ghostty/shaders/cursor_warp.glsl` | `~/.config/ghostty/shaders/cursor_warp.glsl` |
 
 Edit the repository copies, then rerun `./install.sh` to apply them. Local edits
-to the installed copies are overwritten. Other Ghostty files are left alone.
-The installer ensures tmux is installed through Homebrew; it does not check for
-or install Ghostty.
+to the installed copies are overwritten, including the herdr config on every
+machine where the installer runs. Other Ghostty and herdr files are left alone.
+The installer ensures tmux and herdr are installed through Homebrew, using
+herdr's [documented Homebrew installation](https://herdr.dev/docs/install/).
+It does not check for or install Ghostty.
 
 Reload Ghostty with `⌘ Shift ,`. For an existing tmux server, run
 `tmux source-file ~/.tmux.conf`; new servers load the file automatically.
+
+Ghostty, herdr, and Emacs follow macOS appearance: Modus Operandi in light
+mode and Modus Vivendi in dark mode. Ghostty uses its built-in theme pair;
+herdr follows the host terminal with matching custom light/dark palettes.
+After changing herdr's config, press `F12`, then `Shift R` to reload it.
+Emacs checks macOS appearance every two seconds, including terminal and daemon
+sessions, and uses the native appearance hook when available. Restarting this
+watcher with `M-x tay/appearance-start` is safe. macOS System Settings →
+Appearance can be Light, Dark, or Auto; these configs follow that setting.
 
 | shortcut | action |
 | --- | --- |
@@ -73,16 +85,20 @@ eml magit .
 eml --split folio docs/plan.md
 ```
 
-Each command creates and selects a fresh tmux window named `em:notes.md`,
+Each command creates and selects a fresh herdr tab or tmux window named `em:notes.md`,
 `folio:plan.md`, or `magit:repo`. `--split` opens a side-by-side pane instead,
 with the same label as its pane title. Pane titles are visible if your tmux
-configuration displays them. The launcher returns once tmux creates the view;
+configuration displays them. The launcher returns once the multiplexer launches the view;
 the terminal client stays in the new window. The first launch starts an Emacs
 daemon if necessary; later launches share that server and its buffers.
 For Folio, the launcher supplies its Pandoc path if the existing server cannot
 find `pandoc`. An explicitly customized `folio-md-pandoc-program` is preserved.
-Outside tmux, run the same commands in an interactive terminal to open the
-client there. Agents must run inside tmux and preserve `TMUX` and `TMUX_PANE`.
+The launcher uses herdr when `HERDR_ENV=1`, including when tmux variables were
+inherited from an outer terminal; otherwise it uses tmux when `TMUX` is set.
+Herdr tabs open in the caller's current workspace, and splits open beside the
+caller. Keep `herdr` on `PATH`; the installer installs it through Homebrew. Agents must
+preserve the inherited `HERDR_*`, `TMUX`, and `TMUX_PANE` environment. Outside
+either multiplexer, an interactive terminal opens the client in place.
 
 `open` can visit a new file in an existing directory. `folio` requires an
 existing file. Both accept `file:line` or `file:line:column` references; Folio
@@ -90,8 +106,8 @@ uses the source line to position its rendered view. Magit accepts a repository
 directory or a file inside it and preserves the exact Git worktree. `eml magit`
 defaults to the current repository. The other CLI actions require a file.
 
-Save edits with `C-x C-s`, then close the tmux window or pane as usual. On your
-Command-key setup, `⌘ Shift w` closes a window and `⌘ w` closes a pane.
+Save edits with `C-x C-s`, then close the tab, window, or pane as usual. On your
+tmux Command-key setup, `⌘ Shift w` closes a window and `⌘ w` closes a pane.
 The server keeps its buffers, including unsaved edits, after the client closes.
 Folio and Magit's `q` keys retain their normal buffer behavior.
 
@@ -125,7 +141,7 @@ take precedence.
 
 ```sh
 python3 -m unittest discover -s tests -v
-emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -f ert-run-tests-batch-and-exit
+emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -l tests/tay-appearance-test.el -f ert-run-tests-batch-and-exit
 ```
 
 The reader test requires Pandoc. Format Python with

@@ -1,0 +1,111 @@
+onboarding = false
+[theme]
+# Follow Ghostty's system appearance; the custom palettes supply Modus colors.
+name = "one-dark"
+auto_switch = true
+dark_name = "one-dark"
+light_name = "one-light"
+
+[theme.custom.dark]
+# Modus Vivendi, preserving the existing dark palette.
+panel_bg = "#000000"      # bg-main; also supplies dark text on accent badges
+sidebar_bg = "#000000"    # bg-main
+active_row_bg = "#1e1e1e" # bg-dim, matching Emacs's mode-line overrides
+selection_bg = "#303030"  # bg-active; keeps secondary labels readable
+surface0 = "#1e1e1e"      # bg-dim
+surface1 = "#303030"      # bg-active
+surface_dim = "#1e1e1e"   # bg-dim
+overlay0 = "#989898"      # fg-dim
+overlay1 = "#989898"      # fg-dim, for inactive tabs and secondary chrome
+text = "#ffffff"          # fg-main
+subtext0 = "#989898"      # fg-dim
+accent = "#79a8ff"        # Neovim Modus accent / Ghostty bright blue
+mauve = "#feacd0"         # magenta
+green = "#44bc44"
+yellow = "#d0bc00"
+red = "#ff5f59"
+blue = "#2fafff"
+teal = "#00d3d0"          # cyan
+peach = "#fec43f"         # yellow-warmer
+
+[theme.custom.light]
+# Modus Operandi: bg-main, bg-dim, bg-active, fg-main, and fg-dim.
+panel_bg = "#ffffff"
+sidebar_bg = "#ffffff"
+active_row_bg = "#f2f2f2"
+selection_bg = "#c4c4c4"
+surface0 = "#f2f2f2"
+surface1 = "#c4c4c4"
+surface_dim = "#f2f2f2"
+overlay0 = "#595959"
+overlay1 = "#595959"
+text = "#000000"
+subtext0 = "#595959"
+accent = "#3548cf"
+mauve = "#721045"
+green = "#006800"
+yellow = "#6f5500"
+red = "#a60000"
+blue = "#0031a9"
+teal = "#005e8b"
+peach = "#884900"
+
+[terminal]
+# Match tmux's pane_current_path behavior for new panes, tabs, and spaces.
+new_cwd = "follow"
+
+[keys]
+# Ghostty translates CMD/Super shortcuts into F12 + tmux action keys.
+prefix = "f12"
+
+# CMD+h/j/k/l: focus the pane to the left/down/up/right.
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# CMD+Shift+h/j/k/l: resize the pane left/down/up/right.
+resize_pane_left = "prefix+shift+h"
+resize_pane_down = "prefix+shift+j"
+resize_pane_up = "prefix+shift+k"
+resize_pane_right = "prefix+shift+l"
+
+# CMD+t/r/[/]/1..9: create, rename, and select tabs (tmux windows).
+new_tab = "prefix+c"
+rename_tab = "prefix+n"
+previous_tab = "prefix+["
+next_tab = "prefix+]"
+switch_tab = "prefix+1..9"
+
+# CMD+d / CMD+Shift+d: split side by side / top and bottom.
+split_vertical = "prefix+backslash"
+split_horizontal = "prefix+minus"
+# CMD+Enter: toggle pane zoom.
+zoom = "prefix+m"
+
+# Closing a pane also removes its tab when it was the last pane. If that was
+# the space's final tab, Herdr removes the space as well.
+# CMD+w / CMD+Shift+w: close pane / close tab.
+close_pane = "prefix+q"
+close_tab = "prefix+x"
+# Match tmux's F12+d and free F12+q for closing panes.
+detach = "prefix+d"
+
+# Herdr-only actions (Herdr calls tmux-style sessions "spaces" in the UI and
+# "workspaces" in config). Keep direct Meta/Alt keys available to Emacs.
+# Ghostty forwards CMD+o / CMD+Shift+s / CMD+s through F12.
+toggle_sidebar = "prefix+b"
+new_workspace = "prefix+shift+n"
+rename_workspace = "prefix+shift+w"
+# Unused shortcuts disabled explicitly; do not capture M-w or M-1..9.
+workspace_picker = ""
+switch_workspace = ""
+# Ghostty forwards CMD+Shift+p / CMD+Shift+n through F12.
+previous_workspace = "prefix+u"
+next_workspace = "prefix+shift+u"
+
+[ui]
+pane_gaps = false
+confirm_close = true
+# CMD+t creates a tab immediately, matching tmux new-window.
+prompt_new_tab_name = false
