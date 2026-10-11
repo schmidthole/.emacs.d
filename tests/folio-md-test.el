@@ -54,5 +54,18 @@
       (should-not (invisible-p (1- sibling)))
       (should (= (length (overlays-in (point-min) (point-max))) 1)))))
 
+(ert-deftest folio-md-paragraphs-flow-without-fill ()
+  (let ((words (mapconcat #'identity (make-list 60 "word") " ")))
+    (with-temp-buffer
+      (folio-md-mode)
+      (should visual-line-mode)
+      (setq folio-md--ast (folio-md--parse (concat words "\n\n- " words "\n")))
+      (folio-md--render)
+      (goto-char (point-min))
+      (should (equal (buffer-substring (point) (line-end-position)) words))
+      (search-forward "• ")
+      (should (equal (buffer-substring (point) (line-end-position)) words))
+      (should (equal (get-text-property (point) 'wrap-prefix) "  ")))))
+
 (provide 'folio-md-test)
 ;;; folio-md-test.el ends here

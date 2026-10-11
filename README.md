@@ -156,11 +156,16 @@ The reader test requires Pandoc. Format Python with
 - Fido completion
 - tree-sitter Markdown and Go modes
 - Protocol Buffer mode
-- `jumpa` line navigation
+- `jumpa` line navigation (`C-;`, or `F6` in any terminal)
 - `folio-md` Markdown reading buffers
 - Magit Git interface (`C-x g`)
 
 Magit and Protocol Buffer mode are installed automatically with `package.el` from MELPA.
+
+Ghostty maps `Ctrl+;` to the standard `F6` escape sequence, which Emacs binds
+to `jumpa`. This works through Herdr and tmux without extended keyboard
+protocol negotiation. The native Emacs `C-;` binding is also retained.
+After installing the terminal configs, reload Ghostty with `⌘ Shift ,`.
 
 ## magit
 
@@ -198,6 +203,7 @@ choose a file. The reader opens in a separate, read-only buffer.
 | `g` | refresh from the source, including unsaved edits |
 | `q` | quit the reading window |
 
-Visible reading buffers check for changes every two idle seconds. Customize
-`folio-md-width` (default 88 columns) and `folio-md-refresh-interval` in the
-`folio-md` customization group; set the interval to `nil` to disable polling.
+Text flows to the window width like Org and Markdown modes. Visible reading
+buffers check for changes every two idle seconds. Customize
+`folio-md-refresh-interval` in the `folio-md` customization group; set it to
+`nil` to disable polling.

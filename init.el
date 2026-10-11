@@ -17,6 +17,29 @@
       (unless (member directory (split-string (or (getenv "PATH") "") path-separator))
         (setenv "PATH" (concat directory path-separator (getenv "PATH")))))))
 
+;; system clipboard
+
+(defun tay/clipboard-copy (text)
+  "copy text to the macos clipboard."
+  (let ((process-connection-type nil)
+        (process-environment (cons "LC_CTYPE=UTF-8" process-environment))
+        (coding-system-for-write 'utf-8))
+    (let ((process (start-process "pbcopy" nil "pbcopy")))
+      (process-send-string process text)
+      (process-send-eof process))))
+
+(defun tay/clipboard-paste ()
+  "return the macos clipboard when it differs from the last kill."
+  (let* ((process-environment (cons "LC_CTYPE=UTF-8" process-environment))
+         (coding-system-for-read 'utf-8)
+         (text (shell-command-to-string "pbpaste")))
+    (unless (or (string-empty-p text) (equal text (car kill-ring)))
+      text)))
+
+(when (and (eq system-type 'darwin) (executable-find "pbcopy"))
+  (setq interprogram-cut-function #'tay/clipboard-copy
+        interprogram-paste-function #'tay/clipboard-paste))
+
 ;; appearance
 
 (setq modus-themes-common-palette-overrides
@@ -66,6 +89,8 @@
 (keymap-global-set "M-i v" #'split-window-right)
 (keymap-global-set "M-i s" #'split-window-below)
 (keymap-global-set "C-;" #'jumpa)
+;; Ghostty sends F6 for C-; so it also survives legacy terminal forwarding.
+(keymap-global-set "<f6>" #'jumpa)
 
 ;; core
 

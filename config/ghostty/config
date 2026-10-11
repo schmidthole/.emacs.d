@@ -12,6 +12,10 @@ window-padding-balance = true
 
 custom-shader = ~/.config/ghostty/shaders/cursor_warp.glsl
 
+# Jumpa: use a standard F6 sequence through Herdr/tmux and terminal Emacs.
+# Ctrl+semicolon has no legacy control character of its own.
+keybind = ctrl+semicolon=text:\x1b[17~
+
 # tmux shortcuts send f12 followed by the action key
 keybind = super+h=text:\x1b[24~h
 keybind = super+j=text:\x1b[24~j
@@ -24,6 +28,7 @@ keybind = super+shift+l=text:\x1b[24~L
 keybind = super+d=text:\x1b[24~\\
 keybind = super+shift+d=text:\x1b[24~-
 keybind = super+enter=text:\x1b[24~m
+keybind = super+m=text:\x1b[24~m
 keybind = super+t=text:\x1b[24~c
 keybind = super+digit_1=text:\x1b[24~1
 keybind = super+digit_2=text:\x1b[24~2

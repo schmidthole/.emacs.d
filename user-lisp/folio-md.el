@@ -22,8 +22,6 @@
 (defgroup folio-md nil "Read Markdown in a terminal." :group 'text)
 (defcustom folio-md-pandoc-program "pandoc" "Pandoc executable."
   :type 'string :group 'folio-md)
-(defcustom folio-md-width 88 "Maximum reading width in terminal columns."
-  :type 'integer :group 'folio-md)
 (defcustom folio-md-refresh-interval 2
   "Seconds between checks for source changes.  Nil disables polling."
   :type '(choice (const nil) number) :group 'folio-md)
@@ -127,8 +125,11 @@
           text (propertize "\n" 'folio-md-source-line folio-md--line)))
 
 (defun folio-md--paragraph (text prefix &optional compact)
-  (dolist (line (folio-md--wrap text (- folio-md--render-width (string-width prefix))))
-    (folio-md--insert-line line prefix))
+  "Insert TEXT as logical lines; `visual-line-mode' flows them under PREFIX."
+  (dolist (line (split-string text "\n"))
+    (let ((start (point)))
+      (folio-md--insert-line line prefix)
+      (put-text-property start (point) 'wrap-prefix prefix)))
   (unless compact (insert "\n")))
 
 (defun folio-md--highlight-code (code language)
@@ -295,7 +296,7 @@
 
 (defun folio-md--target-width ()
   (let ((win (get-buffer-window (current-buffer) t)))
-    (max 20 (min folio-md-width (if win (- (window-body-width win) 4) folio-md-width)))))
+    (max 20 (if win (1- (window-body-width win)) 80))))
 
 (defun folio-md--goto-source-line (line)
   (goto-char (point-min))
@@ -451,7 +452,8 @@
 
 (define-derived-mode folio-md-mode special-mode "Folio"
   "Read Markdown with source navigation and terminal-friendly layout."
-  (setq-local truncate-lines t)
+  (setq-local truncate-lines nil)
+  (visual-line-mode 1)
   (setq-local header-line-format " Folio   e source · i headings · TAB fold · o link · c copy code · g refresh · q back")
   (setq-local buffer-invisibility-spec '((folio-md . t)))
   (setq-local show-trailing-whitespace nil)

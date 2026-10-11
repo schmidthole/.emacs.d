@@ -80,7 +80,7 @@ switch_tab = "prefix+1..9"
 # CMD+d / CMD+Shift+d: split side by side / top and bottom.
 split_vertical = "prefix+backslash"
 split_horizontal = "prefix+minus"
-# CMD+Enter: toggle pane zoom.
+# CMD+Enter / CMD+m: toggle pane zoom.
 zoom = "prefix+m"
 
 # Closing a pane also removes its tab when it was the last pane. If that was
