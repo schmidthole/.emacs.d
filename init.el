@@ -1,4 +1,4 @@
-;;; init.el --- terminal emacs configuration -*- lexical-binding: t; -*-
+;;; init.el --- emacs configuration -*- lexical-binding: t; -*-
 
 (when (< emacs-major-version 31)
   (error "taymacs requires emacs 31 or newer"))
@@ -53,7 +53,6 @@
 (load (expand-file-name "user-lisp/tay-appearance.el" user-emacs-directory)
       nil t)
 (tay/appearance-start)
-(menu-bar-mode -1)
 
 ;; editing commands
 
@@ -217,5 +216,19 @@
 (use-package protobuf-mode
   :ensure t
   :mode "\\.proto\\'")
+
+(use-package ghostel
+  :ensure t
+  :commands (ghostel ghostel-project)
+  :config
+  (setopt ghostel-keymap-exceptions
+          (cons "M-o" (remove "M-o" ghostel-keymap-exceptions)))
+  (keymap-set ghostel-char-mode-map "M-o" #'other-window))
+
+(use-package agent
+  :load-path "user-lisp"
+  :bind (("M-i a n" . agent-new)
+         ("M-i a a" . agent-switch)
+         ("M-i a r" . agent-rename)))
 
 ;;; init.el ends here

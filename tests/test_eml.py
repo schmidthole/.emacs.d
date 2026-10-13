@@ -364,6 +364,24 @@ class InstallTests(unittest.TestCase):
                     REPO / "skills" / name,
                 )
 
+    def test_hammerspoon_is_not_installed_by_default(self):
+        installer.install(REPO, self.destination)
+        self.assertFalse((self.destination / ".hammerspoon").exists())
+
+    def test_existing_hammerspoon_config_is_untouched(self):
+        directory = self.destination / ".hammerspoon"
+        directory.mkdir()
+        init = directory / "init.lua"
+        init.write_text('-- existing config\nprint("existing")')
+        first = init.read_bytes()
+        config = directory / "taymacs.lua"
+        config.write_text("existing config")
+        installer.install(REPO, self.destination)
+        installer.install(REPO, self.destination)
+        self.assertEqual(init.read_bytes(), first)
+        self.assertEqual(config.read_text(), "existing config")
+        self.assertFalse(config.is_symlink())
+
     def test_relocating_repo_updates_symlinks(self):
         launcher = self.destination / ".local" / "bin" / "eml"
         launcher.parent.mkdir(parents=True)

@@ -1,6 +1,11 @@
 # taymacs
 
-A minimal terminal-only Emacs 31+ configuration.
+A minimal terminal and GUI Emacs 31+ configuration.
+
+GUI frames use JetBrains Mono at 13 points and have no menu bar, toolbar, or scrollbars.
+Install the font locally before launching GUI Emacs. On macOS, the title bar
+is transparent with a dark appearance matching the theme. These settings also
+apply to GUI clients of the Emacs daemon. Restart Emacs to apply them.
 
 ## installation
 
@@ -77,6 +82,30 @@ Appearance can be Light, Dark, or Auto; these configs follow that setting.
 
 ## emacs launcher
 
+### global application popup
+
+The Hammerspoon launcher is experimental and disabled in the installer.
+`./install.sh` does not install, configure, start, or reload Hammerspoon.
+The development files remain in `config/hammerspoon/taymacs.lua` and
+`user-lisp/mac-launcher.el`; the following behavior requires manual setup.
+
+Press **Option-Space (`M-SPC`)** in any application to open an undecorated Emacs
+minibuffer popup. Choose an application with Fido completion and press `RET` to
+launch it. `C-g` closes the popup and returns focus to the previous application.
+The launcher shares the same daemon and buffers as `eml`; it starts the daemon
+automatically when needed. The first launch can take longer while Emacs starts.
+
+Applications are discovered under `/Applications`, `/System/Applications`, and
+`~/Applications`, including subdirectories such as Utilities. Duplicate names
+include their containing directory. Application bundles are not searched inside.
+Change `mac-launcher-directories` to search other locations. Finish an existing
+Emacs minibuffer prompt before invoking the popup.
+
+Existing Hammerspoon configuration is left untouched. Option-Space must
+be free of other global bindings; Spotlight's default Command-Space is unaffected.
+
+### terminal launcher
+
 ```sh
 eml open notes.md
 eml open src/main.go:42:3
@@ -141,12 +170,14 @@ take precedence.
 
 ```sh
 python3 -m unittest discover -s tests -v
-emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -l tests/tay-appearance-test.el -f ert-run-tests-batch-and-exit
+emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -l tests/tay-appearance-test.el -l tests/early-init-test.el -l tests/mac-launcher-test.el -l tests/agent-test.el -l tests/ghostel-test.el -f ert-run-tests-batch-and-exit
 ```
 
 The reader test requires Pandoc. Format Python with
 `black bin/eml scripts/install-links.py tests/test_eml.py`; use Emacs's
 `indent-region` for the Emacs Lisp and shell files.
+Format the Hammerspoon configuration and tests with `stylua config/hammerspoon tests/hammerspoon-test.lua`
+and run `lua tests/hammerspoon-test.lua` (development tools: `brew install lua stylua`).
 
 ## Features
 
@@ -159,8 +190,58 @@ The reader test requires Pandoc. Format Python with
 - `jumpa` line navigation (`C-;`, or `F6` in any terminal)
 - `folio-md` Markdown reading buffers
 - Magit Git interface (`C-x g`)
+- Ghostel terminal (`M-x ghostel`)
 
-Magit and Protocol Buffer mode are installed automatically with `package.el` from MELPA.
+Magit, Protocol Buffer mode, and Ghostel are installed automatically with
+`package.el` from MELPA.
+
+## ghostel
+
+In GUI Emacs, run `M-x ghostel` to open a terminal, or `M-x ghostel-project`
+to open one in the current project. The package is loaded on demand, so it also
+works when the first GUI frame connects to a daemon started in a terminal.
+[Ghostel](https://github.com/dakra/ghostel) offers to download its prebuilt native
+module on first use. Use `C-c C-t` for copy mode and `C-c C-j` to resume terminal
+input; `M-x` remains available in the default input mode.
+
+## agents
+
+| shortcut | command | action |
+| --- | --- | --- |
+| `M-i a n` | `agent-new` | choose and launch a new agent in the current project |
+| `M-i a a` | `agent-switch` | choose an agent with Fido completion |
+| `M-i a r` | `agent-rename` | rename the current agent buffer |
+
+Agents use Ghostel buffers named `*agent: project*`; additional agents in the
+same project get normal Emacs suffixes such as `<2>`. Renaming with
+`agent-rename` or `rename-buffer` preserves the original project association,
+even if the agent changes directories. The switcher annotates names with their
+project and puts agents needing attention first.
+
+`agent-new` prompts in the minibuffer for `claude`, `codex`, or `pi`.
+`agent-program` sets the default choice and defaults to `codex`. Use
+`M-x customize-variable RET agent-program` to change the default, or set it
+in your configuration:
+
+```elisp
+(setq agent-program 'pi)
+```
+
+Each choice applies to that new agent. Commands start through your login,
+interactive shell so tools installed through shell startup files are available
+in GUI Emacs. If the selected tool is missing, its terminal shows the shell
+error and remains available for inspection.
+
+Codex launches with session-only overrides enabling OSC 9 notifications
+regardless of terminal focus, using its
+[documented notification settings](https://learn.chatgpt.com/docs/config-file/config-reference).
+Ghostel notifications ring an audible bell and show `agent!` in the mode line.
+Repeated notifications stay quiet until acknowledged by switching to the agent
+or interacting with its buffer. Terminal exit also requests attention and
+preserves the buffer. Ordinary Emacs bells remain disabled.
+Claude and Pi launch normally; completion and input alerts require those tools
+to emit OSC 9 or OSC 777 notifications. There is no output-based completion
+guessing or automatic hook installation for those tools.
 
 Ghostty maps `Ctrl+;` to the standard `F6` escape sequence, which Emacs binds
 to `jumpa`. This works through Herdr and tmux without extended keyboard
