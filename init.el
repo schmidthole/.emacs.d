@@ -74,6 +74,34 @@
   (move-beginning-of-line 1)
   (kill-line n))
 
+(defun tay/window-narrower ()
+  "make the selected window 5 columns narrower."
+  (interactive)
+  (shrink-window-horizontally 5))
+
+(defun tay/window-wider ()
+  "make the selected window 5 columns wider."
+  (interactive)
+  (enlarge-window-horizontally 5))
+
+(defun tay/window-taller ()
+  "make the selected window 5 lines taller."
+  (interactive)
+  (enlarge-window 5))
+
+(defun tay/window-shorter ()
+  "make the selected window 5 lines shorter."
+  (interactive)
+  (shrink-window 5))
+
+(defvar-keymap tay/window-resize-repeat-map
+  :doc "repeat window resizing with shifted hjkl."
+  :repeat t
+  "H" #'tay/window-narrower
+  "J" #'tay/window-shorter
+  "K" #'tay/window-taller
+  "L" #'tay/window-wider)
+
 ;; keys
 
 (dolist (key '("M-i" "C-z" "C-x C-z" "C-x C-r"))
@@ -87,6 +115,11 @@
 (keymap-global-set "M-o" #'other-window)
 (keymap-global-set "M-i v" #'split-window-right)
 (keymap-global-set "M-i s" #'split-window-below)
+(keymap-global-set "M-i H" #'tay/window-narrower)
+(keymap-global-set "M-i J" #'tay/window-shorter)
+(keymap-global-set "M-i K" #'tay/window-taller)
+(keymap-global-set "M-i L" #'tay/window-wider)
+(repeat-mode 1)
 (keymap-global-set "C-;" #'jumpa)
 ;; Ghostty sends F6 for C-; so it also survives legacy terminal forwarding.
 (keymap-global-set "<f6>" #'jumpa)
