@@ -67,5 +67,41 @@
       (should (equal (buffer-substring (point) (line-end-position)) words))
       (should (equal (get-text-property (point) 'wrap-prefix) "  ")))))
 
+;; carets and tildes carry meaning in exponents and must stay visible.
+(defun folio-md-test--render (markdown)
+  "return the rendered text of MARKDOWN."
+  (with-temp-buffer
+    (folio-md-mode)
+    (setq folio-md--ast (folio-md--parse markdown))
+    (folio-md--render)
+    (buffer-substring-no-properties (point-min) (point-max))))
+
+(ert-deftest folio-md-keeps-exponent-carets ()
+  (let ((text (folio-md-test--render
+               (concat "fewer than 2^32 and **2^30** and `2^-37` and 2^-33.\n\n"
+                       "n² / 2^97 and n^2 and x^2^ and H~2~O and ~~old~~ and \\^\n\n"
+                       "| bound | value |\n| --- | --- |\n| **2^32** | 2^-33 |\n"))))
+    (dolist (expected '("fewer than 2^32 and 2^30 and 2^-37 and 2^-33."
+                        "n² / 2^97 and n^2 and x^2^ and H~2~O and old and ^"
+                        "│ 2^32 " "│ 2^-33 "))
+      (should (string-search expected text)))
+    (should-not (string-search "232" text))))
+
+(ert-deftest folio-md-marked-inlines-stay-visible ()
+  (let ((folio-md--line 1)
+        (str (lambda (text) `((t . "Str") (c . ,text)))))
+    (should (equal (folio-md--inlines
+                    `(,(funcall str "2")
+                      ((t . "Superscript") (c ,(funcall str "32")))))
+                   "2^32^"))
+    (should (equal (folio-md--inlines
+                    `(,(funcall str "H")
+                      ((t . "Subscript") (c ,(funcall str "2")))
+                      ,(funcall str "O")))
+                   "H~2~O"))
+    (should (equal (folio-md--inlines
+                    `(((t . "SmallCaps") (c ,(funcall str "nist")))))
+                   "NIST"))))
+
 (provide 'folio-md-test)
 ;;; folio-md-test.el ends here

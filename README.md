@@ -288,3 +288,6 @@ Text flows to the window width like Org and Markdown modes. Visible reading
 buffers check for changes every two idle seconds. Customize
 `folio-md-refresh-interval` in the `folio-md` customization group; set it to
 `nil` to disable polling.
+
+Folio shows `^` and `~` literally, so exponents such as `2^32` and `2^-33` keep
+their caret. Pandoc's superscript and subscript syntax is disabled.

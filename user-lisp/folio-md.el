@@ -8,7 +8,8 @@
 ;;; Commentary:
 ;; M-x folio-md opens the current Markdown buffer in a separate, read-only
 ;; reading buffer.  Requires Pandoc 3.x on PATH.  No browser or markdown-mode
-;; dependency.  Uses commonmark_x+sourcepos, with no filters or code execution.
+;; dependency.  Uses commonmark_x+sourcepos without superscript and subscript,
+;; so carets and tildes such as 2^32 stay literal, with no filters or code execution.
 ;; e jumps to source, o follows a link, TAB folds a section, i selects a heading,
 ;; g refreshes and q returns.  M-x folio-md-open opens a file directly.
 
@@ -85,7 +86,10 @@
                               'mouse-face 'highlight 'help-echo url)))
                ("Math" (folio-md--styled (cadr c) 'folio-md-code))
                ("Quoted" (concat "“" (folio-md--inlines (cadr c)) "”"))
-               ((or "SmallCaps" "Superscript" "Subscript") (folio-md--inlines c))
+               ;; keep the markers visible so 2^32 never reads as 232.
+               ("Superscript" (concat "^" (folio-md--inlines c) "^"))
+               ("Subscript" (concat "~" (folio-md--inlines c) "~"))
+               ("SmallCaps" (upcase (folio-md--inlines c)))
                ("RawInline" (folio-md--styled (cadr c) 'folio-md-muted))
                ("Note" (concat " [Note: " (folio-md--plain-blocks c) "]"))
                (_ (format "[%s]" tag)))))
@@ -288,7 +292,8 @@
     (insert source)
     (let ((status (call-process-region (point-min) (point-max)
                                       folio-md-pandoc-program t t nil
-                                      "--from=commonmark_x+sourcepos" "--to=json")))
+                                      "--from=commonmark_x-superscript-subscript+sourcepos"
+                                      "--to=json")))
       (unless (eq status 0) (error "Pandoc failed: %s" (buffer-string)))
       (goto-char (point-min))
       (alist-get 'blocks (json-parse-buffer :object-type 'alist :array-type 'list
