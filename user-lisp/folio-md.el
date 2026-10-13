@@ -291,9 +291,9 @@
   (with-temp-buffer
     (insert source)
     (let ((status (call-process-region (point-min) (point-max)
-                                      folio-md-pandoc-program t t nil
-                                      "--from=commonmark_x-superscript-subscript+sourcepos"
-                                      "--to=json")))
+                                       folio-md-pandoc-program t t nil
+                                       "--from=commonmark_x-superscript-subscript+sourcepos"
+                                       "--to=json")))
       (unless (eq status 0) (error "Pandoc failed: %s" (buffer-string)))
       (goto-char (point-min))
       (alist-get 'blocks (json-parse-buffer :object-type 'alist :array-type 'list
