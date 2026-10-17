@@ -43,7 +43,7 @@
 ;; appearance
 
 (setq modus-themes-common-palette-overrides
-      '((bg-mode-line-active bg-dim)
+      '((bg-mode-line-active bg-active)
         (fg-mode-line-active fg-main)
         (border-mode-line-active unspecified)
         (bg-mode-line-inactive bg-dim)
@@ -150,20 +150,9 @@
 
 ;; mode line
 
-(setq-default mode-line-format
-              '("%e"
-                mode-line-modified
-                mode-line-buffer-identification
-                "  %l:%c"
-                mode-line-format-right-align
-                (project-mode-line project-mode-line-format)
-                "  "
-                (vc-mode vc-mode)
-                "  "
-                mode-name
-                mode-line-process
-                " ")
-              mode-line-buffer-identification '(" %b"))
+(load (expand-file-name "user-lisp/tay-modeline.el" user-emacs-directory)
+      nil t)
+(tay/modeline-setup)
 
 (setq project-mode-line t)
 

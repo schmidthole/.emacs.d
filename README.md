@@ -170,7 +170,7 @@ take precedence.
 
 ```sh
 python3 -m unittest discover -s tests -v
-emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -l tests/tay-appearance-test.el -l tests/early-init-test.el -l tests/mac-launcher-test.el -l tests/agent-test.el -l tests/window-resize-test.el -l tests/ghostel-test.el -f ert-run-tests-batch-and-exit
+emacs -Q --batch -L user-lisp -l tests/folio-md-test.el -l tests/eml-test.el -l tests/tay-appearance-test.el -l tests/tay-modeline-test.el -l tests/early-init-test.el -l tests/mac-launcher-test.el -l tests/agent-test.el -l tests/window-resize-test.el -l tests/ghostel-test.el -f ert-run-tests-batch-and-exit
 ```
 
 The reader test requires Pandoc. Format Python with
