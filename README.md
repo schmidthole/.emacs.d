@@ -290,12 +290,19 @@ choose a file. The reader opens in a separate, read-only buffer.
 | key | action |
 | --- | --- |
 | `e` | jump to the corresponding source line |
+| `n` / `p` | next or previous heading |
+| `u` | parent heading |
 | `i` | choose a heading with completion |
+| `l` | return from the last link or heading jump |
+| `s` | regexp search |
 | `TAB` | fold or unfold the current section |
 | `o` / `RET` | follow the link at point |
 | `c` | copy the code block at point without its borders |
 | `g` | refresh from the source, including unsaved edits |
 | `q` | quit the reading window |
+
+Faces inherit from Info's (`info-title-1` through `info-title-4`, `info-xref`,
+`Info-quoted`), so themes that style Info style Folio too.
 
 Text flows to the window width like Org and Markdown modes. Visible reading
 buffers check for changes every two idle seconds. Customize

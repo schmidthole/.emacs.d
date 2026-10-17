@@ -10,8 +10,10 @@
 ;; reading buffer.  Requires Pandoc 3.x on PATH.  No browser or markdown-mode
 ;; dependency.  Uses commonmark_x+sourcepos without superscript and subscript,
 ;; so carets and tildes such as 2^32 stay literal, with no filters or code execution.
-;; e jumps to source, o follows a link, TAB folds a section, i selects a heading,
-;; g refreshes and q returns.  M-x folio-md-open opens a file directly.
+;; Faces and navigation keys follow Info: n/p/u move between headings, l returns
+;; from a link or heading jump and s searches.  e jumps to source, o follows a
+;; link, TAB folds a section, i selects a heading, g refreshes and q returns.
+;; M-x folio-md-open opens a file directly.
 
 ;;; Code:
 (require 'cl-lib)
@@ -19,6 +21,7 @@
 (require 'subr-x)
 (require 'browse-url)
 (require 'url-util)
+(require 'info)
 
 (defgroup folio-md nil "Read Markdown in a terminal." :group 'text)
 (defcustom folio-md-pandoc-program "pandoc" "Pandoc executable."
@@ -26,12 +29,14 @@
 (defcustom folio-md-refresh-interval 2
   "Seconds between checks for source changes.  Nil disables polling."
   :type '(choice (const nil) number) :group 'folio-md)
-(defface folio-md-title '((t (:inherit font-lock-function-name-face :weight bold)))
-  "Document title." :group 'folio-md)
-(defface folio-md-heading '((t (:inherit font-lock-keyword-face :weight bold)))
-  "Section heading." :group 'folio-md)
+(defface folio-md-title '((t (:inherit info-title-1))) "Document title." :group 'folio-md)
+(defface folio-md-heading '((t (:inherit info-title-2))) "Level 2 heading." :group 'folio-md)
+(defface folio-md-heading-3 '((t (:inherit info-title-3))) "Level 3 heading." :group 'folio-md)
+(defface folio-md-heading-4 '((t (:inherit info-title-4)))
+  "Level 4 and deeper heading." :group 'folio-md)
+(defface folio-md-link '((t (:inherit info-xref))) "Link." :group 'folio-md)
 (defface folio-md-muted '((t (:inherit shadow))) "Secondary text." :group 'folio-md)
-(defface folio-md-code '((t (:inherit fixed-pitch))) "Inline code." :group 'folio-md)
+(defface folio-md-code '((t (:inherit Info-quoted))) "Inline code." :group 'folio-md)
 (defface folio-md-code-block
   '((((class color) (background dark)) (:background "#202530"))
     (((class color) (background light)) (:background "#eeeeee"))
@@ -42,6 +47,7 @@
 (defvar-local folio-md--tick nil)
 (defvar-local folio-md--timer nil)
 (defvar-local folio-md--width nil)
+(defvar-local folio-md--history nil "Stack of (BUFFER . SOURCE-LINE) to return to.")
 (defvar folio-md--line 1)
 (defvar folio-md--render-width 88)
 
@@ -82,7 +88,7 @@
                        (url (car (nth 2 c))))
                   (propertize (if (equal tag "Image")
                                   (concat "[Image: " label "]") label)
-                              'face 'link 'folio-md-url url
+                              'face 'folio-md-link 'folio-md-url url
                               'mouse-face 'highlight 'help-echo url)))
                ("Math" (folio-md--styled (cadr c) 'folio-md-code))
                ("Quoted" (concat "“" (folio-md--inlines (cadr c)) "”"))
@@ -235,7 +241,8 @@
            (folio-md--insert-line
             (folio-md--styled (concat (if (= level 1) "" (make-string (1- level) ?›))
                                      (if (= level 1) "" " ") label)
-                              (if (= level 1) 'folio-md-title 'folio-md-heading)) prefix)
+                              (pcase level (1 'folio-md-title) (2 'folio-md-heading)
+                                     (3 'folio-md-heading-3) (_ 'folio-md-heading-4))) prefix)
            (when (= level 1)
              (folio-md--insert-line (folio-md--styled
                                      (make-string (min folio-md--render-width (string-width label)) ?━)
@@ -365,7 +372,7 @@
   (let ((line (or (get-text-property (point) 'folio-md-source-line) 1))
         (source folio-md--source))
     (unless (buffer-live-p source) (user-error "Source buffer was closed"))
-    (pop-to-buffer source)
+    (pop-to-buffer-same-window source)
     (widen) (goto-char (point-min)) (forward-line (1- line))))
 
 (defun folio-md--headings ()
@@ -377,14 +384,59 @@
       (setq p (next-single-property-change p 'folio-md-heading nil (point-max))))
     (nreverse result)))
 
+(defun folio-md--location ()
+  (cons (current-buffer) (or (get-text-property (point) 'folio-md-source-line) 1)))
+
+(defun folio-md--jump (pos)
+  "Unfold everything and move to POS, remembering where we came from."
+  (push (folio-md--location) folio-md--history)
+  (remove-overlays (point-min) (point-max) 'folio-md-fold t)
+  (goto-char pos))
+
 (defun folio-md-heading ()
   "Select a document heading with completion."
   (interactive)
   (let* ((items (folio-md--headings))
          (choice (completing-read "Heading: " items nil t)))
     (when-let ((pos (cdr (assoc choice items))))
-      (remove-overlays (point-min) (point-max) 'folio-md-fold t)
-      (goto-char pos))))
+      (folio-md--jump pos))))
+
+(defun folio-md-next-heading (&optional n)
+  "Move to the Nth next visible heading; backward when N is negative."
+  (interactive "p")
+  (setq n (or n 1))
+  (let* ((visible (cl-remove-if #'invisible-p (mapcar #'cdr (folio-md--headings))))
+         (candidates (if (> n 0) (cl-remove-if-not (lambda (p) (> p (point))) visible)
+                       (reverse (cl-remove-if-not (lambda (p) (< p (point))) visible))))
+         (target (nth (1- (abs n)) candidates)))
+    (unless target (user-error (if (> n 0) "No next heading" "No previous heading")))
+    (goto-char target)))
+
+(defun folio-md-previous-heading (&optional n)
+  "Move to the Nth previous visible heading."
+  (interactive "p")
+  (folio-md-next-heading (- (or n 1))))
+
+(defun folio-md-up-heading ()
+  "Move to the parent heading of the section containing point."
+  (interactive)
+  (let* ((before (cl-remove-if (lambda (p) (> p (point))) (mapcar #'cdr (folio-md--headings))))
+         (current (car (last before)))
+         (level (and current (get-text-property current 'folio-md-heading)))
+         (parent (and level (cl-find-if (lambda (p) (< (get-text-property p 'folio-md-heading) level))
+                                        before :from-end t))))
+    (unless parent (user-error "No parent heading"))
+    (goto-char parent)))
+
+(defun folio-md-back ()
+  "Return to the position before the last link or heading jump."
+  (interactive)
+  (let ((entry (pop folio-md--history)))
+    (while (and entry (not (buffer-live-p (car entry))))
+      (setq entry (pop folio-md--history)))
+    (unless entry (user-error "No previous position"))
+    (unless (eq (car entry) (current-buffer)) (pop-to-buffer-same-window (car entry)))
+    (folio-md--goto-source-line (cdr entry))))
 
 (defun folio-md-toggle-section ()
   "Fold or unfold the section containing point."
@@ -417,20 +469,21 @@
       (let ((p (cl-find-if (lambda (pos) (equal (get-text-property pos 'folio-md-anchor)
                                                 (substring url 1)))
                            (mapcar #'cdr (folio-md--headings)))))
-        (if p (progn (remove-overlays (point-min) (point-max) 'folio-md-fold t) (goto-char p))
-          (user-error "Anchor not found: %s" url))))
+        (if p (folio-md--jump p) (user-error "Anchor not found: %s" url))))
      ((string-match-p "\\`https?://" url) (browse-url url))
      ((string-match-p "\\`[[:alpha:]][[:alnum:]+.-]*:" url)
       (user-error "Unsupported link scheme: %s" url))
      (t (let* ((parts (split-string url "#"))
                (file (expand-file-name (url-unhex-string (car parts)) default-directory)))
           (if (string-match-p "\\.\\(?:md\\|markdown\\)\\'" file)
-              (progn (folio-md-open file)
-                     (when (cadr parts)
-                       (let ((p (cl-find-if (lambda (pos)
-                                            (equal (get-text-property pos 'folio-md-anchor) (cadr parts)))
-                                          (mapcar #'cdr (folio-md--headings)))))
-                         (when p (goto-char p)))))
+              (let ((origin (folio-md--location)))
+                (folio-md-open file)
+                (push origin folio-md--history)
+                (when (cadr parts)
+                  (let ((p (cl-find-if (lambda (pos)
+                                         (equal (get-text-property pos 'folio-md-anchor) (cadr parts)))
+                                       (mapcar #'cdr (folio-md--headings)))))
+                    (when p (goto-char p)))))
             (find-file file)))))))
 
 (defun folio-md-copy-code ()
@@ -453,13 +506,18 @@
     (define-key map (kbd "i") #'folio-md-heading)
     (define-key map (kbd "g") #'folio-md-refresh)
     (define-key map (kbd "c") #'folio-md-copy-code)
+    (define-key map (kbd "n") #'folio-md-next-heading)
+    (define-key map (kbd "p") #'folio-md-previous-heading)
+    (define-key map (kbd "u") #'folio-md-up-heading)
+    (define-key map (kbd "l") #'folio-md-back)
+    (define-key map (kbd "s") #'isearch-forward-regexp)
     map))
 
 (define-derived-mode folio-md-mode special-mode "Folio"
   "Read Markdown with source navigation and terminal-friendly layout."
   (setq-local truncate-lines nil)
   (visual-line-mode 1)
-  (setq-local header-line-format " Folio   e source · i headings · TAB fold · o link · c copy code · g refresh · q back")
+  (setq-local header-line-format " Folio   n/p/u heading · i headings · TAB fold · o link · l back · s search · e source · c copy · g refresh · q quit")
   (setq-local buffer-invisibility-spec '((folio-md . t)))
   (setq-local show-trailing-whitespace nil)
   (add-hook 'kill-buffer-hook #'folio-md--cleanup nil t))
@@ -470,7 +528,7 @@
   (interactive)
   (let* ((source (if (derived-mode-p 'folio-md-mode) folio-md--source (current-buffer)))
          (buffer (get-buffer-create (format "*Folio: %s*" (buffer-name source)))))
-    (pop-to-buffer buffer)
+    (pop-to-buffer-same-window buffer)
     (unless (derived-mode-p 'folio-md-mode) (folio-md-mode))
     (setq folio-md--source source
           default-directory (buffer-local-value 'default-directory source))
@@ -484,7 +542,7 @@
 (defun folio-md-open (file)
   "Open Markdown FILE in a Folio reading buffer."
   (interactive "fMarkdown file: ")
-  (pop-to-buffer (find-file-noselect file))
+  (pop-to-buffer-same-window (find-file-noselect file))
   (folio-md))
 
 (provide 'folio-md)
