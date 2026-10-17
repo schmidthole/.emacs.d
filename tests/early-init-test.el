@@ -27,7 +27,7 @@
   (let ((default-frame-alist '((width . 100))))
     (load tay/test-early-init-file nil t)
     (load tay/test-early-init-file nil t)
-    (should (equal (alist-get 'font default-frame-alist) "JetBrains Mono-13"))
+    (should (equal (alist-get 'font default-frame-alist) "JetBrains Mono-12"))
     (should (= (alist-get 'width default-frame-alist) 100))
     (should (= (length (seq-filter (lambda (entry) (eq (car entry) 'font))
                                    default-frame-alist))

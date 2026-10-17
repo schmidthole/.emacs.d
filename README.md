@@ -2,7 +2,7 @@
 
 A minimal terminal and GUI Emacs 31+ configuration.
 
-GUI frames use JetBrains Mono at 13 points and have no menu bar, toolbar, or scrollbars.
+GUI frames use JetBrains Mono at 12 points and have no menu bar, toolbar, or scrollbars.
 Install the font locally before launching GUI Emacs. On macOS, the title bar
 is transparent with a dark appearance matching the theme. These settings also
 apply to GUI clients of the Emacs daemon. Restart Emacs to apply them.

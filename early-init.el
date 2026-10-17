@@ -6,7 +6,7 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-(add-to-list 'default-frame-alist '(font . "JetBrains Mono-13"))
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-12"))
 
 (when (eq system-type 'darwin)
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
