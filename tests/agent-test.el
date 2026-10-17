@@ -171,4 +171,29 @@
     (should (eq (key-binding (kbd "M-i a a")) #'agent-switch))
     (should (eq (key-binding (kbd "M-i a r")) #'agent-rename))))
 
+(ert-deftest agent-new-and-switch-use-selected-window ()
+  (let (buffer)
+    (unwind-protect
+        (save-window-excursion
+          (delete-other-windows)
+          (cl-letf (((symbol-function 'require) (lambda (&rest _) t))
+                    ((symbol-function 'project-current)
+                     (lambda (&rest _) '(transient . "/private/tmp/")))
+                    ((symbol-function 'project-name) (lambda (_) "example"))
+                    ((symbol-function 'ghostel-exec)
+                     (lambda (created &rest _)
+                       (setq buffer created)
+                       (with-current-buffer created
+                         (setq major-mode 'ghostel-mode)))))
+            (agent-new 'claude)
+            (should (= (length (window-list)) 1))
+            (should (eq (window-buffer) buffer))
+            (switch-to-buffer "*scratch*")
+            (cl-letf (((symbol-function 'completing-read)
+                       (lambda (&rest _) (buffer-name buffer))))
+              (agent-switch))
+            (should (= (length (window-list)) 1))
+            (should (eq (window-buffer) buffer))))
+      (when (buffer-live-p buffer) (kill-buffer buffer)))))
+
 ;;; agent-test.el ends here

@@ -96,7 +96,7 @@ prompt for program interactively; otherwise default to `agent-program'."
     (let ((buffer (generate-new-buffer (format "*agent: %s*" name))))
       (condition-case err
           (progn
-            (pop-to-buffer buffer)
+            (pop-to-buffer-same-window buffer)
             (ghostel-exec buffer shell
                           (list "-l" "-i" "-c"
                                 (concat "exec " (mapconcat #'shell-quote-argument
@@ -153,7 +153,7 @@ prompt for program interactively; otherwise default to `agent-program'."
                                    :cycle-sort-function identity))
            (name (completing-read "agent: " names nil t nil
                                   'agent-switch-history (car names))))
-      (pop-to-buffer name)
+      (pop-to-buffer-same-window name)
       (agent--acknowledge))))
 
 (provide 'agent)
