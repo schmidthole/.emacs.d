@@ -138,6 +138,17 @@
       global-auto-revert-non-file-buffers t
       vc-handled-backends '(Git))
 
+;; keep backups, auto-saves, and lock files out of project directories
+
+(let ((backups (expand-file-name "var/backups/" user-emacs-directory))
+      (auto-saves (expand-file-name "var/auto-saves/" user-emacs-directory))
+      (locks (expand-file-name "var/locks/" user-emacs-directory)))
+  (dolist (directory (list backups auto-saves locks))
+    (make-directory directory t))
+  (setq backup-directory-alist `(("." . ,backups))
+        auto-save-file-name-transforms `((".*" ,auto-saves t))
+        lock-file-name-transforms `((".*" ,locks t))))
+
 (setq-default indent-tabs-mode nil
               tab-width 4
               truncate-lines t)

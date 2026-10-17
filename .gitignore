@@ -20,3 +20,4 @@ tramp
 tree-sitter/
 user-lisp/.user-lisp-autoloads.el
 __pycache__/
+var/
